@@ -14,14 +14,13 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trilas.ControlEnvio.front.Admin;
+
 import mx.trilas.ControlEnvio.front.Login;
-import mx.trilas.ControlEnvio.front.User;
+
 public class Login {
 	
 	public void LoginStage(Stage login) {
-		Admin admin = new Admin();
-		User user =  new User();
+		Menu menuEntry = new Menu();
 		
 		try {
 			VBox rootPane = new VBox();
