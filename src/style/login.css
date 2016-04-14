@@ -1,0 +1,80 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+	-fx-background-color: white;
+	-fx-padding: 20.0%;
+	-fx-spacing: 15.0;
+}
+
+#footerPane{
+		-fx-background-color: black;
+		-fx-max-height: 30.0;
+}
+
+.button {
+	-fx-background-color: #bbb, linear-gradient(black,  #bbb);
+	-fx-text-fill: white;
+	-fx-position-shape: true;
+	-fx-alignment: center;
+	-fx-background-radius: 5.0;
+}
+
+.label {
+		-fx-color: white;
+		-fx-font-family: Arial;
+		-fx-text-fill: #333;
+}
+
+#textFin {
+		-fx-size: 10.0;
+		-fx-font-family: Arial;
+		-fx-color: #000;
+}
+
+#textInicio {
+		-fx-color: #000;
+		-fx-size: 4.0cm; 
+		-fx-font-family: Arial;
+}
+
+.text {
+		-fx-color: white;
+/* 		-fx-size: 4.0cm;  */
+		-fx-font-family: Arial;
+		-fx-text-fill: blue;
+		-fx-background-color: blue;
+}
+
+.text-field {
+		-fx-color: white;
+			-fx-pref-width: 600.0;
+			 -fx-min-width: 600.0;
+    -fx-min-height: 10.0;
+    -fx-background-color: #ccc;
+}
+
+#password {
+		-fx-size: 4.0cm; 
+		-fx-color: blue;
+		-fx-background-color: #ccc;
+		-fx-pref-width: 6.0;
+		 -fx-min-width: 30.0;
+    	-fx-min-height: 10.0;
+}
+
+.combobox {
+		-fx-color: white;
+		-fx-size: 4.0cm; 
+}
+
+#inputField {
+	-fx-font-weight: bold;	
+}
+
+.backButton {
+	-fx-background-image: url("../img/arrow_left.png");
+	-fx-size: 70.0;
+	
+			-fx-pref-width: 70.0;
+			 -fx-min-width: 70.0;
+}

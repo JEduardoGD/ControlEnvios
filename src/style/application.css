@@ -1,0 +1,53 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+	-fx-background-color: white;
+	-fx-padding: 20.0%;
+	-fx-spacing: 15.0;
+
+}
+
+.button {
+/*	-fx-background-color: #bbb, linear-gradient(#3171af,  #0099ff);   */
+	-fx-background-color: #bbb, linear-gradient(black,  #bbb);
+	-fx-text-fill: white;
+	-fx-position-shape: true;
+	-fx-alignment: center;
+	-fx-background-radius: 5.0;
+}
+
+.label {
+		-fx-color: white;
+		-fx-font-family: Arial;
+		-fx-text-fill: #333;
+}
+
+#textFin {
+		-fx-size: 4.0cm; 
+		-fx-font-family: Arial;
+		-fx-color: #000;
+}
+
+#textInicio {
+		-fx-color: #000;
+		-fx-size: 4.0cm; 
+		-fx-font-family: Arial;
+}
+
+.text {
+		-fx-color: white;
+		-fx-size: 4.0cm; 
+		-fx-font-family: Arial;
+		-fx-text-fill: blue;
+		-fx-background-color: blue;
+}
+
+.textfield {
+		-fx-color: white;
+		-fx-size: 4.0cm; 
+}
+
+.combobox {
+		-fx-color: white;
+		-fx-size: 4.0cm; 
+}

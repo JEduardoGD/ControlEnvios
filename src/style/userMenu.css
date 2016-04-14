@@ -1,0 +1,25 @@
+.root {
+	-fx-background-color: #fff;
+	-fx-padding:100;
+	-fx-spacing: 30.0;
+
+}
+
+.label {
+	-fx-text-fill: #000;
+	-fx-font-weight: bold;
+	-fx-font-size: 20.0;
+}
+
+.button {
+	-fx-background-color: #333;
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-alignment: center;
+	-fx-background-radius: 5.0;
+	-fx-font-size: 13.0;
+	-fx-min-height: 40;
+	-fx-max-height: 55;
+	-fx-min-width: 30;
+	-fx-max-width: 360;
+}
