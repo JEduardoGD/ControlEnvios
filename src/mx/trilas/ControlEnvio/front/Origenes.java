@@ -83,7 +83,7 @@ public class Origenes {
 			headerPane.getChildren().addAll(backButton, modifyButton);
 			rootVbox.getChildren().addAll(headerPane);
 			
-			Text text = new Text("Ingrese el nuevo origen");
+			Text text = new Text("Ingrese el origen");
 			rootVbox.getChildren().addAll(text);
 			
 			Label nombreLabel = new Label("Origen ");
@@ -244,7 +244,7 @@ public class Origenes {
 			rootVbox.getChildren().addAll(flowPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Alta y modificacion de origenes");
+			stage.setTitle("Confirmar origen");
 			stage.setResizable(true);
 			stage.show();
 

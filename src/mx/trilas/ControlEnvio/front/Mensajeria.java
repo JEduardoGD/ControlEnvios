@@ -116,7 +116,7 @@ public class Mensajeria {
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Alta y modificacion de mensajeria");
-			stage.setResizable(true);
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (Exception e) {
@@ -180,7 +180,7 @@ public class Mensajeria {
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Modificar empresa de mensajeria");
-			stage.setResizable(true);
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (Exception e) {
@@ -241,8 +241,8 @@ public class Mensajeria {
 			rootVbox.getChildren().addAll(flowPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Alta y modificacion de mensajeria");
-			stage.setResizable(true);
+			stage.setTitle("Confirmar mensajeria");
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (Exception e) {

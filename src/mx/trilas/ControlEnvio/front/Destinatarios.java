@@ -260,13 +260,14 @@ public class Destinatarios {
 
 				}
 			});
+			
 			flowPane.setAlignment(Pos.CENTER);
 
 			flowPane.getChildren().addAll(aceptarButton, cancelarButton);
 			rootVbox.getChildren().addAll(flowPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Alta y modificacion de destinatarios");
+			stage.setTitle("Confirmar destinatario");
 			stage.setResizable(true);
 			stage.show();
 
@@ -307,7 +308,7 @@ public class Destinatarios {
 			headerPane.getChildren().addAll(backButton);
 			rootVbox.getChildren().addAll(headerPane);
 
-			Text text = new Text("Escriba el nombre del destinatario");
+			Text text = new Text("Ingrese el destinatario");
 			rootVbox.getChildren().addAll(text);
 
 			Label nombreLabel = new Label("Destinatario:");

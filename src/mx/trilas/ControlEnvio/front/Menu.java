@@ -49,6 +49,7 @@ public class Menu {
 			rootVBox.getChildren().add(generarReporteButton);
 			
 			Button logOutButton = new Button("Log Out");
+			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -83,7 +84,7 @@ public class Menu {
 			label.setText("Elija una opción");
 			rootVBox.getChildren().add(label);
 
-			Button mensajeriaButon = new Button("Alta o modificar empresa mensajera");
+			Button mensajeriaButon = new Button("Alta o modificar empresa de mensajería");
 			mensajeriaButon.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -117,6 +118,7 @@ public class Menu {
 			rootVBox.getChildren().add(personasButton);
 
 			Button logOutButton = new Button("Log Out");
+			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override

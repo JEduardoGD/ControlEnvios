@@ -66,24 +66,24 @@ public class Captura {
 			rootVBox.getChildren().add(headerPane);
 
 			Label labelMensajeria = new Label();
-			labelMensajeria.setText("Paqueteria ");
+			labelMensajeria.setText("Paqueteria     ");
 
 			ComboBox mensajeriaCombo = new ComboBox<>();
 			mensajeriaCombo.getItems().addAll("ODM", "DHL", "Estafeta", "Personalmente");
-			mensajeriaCombo.setPromptText("Seleccione una paqueteria...");
+			mensajeriaCombo.setPromptText("Seleccione una opción...");
 			
 			mensajeraPane.getChildren().addAll(labelMensajeria, mensajeriaCombo);
 			rootVBox.getChildren().addAll(mensajeraPane);
 
 			Label guiaLabel = new Label();
-			guiaLabel.setText("Numero de guia ");
+			guiaLabel.setText("Numero guia    ");
 
 			TextField guiaField = new TextField();
 			guiaPane.getChildren().addAll(guiaLabel, guiaField);
 			rootVBox.getChildren().addAll(guiaPane);
 			
 			Label origenMensajeria = new Label();
-			origenMensajeria.setText("Origen ");
+			origenMensajeria.setText("Origen            ");
 
 			ComboBox origenCombo = new ComboBox<>();
 			origenCombo.getItems().addAll("Chihuahua", "Durango", "DF", "Sonora", "Chiapas", "Zacatecas", "Otro");
@@ -92,7 +92,7 @@ public class Captura {
 			rootVBox.getChildren().addAll(origenPane);
 
 			Label destinatarioLabel = new Label();
-			destinatarioLabel.setText("Destinatario ");
+			destinatarioLabel.setText("Destinatario    ");
 
 			ComboBox destinatarioCombo = new ComboBox<>();
 			destinatarioCombo.getItems().addAll("Mario Benites", "Rufo Vazquez", "Mafia Costa", "Sofia Fierro", "Otro");
