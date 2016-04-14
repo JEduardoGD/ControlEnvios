@@ -7,50 +7,58 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trilas.ControlEnvio.front.Admin;
+
 import mx.trilas.ControlEnvio.front.Login;
-import mx.trilas.ControlEnvio.front.User;
+
 public class Login {
 	
 	public void LoginStage(Stage login) {
-		Admin admin = new Admin();
-		User user =  new User();
+		Menu menuEntry = new Menu();
 		
 		try {
 			VBox rootPane = new VBox();
 			Scene scene = new Scene(rootPane, 400, 400);
-			BorderPane footerPane = new BorderPane(); 
+			FlowPane usernamePane = new FlowPane();
+			FlowPane passwdPane = new FlowPane();
+			
 			rootPane.setAlignment(Pos.CENTER);
-
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/login.css").toExternalForm());
 
-			Text text = new Text("Control de paquetería");
-			text.setFont(Font.font("Sans-serif", FontWeight.BOLD, FontPosture.REGULAR, 25));
+			Text introText = new Text("Control de paquetería");
+			introText.setId("introText");
 			
-			Text logintext = new Text("Login");
-			logintext.setFont(Font.font("Sans-serif", FontWeight.BOLD, FontPosture.REGULAR, 18));
-			// logintext.setFill("#333");
-			rootPane.getChildren().addAll(text, logintext);
+			Text loginText = new Text("Login");
+			loginText.setId("loginText");
 			
-			Text inputField = new Text("Usuario: fulano de tal");
-			inputField.setId("inputField");
-			rootPane.getChildren().addAll(inputField);
-
-			Label passwdLabel = new Label("Ingrese su contraseña");
-
+			rootPane.getChildren().addAll(introText, loginText);
+			
+			Label usernameLabel= new Label("Username   ");
+			usernameLabel.getStyleClass().add("labels");
+			TextField usernameField = new TextField();
+			
+			usernamePane.getChildren().addAll(usernameLabel, usernameField);
+			
+			Label passwdLabel = new Label("Contraseña ");
+			passwdLabel.getStyleClass().add("labels");
 			PasswordField passwdField = new PasswordField();
-			passwdField.setId("password");
-			rootPane.getChildren().addAll(passwdLabel, passwdField);
+			
+			usernamePane.setAlignment(Pos.BASELINE_CENTER);
+			passwdPane.setAlignment(Pos.BASELINE_CENTER);
+			passwdPane.getChildren().addAll(passwdLabel, passwdField);
+			
+			rootPane.getChildren().addAll(usernamePane, passwdPane);
 
 			Button submitButton = new Button("Aceptar");
-			submitButton.getStylesheets().add(getClass().getClassLoader().getResource("style/login.css").toExternalForm());
+			submitButton.setId("submitButton");
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -59,9 +67,7 @@ public class Login {
 
 				}
 			});
-			footerPane.setId("footerPane");
 			rootPane.getChildren().add(submitButton);
-			rootPane.getChildren().add(footerPane);
 
 			login.setScene(scene);
 			login.setTitle("Control de paquetería - Login");

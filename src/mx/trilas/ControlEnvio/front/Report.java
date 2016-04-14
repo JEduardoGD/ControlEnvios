@@ -1,5 +1,6 @@
 package mx.trilas.ControlEnvio.front;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javafx.collections.FXCollections;
@@ -10,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -18,6 +20,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -32,6 +35,99 @@ public class Report {
 			new Reporte(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
 			new Reporte(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
+	public void GenerarReporteStage(Stage stage) {
+
+		try {
+			VBox pane = new VBox();
+			Scene scene = new Scene(pane, 780, 285);
+			HBox headerPane = new HBox ();
+			FlowPane labelsPane = new FlowPane(20, 40);
+			FlowPane datePane = new FlowPane(20, 40);
+			FlowPane buttonsPane = new FlowPane(20, 40);
+
+			pane.setAlignment(Pos.CENTER);
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
+			
+			Button backButton = new Button("Regresar");
+			backButton.getStyleClass().add("backButton");
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+
+			headerPane.getChildren().add(backButton);
+			headerPane.setAlignment(Pos.TOP_LEFT);
+			pane.getChildren().add(headerPane);
+
+			Label text = new Label("Elija el rango de fechas para generación del reporte");
+			pane.getChildren().addAll(text);
+
+			Label textInicio = new Label("Fecha Inicio");
+			textInicio.setId("textInicio");
+
+			Label textFin = new Label("Fecha fin");
+			textFin.setId("textFin");
+
+			labelsPane.setAlignment(Pos.CENTER);
+			labelsPane.setPadding(new Insets(8));
+			labelsPane.getChildren().addAll(textInicio, textFin);
+			pane.getChildren().addAll(labelsPane);
+
+			DatePicker datePickerInicio = new DatePicker();
+			datePickerInicio.setOnAction(event -> {
+				LocalDate date = datePickerInicio.getValue();
+			});
+			pane.getChildren().addAll(datePickerInicio);
+
+			Label toCalendar = new Label("a");
+			pane.getChildren().add(toCalendar);
+
+			DatePicker datePickerFin = new DatePicker();
+
+			datePickerFin.setOnAction(event -> {
+				LocalDate date = datePickerFin.getValue();
+				System.out.println("Selected date: " + date);
+			});
+			pane.getChildren().addAll(datePickerFin);
+
+			datePane.getChildren().addAll(datePickerInicio, toCalendar, datePickerFin);
+			datePane.setAlignment(Pos.CENTER);
+
+			Button generarButton = new Button("Generar reporte");
+			generarButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+				}
+			});
+			Button downloadButton = new Button("Descargar");
+			downloadButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			buttonsPane.setAlignment(Pos.BOTTOM_CENTER);
+			buttonsPane.setPadding(new Insets(20)); 
+			buttonsPane.getChildren().addAll(generarButton);
+			
+			pane.getChildren().addAll(datePane, buttonsPane);
+
+			stage.setScene(scene);
+			stage.setTitle("Control de paquetería - Generar reporte");
+			stage.show();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public VBox reportView(Stage stage, Scene scene) {
 		VBox vbox = new VBox();
 		FlowPane flowPane = new FlowPane();
@@ -122,7 +218,6 @@ public class Report {
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-//			 Scene scene = new Scene(new Group(), 900, 500);
 			Scene scene = new Scene(paneVbox, 900, 500);
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -134,7 +229,6 @@ public class Report {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
 				}
 			});
 			Button cancelButton = new Button("Cancelar");
@@ -142,7 +236,6 @@ public class Report {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
