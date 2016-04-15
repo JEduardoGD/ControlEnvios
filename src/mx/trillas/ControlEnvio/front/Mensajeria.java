@@ -1,4 +1,4 @@
-package mx.trilas.ControlEnvio.front;
+package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
@@ -24,17 +24,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillasControlEnvio.persistence.pojos.Reporte;
+
+import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
 
 public class Mensajeria {
 
 	/* Solo datos de ejemplo */
 
-	private final ObservableList<Reporte> data = FXCollections.observableArrayList(
-			new Reporte(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Reporte(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Reporte(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Reporte(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
+			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
+			new Controlenvio(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
+			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
+			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
 	public void mensajeriaStage(Stage stage) {
 
@@ -134,21 +135,21 @@ public class Mensajeria {
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
-			TableView<Reporte> table = new TableView<Reporte>();
+			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(true);
 
-			TableColumn<Reporte, String> idCol = new TableColumn<>("Id");
+			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
 			idCol.setMinWidth(170);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Reporte, String> mensajeraCol = new TableColumn<>("Nombre");
+			TableColumn<Controlenvio, String> mensajeraCol = new TableColumn<>("Nombre");
 			mensajeraCol.setMinWidth(185);
 			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("mensajeria"));
 
-			mensajeraCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			mensajeraCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+			mensajeraCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			mensajeraCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setMensajeria(t.getNewValue());
 			});
 			table.setItems(data);
@@ -188,7 +189,7 @@ public class Mensajeria {
 		}
 	}
 
-	public void ConfirmarMensajeriaStage(Stage stage, Reporte reporte) {
+	public void ConfirmarMensajeriaStage(Stage stage, Controlenvio controlEnvio) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -198,7 +199,7 @@ public class Mensajeria {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" + "\nMensajeria: " + reporte.getMensajeria());
+			Text text = new Text("Desea guardar los cambios?\n" + "\nMensajeria: " + controlEnvio.getMensajeria());
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);

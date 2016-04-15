@@ -81,17 +81,6 @@
 	-fx-text-fill: #333;
 }
 
-#textFin {
-		-fx-size: 10;
-		-fx-font-family: Arial;
-		-fx-color: #000;
-}
-
-#textInicio {
-		-fx-color: #000;
-		-fx-size: 4.0cm; 
-		-fx-font-family: Arial;
-}
 
 .text {
 		-fx-color: white;
@@ -103,15 +92,14 @@
 
 .text-field {
 		-fx-color: white;
-			-fx-pref-width: 190;
-			 -fx-min-width: 190;
+			-fx-pref-width: 200; 
+			 -fx-min-width: 200; 
     -fx-min-height: 10;
     -fx-background-color: #ccc;
 }
 
 .combobox {
 		-fx-color: white;
-		-fx-size: 4.0cm; 
 }
 
 .backButton {

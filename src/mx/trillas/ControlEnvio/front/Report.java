@@ -1,4 +1,4 @@
-package mx.trilas.ControlEnvio.front;
+package mx.trillas.ControlEnvio.front;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -25,15 +25,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillasControlEnvio.persistence.pojos.Reporte;
+import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
 
 public class Report {
 
-	private final ObservableList<Reporte> data = FXCollections.observableArrayList(
-			new Reporte(new Integer(0),"DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Reporte(new Integer(1),"Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Reporte(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Reporte(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
+			new Controlenvio(new Integer(0),"DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
+			new Controlenvio(new Integer(1),"Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
+			new Controlenvio(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
+			new Controlenvio(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
 	public void GenerarReporteStage(Stage stage) {
 
@@ -147,53 +147,53 @@ public class Report {
 			
 			Text cabeceraTabla = new Text("Casa: departamento");
 			
-			TableView<Reporte> table = new TableView<Reporte>();
+			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(false);
 
-			TableColumn<Reporte, String> mensajeraCol = new TableColumn<>("Mensajeria");
+			TableColumn<Controlenvio, String> mensajeraCol = new TableColumn<>("Mensajeria");
 			mensajeraCol.setMinWidth(140);
 			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("mensajeria"));
 
-			mensajeraCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			mensajeraCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+			mensajeraCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			mensajeraCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setMensajeria(t.getNewValue());
 			});
 
-			TableColumn<Reporte, String> origenCol = new TableColumn<>("Origen");
+			TableColumn<Controlenvio, String> origenCol = new TableColumn<>("Origen");
 			origenCol.setMinWidth(140);
 			origenCol.setCellValueFactory(new PropertyValueFactory<>("origen"));
 
-			origenCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			origenCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrigen(t.getNewValue());
+			origenCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			origenCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrigen(t.getNewValue());
 			});
 
-			TableColumn<Reporte, String> destinatarioCol = new TableColumn<>("Destinatario");
+			TableColumn<Controlenvio, String> destinatarioCol = new TableColumn<>("Destinatario");
 			destinatarioCol.setMinWidth(140);
 			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("destinatario"));
 
-			destinatarioCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			destinatarioCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+			destinatarioCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			destinatarioCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setDestinatario(t.getNewValue());
 			});
 
-			TableColumn<Reporte, String> fechaCol = new TableColumn<>("Fecha");
+			TableColumn<Controlenvio, String> fechaCol = new TableColumn<>("Fecha");
 			fechaCol.setMinWidth(160);
 			fechaCol.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
-			TableColumn<Reporte, String> observacionCol = new TableColumn<>("Observacion");
+			TableColumn<Controlenvio, String> observacionCol = new TableColumn<>("Observacion");
 			observacionCol.setMinWidth(140);
 			observacionCol.setCellValueFactory(new PropertyValueFactory<>("Observacion"));
 
-			observacionCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			observacionCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+			observacionCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			observacionCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setObservacion(t.getNewValue());
 			});
 			
-			TableColumn<Reporte, String> firmaCol = new TableColumn<>("Firma");
+			TableColumn<Controlenvio, String> firmaCol = new TableColumn<>("Firma");
 			observacionCol.setMinWidth(250);
 
 			table.setItems(data);

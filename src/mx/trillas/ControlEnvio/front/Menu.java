@@ -1,4 +1,4 @@
-package mx.trilas.ControlEnvio.front;
+package mx.trillas.ControlEnvio.front;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
