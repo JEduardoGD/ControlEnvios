@@ -6,7 +6,6 @@
 	-fx-spacing: 15.0;
 }
 
-
 .button {
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #e2e2e2;
@@ -52,41 +51,6 @@
 
 .button:default:hover {
     -fx-background-color: derive(-fx-focus-color,30%);
-}
-
-
-.label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 0.6;
-      -fx-text-fill: #1d1d1d;
-}
-
-.label-bright {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
-
-.label-header {
-    -fx-font-size: 32pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
-
-.text-field {
-	-fx-color: white;
-/* 	-fx-pref-width: 10;
-	-fx-min-width: 150;
-    -fx-min-height: 20;
-    -fx-background-color: #ccc;
-    -fx-padding: 10 10;
-*/    -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Semibold";
-
 }
 
 .backButton {

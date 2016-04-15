@@ -1,4 +1,4 @@
-package mx.trilas.ControlEnvio.front;
+package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
@@ -24,19 +24,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillasControlEnvio.persistence.pojos.Reporte;
+import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
 
-public class Mensajeria {
+public class Departamento {
 
 	/* Solo datos de ejemplo */
 
-	private final ObservableList<Reporte> data = FXCollections.observableArrayList(
-			new Reporte(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Reporte(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Reporte(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Reporte(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
+			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
+			new Controlenvio(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
+			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
+			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
-	public void mensajeriaStage(Stage stage) {
+	public void departamentoStage(Stage stage) {
 
 		try {
 			VBox rootVbox = new VBox(25);
@@ -45,12 +45,17 @@ public class Mensajeria {
 			FlowPane nombrePane = new FlowPane(18, 15);
 			nombrePane.setAlignment(Pos.CENTER);
 
+			FlowPane destinoPane = new FlowPane(18, 15);
+			destinoPane.setAlignment(Pos.CENTER);
+
+			FlowPane abrevPane = new FlowPane();
+			abrevPane.setAlignment(Pos.CENTER);
+
 			FlowPane flowButtonsPane = new FlowPane();
 
 			HBox headerPane = new HBox(150);
-			Scene scene = new Scene(new Group(), 480, 450);
-			scene.getStylesheets()
-					.add(getClass().getClassLoader().getResource("style/mensajeria.css").toExternalForm());
+			Scene scene = new Scene(new Group(), 490, 450);
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/departamento.css").toExternalForm());
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
@@ -66,9 +71,8 @@ public class Mensajeria {
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
 
-			Button modifyButton = new Button("Modificar empresas");
+			Button modifyButton = new Button("Modificar departamentos");
 			modifyButton.getStyleClass().add("modificarRegistroButton");
-
 			modifyButton.setAlignment(Pos.TOP_RIGHT);
 			modifyButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -82,11 +86,12 @@ public class Mensajeria {
 			headerPane.getChildren().addAll(backButton, modifyButton);
 			rootVbox.getChildren().addAll(headerPane);
 
-			Text text = new Text("Ingrese la nueva empresa de mensajeria");
+			Text text = new Text("Ingrese el departamento");
 			rootVbox.getChildren().addAll(text);
 
-			Label nombreLabel = new Label("Mensajería:");
+			Label nombreLabel = new Label("Departamento:");
 			TextField nombreField = new TextField();
+
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
 
@@ -95,6 +100,7 @@ public class Mensajeria {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
+
 				}
 			});
 
@@ -111,12 +117,11 @@ public class Mensajeria {
 			flowButtonsPane.setAlignment(Pos.CENTER);
 			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
 
-			rootVbox.setAlignment(Pos.CENTER);
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Alta y modificacion de mensajeria");
-			stage.setResizable(false);
+			stage.setTitle("Control de paquetería - Alta y modificacion de departamentos");
+			stage.setResizable(true);
 			stage.show();
 
 		} catch (Exception e) {
@@ -124,35 +129,36 @@ public class Mensajeria {
 		}
 	}
 
-	public void modificarMensajeriaStage(Stage stage) {
+	public void modificarDepartamentoStage(Stage stage) {
 
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(paneVbox, 360, 430);
+			Scene scene = new Scene(paneVbox, 400, 450);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/departamento.css").toExternalForm());
 
-			TableView<Reporte> table = new TableView<Reporte>();
+			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(true);
 
-			TableColumn<Reporte, String> idCol = new TableColumn<>("Id");
-			idCol.setMinWidth(170);
+			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
+			idCol.setMinWidth(200);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Reporte, String> mensajeraCol = new TableColumn<>("Nombre");
-			mensajeraCol.setMinWidth(185);
-			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("mensajeria"));
+			TableColumn<Controlenvio, String> deptoCol = new TableColumn<>("Departamento");
+			deptoCol.setMinWidth(200);
+			deptoCol.setCellValueFactory(new PropertyValueFactory<>("departamento"));
 
-			mensajeraCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			mensajeraCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setMensajeria(t.getNewValue());
+			deptoCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			deptoCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setDepartamento(t.getNewValue());
 			});
+
 			table.setItems(data);
-			table.getColumns().addAll(idCol, mensajeraCol);
+			table.getColumns().addAll(idCol, deptoCol);
 
 			paneVbox.setSpacing(10);
 			paneVbox.setPadding(new Insets(1));
@@ -179,8 +185,8 @@ public class Mensajeria {
 			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Modificar empresa de mensajeria");
-			stage.setResizable(false);
+			stage.setTitle("Control de paquetería - Modificar departamentos");
+			stage.setResizable(true);
 			stage.show();
 
 		} catch (Exception e) {
@@ -188,7 +194,7 @@ public class Mensajeria {
 		}
 	}
 
-	public void ConfirmarMensajeriaStage(Stage stage, Reporte reporte) {
+	public void ConfirmarDepartamentoStage(Stage stage, Controlenvio controlEnvio) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -198,7 +204,7 @@ public class Mensajeria {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" + "\nMensajeria: " + reporte.getMensajeria());
+			Text text = new Text("Desea guardar los cambios?\n" + "\nDepartamento: " + controlEnvio.getDepartamento());
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -235,19 +241,19 @@ public class Mensajeria {
 
 				}
 			});
+			
 			flowPane.setAlignment(Pos.CENTER);
 
 			flowPane.getChildren().addAll(aceptarButton, cancelarButton);
 			rootVbox.getChildren().addAll(flowPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Confirmar mensajeria");
-			stage.setResizable(false);
+			stage.setTitle("Confirmar departamento");
+			stage.setResizable(true);
 			stage.show();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

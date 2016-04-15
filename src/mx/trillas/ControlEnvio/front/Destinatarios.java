@@ -1,4 +1,4 @@
-package mx.trilas.ControlEnvio.front;
+package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,17 +25,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillasControlEnvio.persistence.pojos.Reporte;
+import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
 
 public class Destinatarios {
 
 	/* Solo datos de ejemplo */
 
-	private final ObservableList<Reporte> data = FXCollections.observableArrayList(
-			new Reporte(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Reporte(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Reporte(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Reporte(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
+			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
+			new Controlenvio(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
+			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
+			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
 	public void destinatariosStage(Stage stage) {
 
@@ -48,6 +49,9 @@ public class Destinatarios {
 			FlowPane destinoPane = new FlowPane(18, 15);
 			destinoPane.setAlignment(Pos.CENTER);
 
+			FlowPane deptoPane = new FlowPane(18, 15);
+			deptoPane.setAlignment(Pos.CENTER);
+			
 			FlowPane abrevPane = new FlowPane();
 			abrevPane.setAlignment(Pos.CENTER);
 
@@ -90,18 +94,24 @@ public class Destinatarios {
 			Text text = new Text("Ingrese los datos del nuevo destinatario");
 			rootVbox.getChildren().addAll(text);
 
-			Label nombreLabel = new Label("Destinatario:");
-			TextField nombreField = new TextField();
-
-			nombrePane.getChildren().addAll(nombreLabel, nombreField);
-			rootVbox.getChildren().addAll(nombrePane);
-
-			Label destinatarioLabel = new Label("Departamento:");
+			Label destinatarioLabel = new Label("Destinatario ");
+			destinatarioLabel.getStyleClass().add(".inputs");
 			TextField destinatarioField = new TextField();
 
-			destinoPane.getChildren().addAll(destinatarioLabel, destinatarioField);
-			rootVbox.getChildren().addAll(destinoPane);
+			nombrePane.getChildren().addAll(destinatarioLabel, destinatarioField);
+			rootVbox.getChildren().addAll(nombrePane);
 
+			Label deptoLabel = new Label("Departamento ");
+			deptoLabel.getStyleClass().add(".inputs");
+
+			ComboBox<Object> deptoCombo = new ComboBox<>();
+			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas");
+			deptoCombo.setPromptText("Seleccione una opcion...");
+			
+			deptoPane.getChildren().addAll(deptoLabel, deptoCombo);
+			rootVbox.getChildren().addAll(deptoPane);
+
+			
 			Button aceptarButton = new Button("Aceptar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -142,36 +152,35 @@ public class Destinatarios {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
 
-			// Scene scene = new Scene(new Group(), 900, 500);
 			Scene scene = new Scene(paneVbox, 430, 450);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
 
-			TableView<Reporte> table = new TableView<Reporte>();
+			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(true);
 
-			TableColumn<Reporte, String> idCol = new TableColumn<>("Id");
+			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
 			idCol.setMinWidth(80);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Reporte, String> destinatarioCol = new TableColumn<>("Destinatario");
+			TableColumn<Controlenvio, String> destinatarioCol = new TableColumn<>("Destinatario");
 			destinatarioCol.setMinWidth(190);
 			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("destinatario"));
 
-			destinatarioCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			destinatarioCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+			destinatarioCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			destinatarioCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setDestinatario(t.getNewValue());
 			});
 
-			TableColumn<Reporte, String> deptoCol = new TableColumn<>("Departamento");
+			TableColumn<Controlenvio, String> deptoCol = new TableColumn<>("Departamento");
 			deptoCol.setMinWidth(140);
 			deptoCol.setCellValueFactory(new PropertyValueFactory<>("departamento"));
 
-			deptoCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			deptoCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+			deptoCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			deptoCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setDepartamento(t.getNewValue());
 			});
 
@@ -212,7 +221,7 @@ public class Destinatarios {
 		}
 	}
 
-	public void ConfirmarDestinatariosStage(Stage stage, Reporte reporte) {
+	public void ConfirmarDestinatariosStage(Stage stage, Controlenvio controlEnvio) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -222,8 +231,8 @@ public class Destinatarios {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" + "\nDestinatario: " + reporte.getDestinatario()
-					+ "\nDepartamento: " + reporte.getDepartamento());
+			Text text = new Text("Desea guardar los cambios?\n" + "\nDestinatario: " + controlEnvio.getDestinatario()
+					+ "\nDepartamento: " + controlEnvio.getDepartamento());
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);

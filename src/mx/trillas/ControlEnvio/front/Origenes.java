@@ -1,4 +1,4 @@
-package mx.trilas.ControlEnvio.front;
+package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
@@ -24,17 +24,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillasControlEnvio.persistence.pojos.Reporte;
+import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
 
 public class Origenes {
 
 	/* Solo datos de ejemplo*/
 
-	private final ObservableList<Reporte> data = FXCollections.observableArrayList(
-			new Reporte(new Integer(0),"DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Reporte(new Integer(1),"Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Reporte(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Reporte(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
+			new Controlenvio(new Integer(0),"DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
+			new Controlenvio(new Integer(1),"Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
+			new Controlenvio(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
+			new Controlenvio(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
 	public void origenesStage(Stage stage) {
 
@@ -136,21 +136,21 @@ public class Origenes {
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
-			TableView<Reporte> table = new TableView<Reporte>();
+			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(true);
 
-			TableColumn<Reporte, String> idCol = new TableColumn<>("Id");
+			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
 			idCol.setMinWidth(95);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 			
-			TableColumn<Reporte, String> origenCol = new TableColumn<>("Origen");
+			TableColumn<Controlenvio, String> origenCol = new TableColumn<>("Origen");
 			origenCol.setMinWidth(190);
 			origenCol.setCellValueFactory(new PropertyValueFactory<>("origen"));
 
-			origenCol.setCellFactory(TextFieldTableCell.<Reporte> forTableColumn());
-			origenCol.setOnEditCommit((CellEditEvent<Reporte, String> t) -> {
-				((Reporte) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrigen(t.getNewValue());
+			origenCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
+			origenCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
+				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrigen(t.getNewValue());
 			});
 
 			table.setItems(data);
@@ -190,7 +190,7 @@ public class Origenes {
 		}
 	}
 	
-	public void ConfirmarOrigenesStage(Stage stage, Reporte reporte) {
+	public void ConfirmarOrigenesStage(Stage stage, Controlenvio controlEnvio) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -201,7 +201,7 @@ public class Origenes {
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
 			Text text = new Text("Desea guardar los cambios?\n" 
-					+ "\nOrigen: " + reporte.getOrigen());
+					+ "\nOrigen: " + controlEnvio.getOrigen());
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);
