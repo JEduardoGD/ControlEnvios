@@ -32,22 +32,22 @@ public class Captura {
 
 	public void CapturaStage(Stage stage) {
 		try {
-			VBox rootVBox = new VBox();
-			VBox vbox = new VBox(15);
+			VBox rootVBox = new VBox(5);
+			VBox vbox = new VBox(20);
 
-			FlowPane mensajeraPane = new FlowPane(1,1);
+			FlowPane mensajeraPane = new FlowPane(1, 1);
 			FlowPane headerPane = new FlowPane();
-			FlowPane observacionPane = new FlowPane(10,10);
-			FlowPane guiaPane = new FlowPane(17,10);
+			FlowPane observacionPane = new FlowPane(10, 10);
+			FlowPane guiaPane = new FlowPane(17, 10);
 			FlowPane destinatarioPane = new FlowPane();
 			FlowPane deptosPane = new FlowPane();
-			FlowPane origenPane = new FlowPane(45,10);
+			FlowPane origenPane = new FlowPane(45, 10);
 			FlowPane otroDestinatarioPane = new FlowPane();
 			FlowPane otroOrigenPane = new FlowPane();
 			FlowPane clearPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(rootVBox, 470, 500);
+			Scene scene = new Scene(rootVBox, 470, 530);
 
 			mensajeraPane.setAlignment(Pos.CENTER);
 			guiaPane.setAlignment(Pos.CENTER);
@@ -59,7 +59,6 @@ public class Captura {
 			clearPane.setAlignment(Pos.BOTTOM_CENTER);
 			buttonsPane.setAlignment(Pos.BOTTOM_CENTER);
 
-			observacionPane.setVisible(false);
 			otroOrigenPane.setVisible(false);
 			otroDestinatarioPane.setVisible(false);
 
@@ -91,27 +90,12 @@ public class Captura {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 
-					if (mensajeriaCombo.isHover()) {
-						System.out.println("is hover");
-					}
-
-					if (mensajeriaCombo.getValue().equals("Personalmente")) {
-						 System.out.println("personalment... ");
-						observacionPane.setVisible(true);
-						mensajeriaCombo.setDisable(true);
-					}
 				}
 			});
 
 			mensajeraPane.getChildren().addAll(labelMensajeria, mensajeriaCombo);
 
 			rootVBox.getChildren().addAll(mensajeraPane);
-
-			Label observacionLabel = new Label("Observacion ");
-
-			TextField observacionField = new TextField();
-			observacionPane.getChildren().addAll(observacionLabel, observacionField);
-			rootVBox.getChildren().addAll(observacionPane);
 
 			Label guiaLabel = new Label();
 			guiaLabel.setText("Numero guia");
@@ -188,6 +172,12 @@ public class Captura {
 			otroDestinatarioPane.getChildren().addAll(otroDestinatarioLabel, otroDestinatarioField);
 			rootVBox.getChildren().addAll(otroDestinatarioPane);
 
+			Label observacionLabel = new Label("Observacion ");
+
+			TextField observacionField = new TextField();
+			observacionPane.getChildren().addAll(observacionLabel, observacionField);
+			rootVBox.getChildren().addAll(observacionPane);
+
 			Button clearButton = new Button("Limpiar formulario");
 			clearButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -198,7 +188,7 @@ public class Captura {
 				}
 			});
 			clearPane.getChildren().addAll(clearButton);
-			
+
 			Button submitButton = new Button("Aceptar");
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -209,18 +199,8 @@ public class Captura {
 				}
 			});
 
-			Button cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-
-			buttonsPane.getChildren().addAll(submitButton, cancelButton);
-			rootVBox.getChildren().addAll(clearPane,buttonsPane);
+			buttonsPane.getChildren().addAll(submitButton);
+			rootVBox.getChildren().addAll(clearPane, buttonsPane);
 
 			vbox.setAlignment(Pos.BOTTOM_CENTER);
 			rootVBox.getChildren().addAll(vbox);

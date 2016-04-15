@@ -6,7 +6,6 @@
 	-fx-spacing: 15.0;
 }
 
-
 .button {
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #e2e2e2;
@@ -17,14 +16,6 @@
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
-}
-
-.inputs {
-	-fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-	-fx-text-fill: #fff;
-	-fx-font-size: 11pt;
-    -fx-text-fill: #333;
-    -fx-opacity: 0.7;
 }
 
 .button:hover {
@@ -63,7 +54,6 @@
 .backButton {
 		-fx-padding: 25;
 		-fx-background-size: 50;
-/*		-fx-background-image: url("../img/back.png"); */
 		-fx-background-color: #fff;
 		 -fx-text-fill: #000;
 		-fx-background-repeat: space;

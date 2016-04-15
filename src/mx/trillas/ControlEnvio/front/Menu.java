@@ -16,7 +16,7 @@ public class Menu {
 
 		try {
 			VBox rootVBox = new VBox();
-			Scene scene = new Scene(rootVBox, 570, 570);
+			Scene scene = new Scene(rootVBox, 550, 550);
 			
 			rootVBox.setAlignment(Pos.CENTER);
 			
@@ -75,7 +75,7 @@ public class Menu {
 
 		try {
 			VBox rootVBox = new VBox();
-			Scene scene = new Scene(rootVBox, 570, 570);
+			Scene scene = new Scene(rootVBox, 550, 550);
 			rootVBox.setAlignment(Pos.CENTER);
 
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/panelAdmin.css").toExternalForm());
@@ -117,6 +117,17 @@ public class Menu {
 			});
 			rootVBox.getChildren().add(personasButton);
 
+			Button deptosButton = new Button("Alta o modificar departamentos");
+			deptosButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			rootVBox.getChildren().add(deptosButton);
+			
 			Button logOutButton = new Button("Log Out");
 			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {

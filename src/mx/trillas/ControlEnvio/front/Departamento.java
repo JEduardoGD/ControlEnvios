@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,7 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
 
-public class Destinatarios {
+public class Departamento {
 
 	/* Solo datos de ejemplo */
 
@@ -37,7 +36,7 @@ public class Destinatarios {
 			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
 			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
-	public void destinatariosStage(Stage stage) {
+	public void departamentoStage(Stage stage) {
 
 		try {
 			VBox rootVbox = new VBox(25);
@@ -49,18 +48,14 @@ public class Destinatarios {
 			FlowPane destinoPane = new FlowPane(18, 15);
 			destinoPane.setAlignment(Pos.CENTER);
 
-			FlowPane deptoPane = new FlowPane(18, 15);
-			deptoPane.setAlignment(Pos.CENTER);
-			
 			FlowPane abrevPane = new FlowPane();
 			abrevPane.setAlignment(Pos.CENTER);
 
 			FlowPane flowButtonsPane = new FlowPane();
 
 			HBox headerPane = new HBox(150);
-			Scene scene = new Scene(new Group(), 480, 450);
-			scene.getStylesheets()
-					.add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
+			Scene scene = new Scene(new Group(), 490, 450);
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/departamento.css").toExternalForm());
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
@@ -76,7 +71,7 @@ public class Destinatarios {
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
 
-			Button modifyButton = new Button("Modificar destinatarios");
+			Button modifyButton = new Button("Modificar departamentos");
 			modifyButton.getStyleClass().add("modificarRegistroButton");
 			modifyButton.setAlignment(Pos.TOP_RIGHT);
 			modifyButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -91,27 +86,15 @@ public class Destinatarios {
 			headerPane.getChildren().addAll(backButton, modifyButton);
 			rootVbox.getChildren().addAll(headerPane);
 
-			Text text = new Text("Ingrese los datos del nuevo destinatario");
+			Text text = new Text("Ingrese el departamento");
 			rootVbox.getChildren().addAll(text);
 
-			Label destinatarioLabel = new Label("Destinatario ");
-			destinatarioLabel.getStyleClass().add(".inputs");
-			TextField destinatarioField = new TextField();
+			Label nombreLabel = new Label("Departamento:");
+			TextField nombreField = new TextField();
 
-			nombrePane.getChildren().addAll(destinatarioLabel, destinatarioField);
+			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
 
-			Label deptoLabel = new Label("Departamento ");
-			deptoLabel.getStyleClass().add(".inputs");
-
-			ComboBox<Object> deptoCombo = new ComboBox<>();
-			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas");
-			deptoCombo.setPromptText("Seleccione una opcion...");
-			
-			deptoPane.getChildren().addAll(deptoLabel, deptoCombo);
-			rootVbox.getChildren().addAll(deptoPane);
-
-			
 			Button aceptarButton = new Button("Aceptar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -137,7 +120,7 @@ public class Destinatarios {
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Alta y modificacion de destinatarios");
+			stage.setTitle("Control de paquetería - Alta y modificacion de departamentos");
 			stage.setResizable(true);
 			stage.show();
 
@@ -146,36 +129,26 @@ public class Destinatarios {
 		}
 	}
 
-	public void modificarDestinatariosStage(Stage stage) {
+	public void modificarDepartamentoStage(Stage stage) {
 
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(paneVbox, 430, 450);
+			Scene scene = new Scene(paneVbox, 400, 450);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/departamento.css").toExternalForm());
 
 			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(true);
 
 			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
-			idCol.setMinWidth(80);
+			idCol.setMinWidth(200);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Controlenvio, String> destinatarioCol = new TableColumn<>("Destinatario");
-			destinatarioCol.setMinWidth(190);
-			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("destinatario"));
-
-			destinatarioCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			destinatarioCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setDestinatario(t.getNewValue());
-			});
-
 			TableColumn<Controlenvio, String> deptoCol = new TableColumn<>("Departamento");
-			deptoCol.setMinWidth(140);
+			deptoCol.setMinWidth(200);
 			deptoCol.setCellValueFactory(new PropertyValueFactory<>("departamento"));
 
 			deptoCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
@@ -185,7 +158,7 @@ public class Destinatarios {
 			});
 
 			table.setItems(data);
-			table.getColumns().addAll(idCol, destinatarioCol, deptoCol);
+			table.getColumns().addAll(idCol, deptoCol);
 
 			paneVbox.setSpacing(10);
 			paneVbox.setPadding(new Insets(1));
@@ -212,7 +185,7 @@ public class Destinatarios {
 			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Modificar destinatarios");
+			stage.setTitle("Control de paquetería - Modificar departamentos");
 			stage.setResizable(true);
 			stage.show();
 
@@ -221,7 +194,7 @@ public class Destinatarios {
 		}
 	}
 
-	public void ConfirmarDestinatariosStage(Stage stage, Controlenvio controlEnvio) {
+	public void ConfirmarDepartamentoStage(Stage stage, Controlenvio controlEnvio) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -231,8 +204,7 @@ public class Destinatarios {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" + "\nDestinatario: " + controlEnvio.getDestinatario()
-					+ "\nDepartamento: " + controlEnvio.getDepartamento());
+			Text text = new Text("Desea guardar los cambios?\n" + "\nDepartamento: " + controlEnvio.getDepartamento());
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -276,81 +248,7 @@ public class Destinatarios {
 			rootVbox.getChildren().addAll(flowPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Confirmar destinatario");
-			stage.setResizable(true);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void otroDestinatarioStage(Stage stage) {
-
-		try {
-			VBox rootVbox = new VBox(25);
-			rootVbox.setAlignment(Pos.CENTER);
-
-			FlowPane nombrePane = new FlowPane(18, 15);
-			nombrePane.setAlignment(Pos.CENTER);
-
-			FlowPane flowButtonsPane = new FlowPane();
-
-			HBox headerPane = new HBox(150);
-			Scene scene = new Scene(new Group(), 450, 450);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/otros.css").toExternalForm());
-
-			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
-
-			Button backButton = new Button("Regresar");
-			backButton.getStyleClass().add("backButton");
-			backButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			backButton.setAlignment(Pos.TOP_LEFT);
-
-			headerPane.getChildren().addAll(backButton);
-			rootVbox.getChildren().addAll(headerPane);
-
-			Text text = new Text("Ingrese el destinatario");
-			rootVbox.getChildren().addAll(text);
-
-			Label nombreLabel = new Label("Destinatario:");
-			TextField nombreField = new TextField();
-
-			nombrePane.getChildren().addAll(nombreLabel, nombreField);
-			rootVbox.getChildren().addAll(nombrePane);
-
-			Button aceptarButton = new Button("Aceptar");
-			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setAlignment(Pos.CENTER);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
-
-			rootVbox.getChildren().addAll(flowButtonsPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Otro destinatario");
+			stage.setTitle("Confirmar departamento");
 			stage.setResizable(true);
 			stage.show();
 
