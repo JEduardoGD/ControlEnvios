@@ -15,14 +15,14 @@ import javafx.stage.Stage;
 
 public class Login {
 	
-	public void LoginStage(Stage login) {
-		Menu menuEntry = new Menu();
+	public void LoginStage(Stage stage) {
 		
 		try {
 			VBox rootPane = new VBox();
-			Scene scene = new Scene(rootPane, 400, 400);
-			FlowPane usernamePane = new FlowPane();
-			FlowPane passwdPane = new FlowPane();
+			Scene scene = new Scene(rootPane, 450, 450);
+			
+			FlowPane usernamePane = new FlowPane(50,50);
+			FlowPane passwdPane = new FlowPane(20,20);
 			
 			rootPane.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/login.css").toExternalForm());
@@ -30,23 +30,23 @@ public class Login {
 			Text introText = new Text("Control de paquetería");
 			introText.setId("introText");
 			
-			Text loginText = new Text("Login");
+			Text loginText = new Text("Acceso");
 			loginText.setId("loginText");
 			
 			rootPane.getChildren().addAll(introText, loginText);
 			
-			Label usernameLabel= new Label("Username   ");
+			Label usernameLabel= new Label("Usuario");
 			usernameLabel.getStyleClass().add("labels");
 			TextField usernameField = new TextField();
 			
 			usernamePane.getChildren().addAll(usernameLabel, usernameField);
 			
-			Label passwdLabel = new Label("Contraseña ");
+			Label passwdLabel = new Label("Contraseña");
 			passwdLabel.getStyleClass().add("labels");
 			PasswordField passwdField = new PasswordField();
 			
-			usernamePane.setAlignment(Pos.BASELINE_CENTER);
-			passwdPane.setAlignment(Pos.BASELINE_CENTER);
+			usernamePane.setAlignment(Pos.CENTER);
+			passwdPane.setAlignment(Pos.CENTER);
 			passwdPane.getChildren().addAll(passwdLabel, passwdField);
 			
 			rootPane.getChildren().addAll(usernamePane, passwdPane);
@@ -54,19 +54,22 @@ public class Login {
 			Button submitButton = new Button("Aceptar");
 			submitButton.setId("submitButton");
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
-
+				
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu =  new Menu();
+					
+//					menu.UserMenuStage(stage);
+					menu.AdminMenuStage(stage);
 				}
 			});
 			rootPane.getChildren().add(submitButton);
 
-			login.setScene(scene);
-			login.setTitle("Control de paquetería - Login");
-			login.setResizable(false);
-			login.show();
+			stage.setScene(scene);
+			stage.setTitle("Control de paquetería - Login");
+			stage.setResizable(false);
+			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

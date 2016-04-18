@@ -3,6 +3,7 @@ package mx.trillas.ControlEnvio.front;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Menu {
-
 
 	public void UserMenuStage(Stage stage) {
 
@@ -32,7 +32,8 @@ public class Menu {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Captura captura = new Captura();
+					captura.CapturaStage(stage);
 				}
 			});
 			rootVBox.getChildren().add(capturaButton);
@@ -43,7 +44,8 @@ public class Menu {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Report reporte = new Report();
+					reporte.GenerarReporteStage(stage);
 				}
 			});
 			rootVBox.getChildren().add(generarReporteButton);
@@ -55,7 +57,8 @@ public class Menu {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Login login = new Login();
+					login.LoginStage(stage);
 				}
 			});
 			logOutButton.setAlignment(Pos.BOTTOM_RIGHT);
@@ -69,7 +72,6 @@ public class Menu {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public void AdminMenuStage(Stage stage) {
 
@@ -79,7 +81,7 @@ public class Menu {
 			rootVBox.setAlignment(Pos.CENTER);
 
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/panelAdmin.css").toExternalForm());
-
+			
 			Label label = new Label();
 			label.setText("Elija una opción");
 			rootVBox.getChildren().add(label);
@@ -90,29 +92,32 @@ public class Menu {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Mensajeria mensajeria = new Mensajeria();
+					mensajeria.mensajeriaStage(stage);
 				}
 			});
 			rootVBox.getChildren().add(mensajeriaButon);
 
-			Button origenesBUtton = new Button("Alta o modificar lugares origenes");
-			origenesBUtton.setOnAction(new EventHandler<ActionEvent>() {
+			Button origenesButton = new Button("Alta o modificar lugares origenes");
+			origenesButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Origenes origenes =  new Origenes();
+					origenes.origenesStage(stage);
 				}
 			});
-			rootVBox.getChildren().add(origenesBUtton);
+			rootVBox.getChildren().add(origenesButton);
 
 			Button personasButton = new Button("Alta o modificar personas destinatarias");
-			origenesBUtton.setOnAction(new EventHandler<ActionEvent>() {
+			personasButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Destinatarios destinatarios = new Destinatarios();
+					destinatarios.destinatariosStage(stage);
 				}
 			});
 			rootVBox.getChildren().add(personasButton);
@@ -123,7 +128,8 @@ public class Menu {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Departamento depto = new Departamento();
+					depto.departamentoStage(stage);
 				}
 			});
 			rootVBox.getChildren().add(deptosButton);
@@ -135,7 +141,8 @@ public class Menu {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Login login = new Login();
+					login.LoginStage(stage);
 				}
 			});
 			logOutButton.setAlignment(Pos.BOTTOM_RIGHT);

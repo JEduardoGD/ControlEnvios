@@ -37,17 +37,19 @@ public class Captura {
 
 			FlowPane mensajeraPane = new FlowPane(1, 1);
 			FlowPane headerPane = new FlowPane();
-			FlowPane observacionPane = new FlowPane(10, 10);
+			
 			FlowPane guiaPane = new FlowPane(17, 10);
-			FlowPane destinatarioPane = new FlowPane();
-			FlowPane deptosPane = new FlowPane();
-			FlowPane origenPane = new FlowPane(45, 10);
+			FlowPane destinatarioPane = new FlowPane(45,10);
+			FlowPane deptosPane = new FlowPane(25,10);
+			FlowPane origenPane = new FlowPane(55, 10);
+			FlowPane otroOrigenPane = new FlowPane(45,10);
 			FlowPane otroDestinatarioPane = new FlowPane();
-			FlowPane otroOrigenPane = new FlowPane();
+			FlowPane otroDeptoPane = new FlowPane(5,10);
+			FlowPane observacionPane = new FlowPane(35, 10);
 			FlowPane clearPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(rootVBox, 470, 530);
+			Scene scene = new Scene(rootVBox, 480, 560);
 
 			mensajeraPane.setAlignment(Pos.CENTER);
 			guiaPane.setAlignment(Pos.CENTER);
@@ -56,12 +58,13 @@ public class Captura {
 			observacionPane.setAlignment(Pos.CENTER);
 			otroOrigenPane.setAlignment(Pos.CENTER);
 			otroDestinatarioPane.setAlignment(Pos.CENTER);
+			otroDeptoPane.setAlignment(Pos.CENTER);
 			clearPane.setAlignment(Pos.BOTTOM_CENTER);
 			buttonsPane.setAlignment(Pos.BOTTOM_CENTER);
 
-			otroOrigenPane.setVisible(false);
-			otroDestinatarioPane.setVisible(false);
-
+//			otroOrigenPane.setVisible(false);
+//			otroDestinatarioPane.setVisible(false);
+			
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/captura.css").toExternalForm());
 
 			Button backButton = new Button("Regresar");
@@ -71,7 +74,8 @@ public class Captura {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu = new Menu();
+					menu.UserMenuStage(stage);
 				}
 			});
 			headerPane.setAlignment(Pos.TOP_LEFT);
@@ -97,19 +101,25 @@ public class Captura {
 
 			rootVBox.getChildren().addAll(mensajeraPane);
 
-			Label guiaLabel = new Label();
-			guiaLabel.setText("Numero guia");
+			Label guiaLabel = new Label("Numero guia");
 
 			TextField guiaField = new TextField();
 			guiaPane.getChildren().addAll(guiaLabel, guiaField);
 			rootVBox.getChildren().addAll(guiaPane);
 
-			Label origenMensajeria = new Label();
-			origenMensajeria.setText("Origen ");
+			TextField otroOrigenField = new TextField();
+			TextField otroDeptoField = new TextField();
+			TextField otroDestinatarioField = new TextField();
+			
+			otroOrigenField.setDisable(true);
+			otroDeptoField.setDisable(true);
+			otroDestinatarioField.setDisable(true);
+			
+			Label origenMensajeria = new Label("Origen ");
 
 			ComboBox<Object> origenCombo = new ComboBox<>();
 			origenCombo.getItems().addAll("Chihuahua", "Durango", "DF", "Sonora", "Chiapas", "Zacatecas", "Otro");
-			origenCombo.setPromptText("Seleccione un origen... ");
+			origenCombo.setPromptText("Seleccione un origen...");
 			origenPane.getChildren().addAll(origenMensajeria, origenCombo);
 
 			origenCombo.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,37 +128,52 @@ public class Captura {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					if (origenCombo.getValue().equals("Otro")) {
-						// System.out.println(destinatarioCombo.getValue().equals("Otro"));
-						otroOrigenPane.setVisible(true);
-						origenCombo.setDisable(true);
+						otroOrigenField.setDisable(false);
+					} else {
+						otroOrigenField.setDisable(true);
 					}
 				}
 			});
 
 			rootVBox.getChildren().addAll(origenPane);
 
-			Label otroOrigenLabel = new Label("Otro origen   ");
-
-			TextField otroOrigenField = new TextField();
+			Label otroOrigenLabel = new Label("Otro origen ");
+			
 			otroOrigenPane.getChildren().addAll(otroOrigenLabel, otroOrigenField);
+			
+
 			rootVBox.getChildren().addAll(otroOrigenPane);
 
-			Label deptoLabel = new Label();
-			deptoLabel.setText("Departamento ");
+			Label deptoLabel = new Label("Departamento ");
 
 			ComboBox<Object> deptoCombo = new ComboBox<>();
-			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas");
+			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas", "Otro");
 			deptoCombo.setPromptText("Seleccione una opcion...");
 			deptosPane.setAlignment(Pos.CENTER);
+			
+			deptoCombo.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					if (deptoCombo.getValue().equals("Otro")) {
+					}
+					if (deptoCombo.getValue().equals("Otro")) {
+						otroDeptoField.setDisable(false);
+					} else {
+						otroDeptoField.setDisable(true);
+					}
+				}
+			});
+			
 			deptosPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVBox.getChildren().addAll(deptosPane);
 
-			Label destinatarioLabel = new Label();
-			destinatarioLabel.setText("Destinatario    ");
+			Label destinatarioLabel = new Label("Destinatario ");
 
 			ComboBox<Object> destinatarioCombo = new ComboBox<>();
 			destinatarioCombo.getItems().addAll("Mario Benites", "Rufo Vazquez", "Mafia Costa", "Sofia Fierro", "Otro");
-			destinatarioCombo.setPromptText("Seleccione una opcion...");
+			destinatarioCombo.setPromptText("Seleccione una opción...");
 
 			destinatarioCombo.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -156,9 +181,12 @@ public class Captura {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					if (destinatarioCombo.getValue().equals("Otro")) {
+					}
+					if (destinatarioCombo.getValue().equals("Otro")) {
 						// System.out.println(destinatarioCombo.getValue().equals("Otro"));
-						otroDestinatarioPane.setVisible(true);
-						destinatarioCombo.setDisable(true);
+						otroDestinatarioField.setDisable(false);
+					} else {
+						otroDestinatarioField.setDisable(true);
 					}
 				}
 			});
@@ -167,11 +195,14 @@ public class Captura {
 			rootVBox.getChildren().addAll(destinatarioPane);
 
 			Label otroDestinatarioLabel = new Label("Otro destinatario ");
-
-			TextField otroDestinatarioField = new TextField();
+			Label otroDeptoLabel = new Label("Otro deparamento ");
+			
 			otroDestinatarioPane.getChildren().addAll(otroDestinatarioLabel, otroDestinatarioField);
 			rootVBox.getChildren().addAll(otroDestinatarioPane);
 
+			otroDeptoPane.getChildren().addAll(otroDeptoLabel, otroDeptoField);
+			rootVBox.getChildren().addAll(otroDeptoPane);
+			
 			Label observacionLabel = new Label("Observacion ");
 
 			TextField observacionField = new TextField();

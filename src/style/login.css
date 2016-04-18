@@ -6,38 +6,12 @@
 	-fx-spacing: 15.0;
 }
 
-#submitButton{
-	-fx-background-color: #bbb, linear-gradient(black,  #bbb);
-	-fx-text-fill: white;
-	-fx-position-shape: true;
-	-fx-alignment: center;
-	-fx-background-radius: 5.0;
-	-fx-padding: 10 16 10 16;
-}
-
-.label {
-	-fx-font-size: 10pt;
-	-fx-font-family: Arial;
-	-fx-text-fill: #000;
-}
-
-.labels {
-	-fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #333;
-    -fx-opacity: 0.8;
-    -fx-font-weight: normal;
-    -fx-font-posture: regular;
-     -fx-stroke-width: 1;
-}
-
 #introText {
 	-fx-font-size: 18pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: #333;
     -fx-opacity: 0.8;
     -fx-font-weight: bold;	
-    -fx-font-posture: regular;
      -fx-stroke-width: 1;
 }
 
@@ -47,7 +21,6 @@
     -fx-text-fill: #333;
     -fx-opacity: 0.8;
     -fx-font-weight: bold;	
-    -fx-font-posture: regular;
      -fx-stroke-width: 1;
 }
 
@@ -57,4 +30,34 @@
 	-fx-min-width: 60.0;
     -fx-min-height: 10.0;
     -fx-background-color: #ccc;
+
+    -fx-font-size: 12pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #333;
+}
+
+.labels {
+	-fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #333;
+    -fx-opacity: 0.8;
+    -fx-font-weight: bold;
+}
+
+#submitButton{
+	-fx-background-color: #bbb, linear-gradient(black,  #bbb);
+	-fx-text-fill: white;
+	-fx-position-shape: true;
+	-fx-alignment: center;
+	-fx-background-radius: 5.0;
+	-fx-padding: 10 16 10 16;
+}
+
+#submitButton:hover{
+	-fx-background-color: #bbb, linear-gradient(#222,  #ddd);
+	-fx-text-fill: white;
+	-fx-position-shape: true;
+	-fx-alignment: center;
+	-fx-background-radius: 5.0;
+	-fx-padding: 10 16 10 16;
 }

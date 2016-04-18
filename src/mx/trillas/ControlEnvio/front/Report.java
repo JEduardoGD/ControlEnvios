@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -38,14 +39,18 @@ public class Report {
 	public void GenerarReporteStage(Stage stage) {
 
 		try {
-			VBox pane = new VBox();
-			Scene scene = new Scene(pane, 780, 285);
+			BorderPane border = new BorderPane();
 			HBox headerPane = new HBox ();
-			FlowPane labelsPane = new FlowPane(20, 40);
+			VBox pane = new VBox();
+			
+			Scene scene = new Scene(border, 850, 500);
+			
+			FlowPane labelsPane = new FlowPane(60, 80);
 			FlowPane datePane = new FlowPane(20, 40);
-			FlowPane buttonsPane = new FlowPane(20, 40);
+			HBox footer = new HBox();
 
 			pane.setAlignment(Pos.CENTER);
+			
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
 			
 			Button backButton = new Button("Regresar");
@@ -55,25 +60,28 @@ public class Report {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu = new Menu();
+					menu.UserMenuStage(stage);
 				}
 			});
 
 			headerPane.getChildren().add(backButton);
 			headerPane.setAlignment(Pos.TOP_LEFT);
-			pane.getChildren().add(headerPane);
+			border.setTop(headerPane);
 
-			Label text = new Label("Elija el rango de fechas para generación del reporte");
-			pane.getChildren().addAll(text);
+			Label welcomeLabel = new Label("Elija el rango de fechas para generación del reporte");
+			welcomeLabel.setId("welcomeLabel");
+			pane.getChildren().addAll(welcomeLabel);
 
 			Label textInicio = new Label("Fecha Inicio");
+			textInicio.setPadding(new Insets(15, 70, 15, 8));
 			textInicio.setId("textInicio");
 
 			Label textFin = new Label("Fecha fin");
+			textFin.setPadding(new Insets(15, 8, 15, 70));
 			textFin.setId("textFin");
 
 			labelsPane.setAlignment(Pos.CENTER);
-			labelsPane.setPadding(new Insets(8));
 			labelsPane.getChildren().addAll(textInicio, textFin);
 			pane.getChildren().addAll(labelsPane);
 
@@ -102,8 +110,10 @@ public class Report {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
+					reporteViewStage(stage);
 				}
 			});
+			
 			Button downloadButton = new Button("Descargar");
 			downloadButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -113,12 +123,15 @@ public class Report {
 
 				}
 			});
-			buttonsPane.setAlignment(Pos.BOTTOM_CENTER);
-			buttonsPane.setPadding(new Insets(20)); 
-			buttonsPane.getChildren().addAll(generarButton);
+			pane.getChildren().addAll(datePane);
 			
-			pane.getChildren().addAll(datePane, buttonsPane);
+			footer.setAlignment(Pos.BOTTOM_CENTER);
+			footer.setPadding(new Insets(15, 0, 15 , 0)); 
+			footer.getChildren().addAll(generarButton);
 
+			border.setCenter(pane);
+			border.setBottom(footer);
+			
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.show();
@@ -131,9 +144,8 @@ public class Report {
 	public VBox reportView(Stage stage, Scene scene) {
 		VBox vbox = new VBox();
 		FlowPane flowPane = new FlowPane();
-		
-		try {
 
+		try {
 			StackPane pane = new StackPane();
 			pane.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -218,7 +230,9 @@ public class Report {
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
+			
 			Scene scene = new Scene(paneVbox, 900, 500);
+			
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
@@ -236,6 +250,7 @@ public class Report {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
+					GenerarReporteStage(stage);
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);

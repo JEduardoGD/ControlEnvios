@@ -66,7 +66,8 @@ public class Departamento {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu = new Menu();
+					menu.AdminMenuStage(stage);
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
@@ -79,7 +80,8 @@ public class Departamento {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Departamento depto = new Departamento();
+					depto.modificarDepartamentoStage(stage);
 				}
 			});
 
@@ -177,7 +179,8 @@ public class Departamento {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Departamento depto = new Departamento();
+					depto.departamentoStage(stage);
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);

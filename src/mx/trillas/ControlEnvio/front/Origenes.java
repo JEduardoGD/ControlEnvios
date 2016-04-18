@@ -51,7 +51,7 @@ public class Origenes {
 			FlowPane flowButtonsPane = new FlowPane();
 
 			HBox headerPane = new HBox(150);
-			Scene scene = new Scene(new Group(), 450, 450);
+			Scene scene = new Scene(new Group(), 461, 450);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/origenes.css").toExternalForm());
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
@@ -63,7 +63,8 @@ public class Origenes {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu = new Menu();
+					menu.AdminMenuStage(stage);
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
@@ -76,7 +77,8 @@ public class Origenes {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Origenes origenes = new Origenes();
+					origenes.modificarOrigenesStage(stage);
 				}
 			});
 			
@@ -97,7 +99,7 @@ public class Origenes {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					
 				}
 			});
 
@@ -118,7 +120,7 @@ public class Origenes {
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Alta y modificacion de origenes");
-			stage.setResizable(true);
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (Exception e) {
@@ -173,7 +175,8 @@ public class Origenes {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Origenes origenes = new Origenes();
+					origenes.origenesStage(stage);
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
@@ -277,7 +280,7 @@ public class Origenes {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);

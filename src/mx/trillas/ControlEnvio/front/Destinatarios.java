@@ -51,7 +51,7 @@ public class Destinatarios {
 
 			FlowPane deptoPane = new FlowPane(18, 15);
 			deptoPane.setAlignment(Pos.CENTER);
-			
+
 			FlowPane abrevPane = new FlowPane();
 			abrevPane.setAlignment(Pos.CENTER);
 
@@ -71,7 +71,8 @@ public class Destinatarios {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu = new Menu();
+					menu.AdminMenuStage(stage);
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
@@ -84,7 +85,8 @@ public class Destinatarios {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Destinatarios destinatarios = new Destinatarios();
+					destinatarios.modificarDestinatariosStage(stage);
 				}
 			});
 
@@ -107,11 +109,10 @@ public class Destinatarios {
 			ComboBox<Object> deptoCombo = new ComboBox<>();
 			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas");
 			deptoCombo.setPromptText("Seleccione una opcion...");
-			
+
 			deptoPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVbox.getChildren().addAll(deptoPane);
 
-			
 			Button aceptarButton = new Button("Aceptar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -127,7 +128,7 @@ public class Destinatarios {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+			
 				}
 			});
 
@@ -154,7 +155,8 @@ public class Destinatarios {
 
 			Scene scene = new Scene(paneVbox, 430, 450);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
+			scene.getStylesheets()
+					.add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
 
 			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(true);
@@ -204,7 +206,8 @@ public class Destinatarios {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Destinatarios destinatarios = new Destinatarios();
+					destinatarios.destinatariosStage(stage);
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
@@ -269,7 +272,7 @@ public class Destinatarios {
 
 				}
 			});
-			
+
 			flowPane.setAlignment(Pos.CENTER);
 
 			flowPane.getChildren().addAll(aceptarButton, cancelarButton);

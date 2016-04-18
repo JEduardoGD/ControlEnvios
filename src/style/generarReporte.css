@@ -2,18 +2,10 @@
  
 .root {
 	-fx-background-color: white;
-	-fx-padding: 10.0%; 
-	-fx-spacing: 10.0;
-}
-.background {
-    -fx-background-color: #1d1d1d;
 }
 
-.label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #333;
-    -fx-opacity: 0.8;
+.background {
+    -fx-background-color: #1d1d1d;
 }
 
 .label-bright {
@@ -31,7 +23,7 @@
 }
 
 .button {
-    -fx-padding: 5 22 5 22;   
+    -fx-padding: 10 32 10 32;
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
      -fx-text-fill: #fff;
@@ -39,7 +31,6 @@
     -fx-background-color: #1d1d1d;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
-    /*-fx-text-fill: #d8d8d8;*/ 
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
@@ -75,31 +66,40 @@
 .button:default:hover {
     -fx-background-color: derive(-fx-focus-color,30%);
 }
+
 .label {
-	-fx-color: white;
-	-fx-font-family: Arial;
-	-fx-text-fill: #333;
+	-fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #000;
+    -fx-opacity: 0.8;
+}
+
+#welcomeLabel {
+	-fx-font-size: 16pt;
+    -fx-font-family: "Segoe UI Light";
+	-fx-color: #000;
+	-fx-opacity: 1;
+}
+
+#textInicio {
+	-fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+	-fx-color: #000;
+	-fx-opacity: 0.8;
 }
 
 #textFin {
-		-fx-size: 10;
-		-fx-font-family: Arial;
-		-fx-color: #000;
-}
-
-.text {
-		-fx-color: #333;
-		-fx-size: 4.0cm; 
-		-fx-font-family: Arial;
-		-fx-text-fill: #333;
-		-fx-background-color: blue;
+	-fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+	-fx-color: #000;
+	-fx-opacity: 0.8;
 }
 
 .text-field {
-		-fx-color: white;
-			-fx-pref-width: 190;
-			 -fx-min-width: 190;
-    -fx-min-height: 10;
+	-fx-color: white;
+	-fx-pref-width: 200;
+	-fx-min-width: 200;
+    -fx-min-height: 25;
     -fx-background-color: #ccc;
 }
 
@@ -111,7 +111,6 @@
 .backButton {
 		-fx-padding: 25;
 		-fx-background-size: 50;
-/*		-fx-background-image: url("../img/back.png"); */
 		-fx-background-color: #fff;
 		 -fx-text-fill: #000;
 		-fx-background-repeat: space;

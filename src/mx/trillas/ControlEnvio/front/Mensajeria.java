@@ -58,11 +58,12 @@ public class Mensajeria {
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
-
+				
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Menu menu = new Menu();
+					menu.AdminMenuStage(stage);   
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
@@ -76,7 +77,8 @@ public class Mensajeria {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Mensajeria mensajeria = new Mensajeria();
+					mensajeria.modificarMensajeriaStage(stage);
 				}
 			});
 
@@ -105,7 +107,7 @@ public class Mensajeria {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+		
 				}
 			});
 
@@ -172,7 +174,8 @@ public class Mensajeria {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					Mensajeria mensajeria = new Mensajeria();
+					mensajeria.mensajeriaStage(stage);
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
