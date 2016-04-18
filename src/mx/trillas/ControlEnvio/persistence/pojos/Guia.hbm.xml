@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/04/2016 11:21:29 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="mx.trillas.Controlenvio.persistence.pojos.Guia" table="guia" catalog="controlenvios" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="destinatario" class="mx.trillas.Controlenvio.persistence.pojos.Destinatario" fetch="select">
+            <column name="f_destinatario" />
+        </many-to-one>
+        <many-to-one name="mensajeria" class="mx.trillas.Controlenvio.persistence.pojos.Mensajeria" fetch="select">
+            <column name="f_mensajeria" not-null="true" />
+        </many-to-one>
+        <many-to-one name="origen" class="mx.trillas.Controlenvio.persistence.pojos.Origen" fetch="select">
+            <column name="f_origen" />
+        </many-to-one>
+        <many-to-one name="usuario" class="mx.trillas.Controlenvio.persistence.pojos.Usuario" fetch="select">
+            <column name="f_usuario" not-null="true" />
+        </many-to-one>
+        <property name="numero" type="string">
+            <column name="numero" length="45" not-null="true" unique="true" />
+        </property>
+        <property name="observacion" type="string">
+            <column name="observacion" length="45" />
+        </property>
+        <property name="fecha" type="timestamp">
+            <column name="fecha" length="19" not-null="true" />
+        </property>
+        <property name="otroorigen" type="string">
+            <column name="otroorigen" length="45" />
+        </property>
+        <property name="otrodestinatario" type="string">
+            <column name="otrodestinatario" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

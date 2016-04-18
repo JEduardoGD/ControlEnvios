@@ -9,10 +9,10 @@ public class Principal extends Application {
 	@Override
 	public void start(Stage rootStage) {
 		
-		Login login = new Login();
+		LoginWindow login = new LoginWindow();
 		login.LoginStage(rootStage);
 		
-		Report report = new Report();
+		ReportWindow report = new ReportWindow();
 //		report.GenerarReporteStage(rootStage);
 	}
 
