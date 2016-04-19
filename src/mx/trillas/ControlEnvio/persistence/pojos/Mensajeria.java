@@ -1,5 +1,5 @@
 package mx.trillas.ControlEnvio.persistence.pojos;
-// Generated 18/04/2016 11:21:28 AM by Hibernate Tools 4.3.1
+// Generated 19/04/2016 10:31:08 AM by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;

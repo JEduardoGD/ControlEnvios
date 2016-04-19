@@ -24,8 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
+import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class MensajeriaWindow {
 
@@ -58,12 +57,12 @@ public class MensajeriaWindow {
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
-				
+
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					MenuWindow menu = new MenuWindow();
-					menu.AdminMenuStage(stage);   
+					menu.AdminMenuStage(stage);
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
@@ -107,7 +106,7 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-		
+
 				}
 			});
 

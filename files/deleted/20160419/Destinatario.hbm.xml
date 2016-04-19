@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/04/2016 11:21:29 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="mx.trillas.Controlenvio.persistence.pojos.Destinatario" table="destinatario" catalog="controlenvios" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="departamento" class="controlenvios.Departamento" fetch="select">
+            <column name="f_departamento" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" unique="true" />
+        </property>
+        <set name="guias" table="guia" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="f_destinatario" />
+            </key>
+            <one-to-many class="mx.trillas.Controlenvio.persistence.pojos.Guia" />
+        </set>
+    </class>
+</hibernate-mapping>

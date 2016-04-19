@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 18/04/2016 11:21:29 AM by Hibernate Tools 4.3.1 -->
+<!-- Generated 19/04/2016 10:31:08 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="mx.trillas.Controlenvio.persistence.pojos.Tiposusuario" table="tiposusuario" catalog="controlenvios" optimistic-lock="version">
+    <class name="mx.trillas.ControlEnvio.persistence.pojos.Tiposusuario" table="tiposusuario" catalog="controlenvios" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
             <column name="id" />
             <generator class="identity" />
@@ -15,7 +15,7 @@
             <key>
                 <column name="f_tiposusuario" not-null="true" />
             </key>
-            <one-to-many class="mx.trillas.Controlenvio.persistence.pojos.Usuario" />
+            <one-to-many class="mx.trillas.ControlEnvio.persistence.pojos.Usuario" />
         </set>
     </class>
 </hibernate-mapping>

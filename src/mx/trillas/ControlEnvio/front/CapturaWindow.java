@@ -18,8 +18,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
+import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class CapturaWindow {
 
@@ -37,7 +36,7 @@ public class CapturaWindow {
 
 			FlowPane mensajeraPane = new FlowPane(1, 1);
 			FlowPane headerPane = new FlowPane();
-			
+
 			FlowPane guiaPane = new FlowPane(17, 10);
 			FlowPane destinatarioPane = new FlowPane(45,10);
 			FlowPane deptosPane = new FlowPane(25,10);
@@ -64,7 +63,7 @@ public class CapturaWindow {
 
 //			otroOrigenPane.setVisible(false);
 //			otroDestinatarioPane.setVisible(false);
-			
+
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/captura.css").toExternalForm());
 
 			Button backButton = new Button("Regresar");
@@ -110,11 +109,11 @@ public class CapturaWindow {
 			TextField otroOrigenField = new TextField();
 			TextField otroDeptoField = new TextField();
 			TextField otroDestinatarioField = new TextField();
-			
+
 			otroOrigenField.setDisable(true);
 			otroDeptoField.setDisable(true);
 			otroDestinatarioField.setDisable(true);
-			
+
 			Label origenMensajeria = new Label("Origen ");
 
 			ComboBox<Object> origenCombo = new ComboBox<>();
@@ -138,9 +137,9 @@ public class CapturaWindow {
 			rootVBox.getChildren().addAll(origenPane);
 
 			Label otroOrigenLabel = new Label("Otro origen ");
-			
+
 			otroOrigenPane.getChildren().addAll(otroOrigenLabel, otroOrigenField);
-			
+
 
 			rootVBox.getChildren().addAll(otroOrigenPane);
 
@@ -150,7 +149,7 @@ public class CapturaWindow {
 			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas", "Otro");
 			deptoCombo.setPromptText("Seleccione una opcion...");
 			deptosPane.setAlignment(Pos.CENTER);
-			
+
 			deptoCombo.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -165,7 +164,7 @@ public class CapturaWindow {
 					}
 				}
 			});
-			
+
 			deptosPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVBox.getChildren().addAll(deptosPane);
 
@@ -196,13 +195,13 @@ public class CapturaWindow {
 
 			Label otroDestinatarioLabel = new Label("Otro destinatario ");
 			Label otroDeptoLabel = new Label("Otro deparamento ");
-			
+
 			otroDestinatarioPane.getChildren().addAll(otroDestinatarioLabel, otroDestinatarioField);
 			rootVBox.getChildren().addAll(otroDestinatarioPane);
 
 			otroDeptoPane.getChildren().addAll(otroDeptoLabel, otroDeptoField);
 			rootVBox.getChildren().addAll(otroDeptoPane);
-			
+
 			Label observacionLabel = new Label("Observacion ");
 
 			TextField observacionField = new TextField();

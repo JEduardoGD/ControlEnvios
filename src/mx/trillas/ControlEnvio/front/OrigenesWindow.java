@@ -24,7 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
+import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class OrigenesWindow {
 
@@ -41,13 +41,13 @@ public class OrigenesWindow {
 		try {
 			VBox rootVbox = new VBox(25);
 			rootVbox.setAlignment(Pos.CENTER);
-			
+
 			FlowPane nombrePane = new FlowPane(18,15);
 			nombrePane.setAlignment(Pos.CENTER);
-			
+
 			FlowPane abrevPane = new FlowPane();
 			abrevPane.setAlignment(Pos.CENTER);
-			
+
 			FlowPane flowButtonsPane = new FlowPane();
 
 			HBox headerPane = new HBox(150);
@@ -68,7 +68,7 @@ public class OrigenesWindow {
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
-			
+
 			Button modifyButton = new Button("Modificar origenes");
 			modifyButton.getStyleClass().add("modificarRegistroButton");
 			modifyButton.setAlignment(Pos.TOP_RIGHT);
@@ -81,25 +81,25 @@ public class OrigenesWindow {
 					origenes.modificarOrigenesStage(stage);
 				}
 			});
-			
+
 			headerPane.getChildren().addAll(backButton, modifyButton);
 			rootVbox.getChildren().addAll(headerPane);
-			
+
 			Text text = new Text("Ingrese el origen");
 			rootVbox.getChildren().addAll(text);
-			
+
 			Label nombreLabel = new Label("Origen ");
 			TextField nombreField = new TextField();
-			
+
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
-			
+
 			Button aceptarButton = new Button("Aceptar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
 
@@ -115,7 +115,7 @@ public class OrigenesWindow {
 
 			flowButtonsPane.setAlignment(Pos.CENTER);
 			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
-			
+
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
 			stage.setScene(scene);
@@ -127,13 +127,13 @@ public class OrigenesWindow {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void modificarOrigenesStage(Stage stage) {
 
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-			
+
 			Scene scene = new Scene(paneVbox, 290, 440);
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -145,7 +145,7 @@ public class OrigenesWindow {
 			idCol.setMinWidth(95);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-			
+
 			TableColumn<Controlenvio, String> origenCol = new TableColumn<>("Origen");
 			origenCol.setMinWidth(190);
 			origenCol.setCellValueFactory(new PropertyValueFactory<>("origen"));
@@ -161,7 +161,7 @@ public class OrigenesWindow {
 			paneVbox.setSpacing(10);
 			paneVbox.setPadding(new Insets(1));
 			paneVbox.getChildren().addAll(table);
-			
+
 			Button aceptarButton = new Button("Aceptar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -192,7 +192,7 @@ public class OrigenesWindow {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void ConfirmarOrigenesStage(Stage stage, Controlenvio controlEnvio) {
 		DropShadow shadow = new DropShadow();
 
@@ -203,7 +203,7 @@ public class OrigenesWindow {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" 
+			Text text = new Text("Desea guardar los cambios?\n"
 					+ "\nOrigen: " + controlEnvio.getOrigen());
 
 			Scene scene = new Scene(rootVbox, 450, 270);
@@ -255,13 +255,13 @@ public class OrigenesWindow {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void otroOrigenStage(Stage stage) {
 
 		try {
 			VBox rootVbox = new VBox(25);
 			rootVbox.setAlignment(Pos.CENTER);
-			
+
 			FlowPane nombrePane = new FlowPane(18,15);
 			nombrePane.setAlignment(Pos.CENTER);
 
@@ -280,23 +280,23 @@ public class OrigenesWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
 			backButton.setAlignment(Pos.TOP_LEFT);
-			
+
 			headerPane.getChildren().addAll(backButton);
 			rootVbox.getChildren().addAll(headerPane);
-			
+
 			Text text = new Text("Ingrese el origen");
 			rootVbox.getChildren().addAll(text);
-			
+
 			Label nombreLabel = new Label("Origen:");
 			TextField nombreField = new TextField();
-			
+
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
-			
+
 			Button aceptarButton = new Button("Aceptar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -317,7 +317,7 @@ public class OrigenesWindow {
 			});
 			flowButtonsPane.setAlignment(Pos.CENTER);
 			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
-			
+
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
 			stage.setScene(scene);

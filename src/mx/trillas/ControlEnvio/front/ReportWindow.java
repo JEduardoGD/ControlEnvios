@@ -26,7 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillas.ControlEnvio.persistence.pojos.Controlenvio;
+import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class ReportWindow {
 
@@ -42,17 +42,17 @@ public class ReportWindow {
 			BorderPane border = new BorderPane();
 			HBox headerPane = new HBox ();
 			VBox pane = new VBox();
-			
+
 			Scene scene = new Scene(border, 850, 500);
-			
+
 			FlowPane labelsPane = new FlowPane(60, 80);
 			FlowPane datePane = new FlowPane(20, 40);
 			HBox footer = new HBox();
 
 			pane.setAlignment(Pos.CENTER);
-			
+
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
-			
+
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -113,7 +113,7 @@ public class ReportWindow {
 					reporteViewStage(stage);
 				}
 			});
-			
+
 			Button downloadButton = new Button("Descargar");
 			downloadButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -124,14 +124,14 @@ public class ReportWindow {
 				}
 			});
 			pane.getChildren().addAll(datePane);
-			
+
 			footer.setAlignment(Pos.BOTTOM_CENTER);
-			footer.setPadding(new Insets(15, 0, 15 , 0)); 
+			footer.setPadding(new Insets(15, 0, 15 , 0));
 			footer.getChildren().addAll(generarButton);
 
 			border.setCenter(pane);
 			border.setBottom(footer);
-			
+
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.show();
@@ -140,7 +140,7 @@ public class ReportWindow {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public VBox reportView(Stage stage, Scene scene) {
 		VBox vbox = new VBox();
 		FlowPane flowPane = new FlowPane();
@@ -156,9 +156,9 @@ public class ReportWindow {
 			buscador.getStyleClass().add("textFieldReport");
 
 			flowPane.getChildren().addAll(reporteLabel, buscador);
-			
+
 			Text cabeceraTabla = new Text("Casa: departamento");
-			
+
 			TableView<Controlenvio> table = new TableView<Controlenvio>();
 			table.setEditable(false);
 
@@ -204,7 +204,7 @@ public class ReportWindow {
 				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setObservacion(t.getNewValue());
 			});
-			
+
 			TableColumn<Controlenvio, String> firmaCol = new TableColumn<>("Firma");
 			observacionCol.setMinWidth(250);
 
@@ -230,9 +230,9 @@ public class ReportWindow {
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-			
+
 			Scene scene = new Scene(paneVbox, 900, 500);
-			
+
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
