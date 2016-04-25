@@ -26,10 +26,10 @@ public class UsuarioDAODBImpl implements UsuarioDAO {
 			Object resObj = criteria.uniqueResult();
 			if (resObj != null && resObj instanceof Usuario) {
 				usuario = (Usuario) resObj;
+				HibernateUtil.initializeObject(usuario.getTiposusuario());
 				return usuario;
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
 			throw e;
 		} finally {
 			if (session != null)
@@ -37,5 +37,4 @@ public class UsuarioDAODBImpl implements UsuarioDAO {
 		}
 		return null;
 	}
-
 }

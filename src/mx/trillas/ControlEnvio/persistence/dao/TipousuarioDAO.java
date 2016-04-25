@@ -1,24 +1,13 @@
 package mx.trillas.ControlEnvio.persistence.dao;
-/*
-import mx.trillas.ControlEnvio.persistence.pojos.Tipousuario;
+
+import mx.trillas.ControlEnvio.persistence.pojos.Tiposusuario;
 
 public abstract interface TipousuarioDAO {
 
 	public enum TIPOS_USUARIO {
-		TIPOUSUARIO_ADMINISTRADOR("administrador"), TIPOUSUARIO_ASESOR("asesor");
-		private String tipo;
-
-		TIPOS_USUARIO(String tipo) {
-			this.tipo = tipo;
-		}
-
-		public String getString() {
-			return this.tipo;
-		}
+		
+		TIPOUSUARIO_ADMINISTRADOR, 
+		TIPOUSUARIO_CAPTURISTA
 	}
-
-	public Tipousuario getTipousuarioAdministrador() throws Exception;
-
-	public Tipousuario getTipousuarioAsesor() throws Exception;
+	public Tiposusuario getTipoDeusuario(TIPOS_USUARIO tipoUsuario) throws Exception;
 }
-*/

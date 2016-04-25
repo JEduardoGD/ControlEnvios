@@ -14,14 +14,18 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.persistence.dao.TipousuarioDAO;
 import mx.trillas.ControlEnvio.persistence.dao.UsuarioDAO;
+import mx.trillas.ControlEnvio.persistence.dao.TipousuarioDAO.TIPOS_USUARIO;
 import mx.trillas.ControlEnvio.persistence.factory.ImplFactory;
+import mx.trillas.ControlEnvio.persistence.impl.TipousuarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 
 public class LoginWindow {
 	private static UsuarioDAO usuarioDAO = ImplFactory.getUsuarioDAO();
 	private static Logger logger = Logger.getLogger(UsuarioDAO.class);
-
+	private static TipousuarioDAO tipousuarioDAO = new TipousuarioDAODBImpl();
+	
 	public void LoginStage(Stage stage) {
 
 		try {
@@ -67,37 +71,46 @@ public class LoginWindow {
 					String contentUsernameField = usernameField.getText();
 					String contentPasswdField = passwdField.getText();
 
-					if (contentUsernameField == null) {
-						
-					}
-					if (contentUsernameField.equals("")) {
-
-					}
-					if (contentPasswdField == null) {
-
-					}
-					if (contentPasswdField.equals("")) {
-
-					}
 					String username = contentUsernameField;
 					String password = contentPasswdField;
 					Usuario usuario = null;
+					MenuWindow menu = new MenuWindow();
+					
+					if (contentUsernameField == null) {
+						logger.error("Username nulo");
+					}
+					if (contentUsernameField.equals("")) {
+						logger.error("Username vacio" );
+					}
+					if (contentPasswdField == null) {
+						logger.error("Password nulo" );
+					}
+					if (contentPasswdField.equals("")) {
+						logger.error("Password vacio" );
+					}
+					
 					try {
 						usuario = usuarioDAO.getByUsernameAndPassword(username, password);
+
+						if (usuario != null) {
+								
+								System.out.println(usuario.getTiposusuario());
+							
+								if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_ADMINISTRADOR))) {
+									menu.AdminMenuStage(stage);
+								} 
+								else if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_CAPTURISTA))) {
+									menu.UserMenuStage(stage);
+								}
+								else {
+									logger.error("Usuario no contiene los permisos necesarios de acceso.");
+								}
+							} else {
+								logger.error("El usuario ingresado no existe" );
+							}
 					} catch (Exception e) {
-//						e.printStackTrace();
 						logger.error(e.getMessage());
 					}
-					if(usuario==null){
-
-					}
-
-
-					// TODO Auto-generated method stub
-					MenuWindow menu = new MenuWindow();
-
-					// menu.UserMenuStage(stage);
-					menu.AdminMenuStage(stage);
 				}
 			});
 			rootPane.getChildren().add(submitButton);

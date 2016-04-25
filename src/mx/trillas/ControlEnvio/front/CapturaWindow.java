@@ -22,6 +22,7 @@ import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class CapturaWindow {
 
+	
 	/* Solo datos de ejemplo */
 	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
 			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
@@ -82,7 +83,7 @@ public class CapturaWindow {
 			rootVBox.getChildren().add(headerPane);
 
 			Label labelMensajeria = new Label();
-			labelMensajeria.setText("Paqueteria     ");
+			labelMensajeria.setText("Paqueteria");
 
 			ComboBox<Object> mensajeriaCombo = new ComboBox<>();
 			mensajeriaCombo.getItems().addAll("ODM", "DHL", "Estafeta", "Personalmente");
@@ -136,14 +137,14 @@ public class CapturaWindow {
 
 			rootVBox.getChildren().addAll(origenPane);
 
-			Label otroOrigenLabel = new Label("Otro origen ");
+			Label otroOrigenLabel = new Label("Otro origen");
 
 			otroOrigenPane.getChildren().addAll(otroOrigenLabel, otroOrigenField);
 
 
 			rootVBox.getChildren().addAll(otroOrigenPane);
 
-			Label deptoLabel = new Label("Departamento ");
+			Label deptoLabel = new Label("Departamento");
 
 			ComboBox<Object> deptoCombo = new ComboBox<>();
 			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas", "Otro");

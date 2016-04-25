@@ -78,10 +78,6 @@ public class Usuario  implements java.io.Serializable {
     public void setGuias(Set guias) {
         this.guias = guias;
     }
-
-
-
-
 }
 
 
