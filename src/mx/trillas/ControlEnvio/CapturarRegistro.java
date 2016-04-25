@@ -6,7 +6,7 @@ public class CapturarRegistro {
 	 
 	 public static boolean verificarNumeroGuia(){
 		 
-		 return false;
+		 return true;
 	 }
 	 
 	 public static boolean verificarDepartamento(){
