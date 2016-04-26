@@ -2,6 +2,8 @@ package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,10 +26,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
+import mx.trillas.ControlEnvio.backend.OrigenBackend;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class OrigenesWindow {
 
+	private static Logger logger = Logger.getLogger(OrigenesWindow.class);
 	/* Solo datos de ejemplo*/
 
 	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
@@ -99,7 +104,14 @@ public class OrigenesWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					if (nombreField.getText() == null || nombreField.getText().equals("")) {
+						logger.error("El nombre de origen no debe ir vacio");
+					} else if (!(OrigenBackend.checkString(nombreField.getText()))) {
+						logger.error("El nombre de origen no contiene la estructura requerida");
+					} else {
+						logger.info("Intento guardar el nuevo origen");
+						ConfirmarOrigenesStage(stage, nombreField.getText());
+					}
 				}
 			});
 
@@ -109,7 +121,8 @@ public class OrigenesWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					MenuWindow menu = new MenuWindow();
+					menu.AdminMenuStage(stage);
 				}
 			});
 
@@ -193,7 +206,7 @@ public class OrigenesWindow {
 		}
 	}
 
-	public void ConfirmarOrigenesStage(Stage stage, Controlenvio controlEnvio) {
+	public void ConfirmarOrigenesStage(Stage stage, String nombreOrigen) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -204,7 +217,7 @@ public class OrigenesWindow {
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
 			Text text = new Text("Desea guardar los cambios?\n"
-					+ "\nOrigen: " + controlEnvio.getOrigen());
+					+ "\nOrigen: " + nombreOrigen);
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -218,7 +231,18 @@ public class OrigenesWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					if (OrigenBackend.checkString(nombreOrigen)) {
+						try {
+							OrigenBackend.loadOrigenData(nombreOrigen);
+							
+							MenuWindow menu = new MenuWindow();
+							menu.AdminMenuStage(stage);
+								//		Ir a ventana de confirmar
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							logger.error(e.getMessage());
+						}
+					}
 				}
 			});
 
@@ -228,7 +252,8 @@ public class OrigenesWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					MenuWindow menu = new MenuWindow();
+					menu.AdminMenuStage(stage);
 				}
 			});
 

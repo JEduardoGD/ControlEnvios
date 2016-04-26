@@ -1,9 +1,7 @@
 package mx.trillas.ControlEnvio.front;
 
-import java.util.Date;
+import org.apache.log4j.Logger;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,17 +16,12 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.backend.CapturarRegistro;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class CapturaWindow {
 
-	
-	/* Solo datos de ejemplo */
-	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
-			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Controlenvio(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private static Logger logger = Logger.getLogger(CapturaWindow.class);
 
 	public void CapturaStage(Stage stage) {
 		try {
@@ -39,12 +32,12 @@ public class CapturaWindow {
 			FlowPane headerPane = new FlowPane();
 
 			FlowPane guiaPane = new FlowPane(17, 10);
-			FlowPane destinatarioPane = new FlowPane(45,10);
-			FlowPane deptosPane = new FlowPane(25,10);
+			FlowPane destinatarioPane = new FlowPane(45, 10);
+			FlowPane deptosPane = new FlowPane(25, 10);
 			FlowPane origenPane = new FlowPane(55, 10);
-			FlowPane otroOrigenPane = new FlowPane(45,10);
+			FlowPane otroOrigenPane = new FlowPane(45, 10);
 			FlowPane otroDestinatarioPane = new FlowPane();
-			FlowPane otroDeptoPane = new FlowPane(5,10);
+			FlowPane otroDeptoPane = new FlowPane(5, 10);
 			FlowPane observacionPane = new FlowPane(35, 10);
 			FlowPane clearPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
@@ -62,8 +55,8 @@ public class CapturaWindow {
 			clearPane.setAlignment(Pos.BOTTOM_CENTER);
 			buttonsPane.setAlignment(Pos.BOTTOM_CENTER);
 
-//			otroOrigenPane.setVisible(false);
-//			otroDestinatarioPane.setVisible(false);
+			// otroOrigenPane.setVisible(false);
+			// otroDestinatarioPane.setVisible(false);
 
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/captura.css").toExternalForm());
 
@@ -115,7 +108,7 @@ public class CapturaWindow {
 			otroDeptoField.setDisable(true);
 			otroDestinatarioField.setDisable(true);
 
-			Label origenMensajeria = new Label("Origen ");
+			Label origenMensajeria = new Label("Origen");
 
 			ComboBox<Object> origenCombo = new ComboBox<>();
 			origenCombo.getItems().addAll("Chihuahua", "Durango", "DF", "Sonora", "Chiapas", "Zacatecas", "Otro");
@@ -134,13 +127,10 @@ public class CapturaWindow {
 					}
 				}
 			});
-
 			rootVBox.getChildren().addAll(origenPane);
 
 			Label otroOrigenLabel = new Label("Otro origen");
-
 			otroOrigenPane.getChildren().addAll(otroOrigenLabel, otroOrigenField);
-
 
 			rootVBox.getChildren().addAll(otroOrigenPane);
 
@@ -155,9 +145,7 @@ public class CapturaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					if (deptoCombo.getValue().equals("Otro")) {
-					}
+
 					if (deptoCombo.getValue().equals("Otro")) {
 						otroDeptoField.setDisable(false);
 					} else {
@@ -194,8 +182,8 @@ public class CapturaWindow {
 			destinatarioPane.getChildren().addAll(destinatarioLabel, destinatarioCombo);
 			rootVBox.getChildren().addAll(destinatarioPane);
 
-			Label otroDestinatarioLabel = new Label("Otro destinatario ");
-			Label otroDeptoLabel = new Label("Otro deparamento ");
+			Label otroDestinatarioLabel = new Label("Otro destinatario");
+			Label otroDeptoLabel = new Label("Otro deparamento");
 
 			otroDestinatarioPane.getChildren().addAll(otroDestinatarioLabel, otroDestinatarioField);
 			rootVBox.getChildren().addAll(otroDestinatarioPane);
@@ -203,7 +191,7 @@ public class CapturaWindow {
 			otroDeptoPane.getChildren().addAll(otroDeptoLabel, otroDeptoField);
 			rootVBox.getChildren().addAll(otroDeptoPane);
 
-			Label observacionLabel = new Label("Observacion ");
+			Label observacionLabel = new Label("Observacion");
 
 			TextField observacionField = new TextField();
 			observacionPane.getChildren().addAll(observacionLabel, observacionField);
@@ -225,11 +213,20 @@ public class CapturaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
+					if (CapturarRegistro.checkStructData(guiaField.getText(), otroOrigenField.getText(),
+							otroDeptoField.getText(), otroDestinatarioField.getText())) {
+						try {
+							CapturarRegistro.loadCapturaData(origenCombo.getValue().toString(),
+									deptoCombo.getValue().toString(), destinatarioCombo.getValue().toString(),
+									deptoCombo.getValue().toString(), mensajeriaCombo.getValue().toString(),
+									guiaField.getText(), observacionField.getText(), otroOrigenField.getText(),
+									otroDestinatarioField.getText());
+						} catch (Exception e) {
+							logger.error(e.getMessage());
+						}
+					}
 				}
 			});
-
 			buttonsPane.getChildren().addAll(submitButton);
 			rootVBox.getChildren().addAll(clearPane, buttonsPane);
 

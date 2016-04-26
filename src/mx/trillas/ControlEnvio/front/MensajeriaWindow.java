@@ -2,6 +2,8 @@ package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,9 +26,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.backend.Login;
+import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class MensajeriaWindow {
+
+	private static Logger logger = Logger.getLogger(MensajeriaWindow.class);
 
 	/* Solo datos de ejemplo */
 
@@ -88,8 +94,8 @@ public class MensajeriaWindow {
 			rootVbox.getChildren().addAll(text);
 
 			Label nombreLabel = new Label("Mensajería:");
-			TextField nombreField = new TextField();
-			nombrePane.getChildren().addAll(nombreLabel, nombreField);
+			TextField mensajeriaField = new TextField();
+			nombrePane.getChildren().addAll(nombreLabel, mensajeriaField);
 			rootVbox.getChildren().addAll(nombrePane);
 
 			Button aceptarButton = new Button("Aceptar");
@@ -97,6 +103,14 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
+					if (mensajeriaField.getText() == null || mensajeriaField.getText().equals("")) {
+						logger.error("El nombre de empresa de mensajeria no debe ir vacio");
+					} else if (!(MensajeriaBackend.checkString(mensajeriaField.getText()))) {
+						logger.error("El nombre de empresa de mensajeria no contiene la estructura requerida");
+					} else {
+						logger.info("Intento guardar la empresa de mensajeria");
+						ConfirmarMensajeriaStage(stage, mensajeriaField.getText());
+					}
 				}
 			});
 
@@ -106,7 +120,8 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					MenuWindow menu = new MenuWindow();
+					menu.AdminMenuStage(stage);
 				}
 			});
 
@@ -191,7 +206,7 @@ public class MensajeriaWindow {
 		}
 	}
 
-	public void ConfirmarMensajeriaStage(Stage stage, Controlenvio controlEnvio) {
+	public void ConfirmarMensajeriaStage(Stage stage, String nombreMensajeria) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -201,7 +216,7 @@ public class MensajeriaWindow {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" + "\nMensajeria: " + controlEnvio.getMensajeria());
+			Text text = new Text("Desea guardar los cambios?\n" + "\nMensajeria: " + nombreMensajeria);
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -216,6 +231,17 @@ public class MensajeriaWindow {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 
+					try {
+						MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
+						
+						MenuWindow menu = new MenuWindow();
+						menu.AdminMenuStage(stage);
+						// Ir a ventana de confirmar
+						
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						logger.error(e.getMessage());
+					}
 				}
 			});
 
@@ -225,7 +251,8 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					MenuWindow menu = new MenuWindow();
+					menu.AdminMenuStage(stage);
 				}
 			});
 
@@ -252,5 +279,4 @@ public class MensajeriaWindow {
 			e.printStackTrace();
 		}
 	}
-
 }
