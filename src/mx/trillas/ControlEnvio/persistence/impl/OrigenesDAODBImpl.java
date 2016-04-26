@@ -7,7 +7,6 @@ import org.hibernate.criterion.Restrictions;
 
 import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.OrigenesDAO;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class OrigenesDAODBImpl implements OrigenesDAO {
@@ -17,7 +16,7 @@ public class OrigenesDAODBImpl implements OrigenesDAO {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
-		
+
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			transaction = session.beginTransaction();
