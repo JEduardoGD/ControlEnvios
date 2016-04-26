@@ -217,3 +217,353 @@
 2016-04-26 10:51:15 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
 2016-04-26 10:51:15 ERROR Login:64 - El usuario ingresado no existe
 2016-04-26 10:51:19 ERROR Login:31 - Username vacio
+2016-04-26 11:55:15 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 11:55:15 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 11:55:15 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 11:55:15 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 11:55:15 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 11:55:15 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 11:55:15 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 11:55:15 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 11:55:15 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 11:55:15 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 11:55:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 11:55:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 11:55:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 11:55:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 11:55:16 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 11:55:16 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 11:55:16 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 11:55:16 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 11:55:16 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 11:55:16 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 11:55:16 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 11:55:16 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 11:55:17 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 11:55:17 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 11:55:42 ERROR CapturarRegistro:31 - El numero guia ingresado no contiene la estructura requerida.
+2016-04-26 11:55:42 ERROR CapturarRegistro:37 - El origen ingresado no contiene la estructura requerida.
+2016-04-26 11:55:42 ERROR CapturarRegistro:43 - El departamento ingresado no contiene la estructura requerida.
+2016-04-26 11:55:42 ERROR CapturarRegistro:49 - El destinatario ingresado no contiene la estructura requerida.
+2016-04-26 11:56:03 ERROR CapturarRegistro:31 - El numero guia ingresado no contiene la estructura requerida.
+2016-04-26 11:56:03 ERROR CapturarRegistro:37 - El origen ingresado no contiene la estructura requerida.
+2016-04-26 11:56:03 ERROR CapturarRegistro:43 - El departamento ingresado no contiene la estructura requerida.
+2016-04-26 11:56:03 ERROR CapturarRegistro:49 - El destinatario ingresado no contiene la estructura requerida.
+2016-04-26 11:56:09 ERROR CapturarRegistro:31 - El numero guia ingresado no contiene la estructura requerida.
+2016-04-26 11:56:09 ERROR CapturarRegistro:37 - El origen ingresado no contiene la estructura requerida.
+2016-04-26 11:56:09 ERROR CapturarRegistro:43 - El departamento ingresado no contiene la estructura requerida.
+2016-04-26 11:56:09 ERROR CapturarRegistro:49 - El destinatario ingresado no contiene la estructura requerida.
+2016-04-26 11:56:41 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 11:56:41 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 11:56:41 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 11:56:41 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 11:56:41 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 11:56:41 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 11:56:41 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 11:56:41 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 11:56:41 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 11:56:41 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 11:56:41 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 11:56:41 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 11:56:41 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 11:56:41 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 11:56:41 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 11:56:42 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 11:56:42 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 11:58:38 WARN  UnresolvedEntityInsertActions:162 - HHH000437: Attempting to save one or more entities that have a non-nullable association with an unsaved transient entity. The unsaved transient entity must be saved in an operation prior to saving these dependent entities.
+	Unsaved transient entity: ([mx.trillas.ControlEnvio.persistence.pojos.Usuario#<null>])
+	Dependent entities: ([[mx.trillas.ControlEnvio.persistence.pojos.Guia#<null>]])
+	Non-nullable association(s): ([mx.trillas.ControlEnvio.persistence.pojos.Guia.usuario])
+2016-04-26 11:58:38 WARN  UnresolvedEntityInsertActions:162 - HHH000437: Attempting to save one or more entities that have a non-nullable association with an unsaved transient entity. The unsaved transient entity must be saved in an operation prior to saving these dependent entities.
+	Unsaved transient entity: ([mx.trillas.ControlEnvio.persistence.pojos.Mensajeria#<null>])
+	Dependent entities: ([[mx.trillas.ControlEnvio.persistence.pojos.Guia#<null>]])
+	Non-nullable association(s): ([mx.trillas.ControlEnvio.persistence.pojos.Guia.mensajeria])
+2016-04-26 13:04:52 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 13:04:52 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 13:04:52 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 13:04:52 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 13:04:52 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 13:04:52 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 13:04:52 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 13:04:52 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 13:04:53 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 13:04:53 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 13:04:53 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 13:04:53 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 13:04:53 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 13:04:53 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 13:04:53 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 13:04:53 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 13:04:53 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 13:04:53 ERROR Login:64 - El usuario ingresado no existe
+2016-04-26 13:06:17 WARN  SqlExceptionHelper:144 - SQL Error: 1062, SQLState: 23000
+2016-04-26 13:06:17 ERROR SqlExceptionHelper:146 - Duplicate entry 'Juegos' for key 'nombre_UNIQUE'
+2016-04-26 13:06:17 WARN  SqlExceptionHelper:232 - SQL Warning Code: 1062, SQLState: 23000
+2016-04-26 13:06:17 WARN  SqlExceptionHelper:233 - Duplicate entry 'Juegos' for key 'nombre_UNIQUE'
+2016-04-26 13:06:17 ERROR MensajeriaWindow:230 - could not execute statement
+2016-04-26 13:20:33 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 13:20:33 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 13:20:33 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 13:20:33 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 13:20:33 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 13:20:33 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 13:20:33 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 13:20:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 13:20:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 13:20:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 13:20:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 13:20:34 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 13:20:34 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 13:20:34 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 13:20:34 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 13:20:34 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 13:20:34 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 13:20:34 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 13:20:34 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 13:20:34 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 13:20:34 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 13:20:34 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 13:20:34 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 13:20:34 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 13:20:51 WARN  SqlExceptionHelper:144 - SQL Error: 1062, SQLState: 23000
+2016-04-26 13:20:51 ERROR SqlExceptionHelper:146 - Duplicate entry 'Jugos' for key 'nombre_UNIQUE'
+2016-04-26 13:20:51 WARN  SqlExceptionHelper:232 - SQL Warning Code: 1062, SQLState: 23000
+2016-04-26 13:20:51 WARN  SqlExceptionHelper:233 - Duplicate entry 'Jugos' for key 'nombre_UNIQUE'
+2016-04-26 13:20:51 ERROR MensajeriaWindow:240 - could not execute statement
+2016-04-26 13:29:20 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 13:29:20 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 13:29:20 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 13:29:20 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 13:29:20 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 13:29:20 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 13:29:21 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 13:29:21 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 13:29:21 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 13:29:21 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 13:29:21 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 13:29:21 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 13:29:21 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 13:29:21 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 13:29:21 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 13:29:21 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 13:29:21 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 13:30:32 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 13:30:32 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 13:30:32 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 13:30:32 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 13:30:32 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 13:30:32 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 13:30:32 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 13:30:33 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 13:30:34 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 13:30:34 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 13:30:34 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 13:30:34 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 13:30:34 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 13:30:34 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 13:30:34 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 13:30:34 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 13:30:34 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 13:31:00 WARN  SqlExceptionHelper:144 - SQL Error: 1062, SQLState: 23000
+2016-04-26 13:31:00 ERROR SqlExceptionHelper:146 - Duplicate entry 'ayuds' for key 'nombre_UNIQUE'
+2016-04-26 13:31:00 WARN  SqlExceptionHelper:232 - SQL Warning Code: 1062, SQLState: 23000
+2016-04-26 13:31:00 WARN  SqlExceptionHelper:233 - Duplicate entry 'ayuds' for key 'nombre_UNIQUE'
+2016-04-26 13:31:00 ERROR MensajeriaWindow:241 - could not execute statement
+2016-04-26 13:48:41 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 13:48:41 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 13:48:41 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 13:48:41 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 13:48:41 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 13:48:41 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 13:48:41 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 13:48:41 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 13:48:42 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 13:48:42 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 13:48:42 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 13:48:42 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 13:48:42 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 13:48:42 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 13:48:42 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 13:48:42 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 13:48:43 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 13:48:43 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 13:48:53 ERROR MensajeriaWindow:252 - Cannot call this method on primary stage
+2016-04-26 14:02:18 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 14:02:18 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 14:02:18 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 14:02:18 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 14:02:18 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 14:02:18 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 14:02:18 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 14:02:18 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 14:02:19 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 14:02:19 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 14:02:19 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 14:02:19 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 14:02:19 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 14:02:19 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 14:02:19 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 14:02:19 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 14:02:19 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 14:03:27 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 14:03:27 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 14:03:28 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 14:03:28 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 14:03:28 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 14:03:28 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 14:03:28 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 14:03:28 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 14:03:28 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 14:03:28 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 14:03:28 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 14:03:28 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 14:03:28 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 14:03:29 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 14:03:29 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 14:03:29 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 14:03:29 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 14:05:07 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 14:05:07 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 14:05:07 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 14:05:07 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 14:05:07 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 14:05:07 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 14:05:07 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 14:05:07 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 14:05:07 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 14:05:07 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 14:05:07 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 14:05:07 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 14:05:07 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 14:05:07 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 14:05:07 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 14:05:07 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 14:05:07 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 14:21:15 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 14:21:15 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 14:21:15 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 14:21:15 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 14:21:15 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 14:21:15 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 14:21:15 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 14:21:15 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 14:21:16 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 14:21:16 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 14:21:16 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 14:21:16 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 14:21:16 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 14:21:16 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 14:21:17 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 14:21:17 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 14:21:18 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 14:21:18 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 14:31:50 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 14:31:50 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 14:31:51 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 14:31:51 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 14:31:51 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 14:31:51 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 14:31:51 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 14:31:51 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 14:31:52 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 14:31:52 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 14:31:52 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 14:31:52 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 14:31:52 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 14:31:52 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 14:31:52 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 14:31:52 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 14:31:52 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-04-26 14:31:58 INFO  OrigenesWindow:113 - Intento guardar el nuevo origen
+2016-04-26 14:36:26 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {4.0.5.Final}
+2016-04-26 14:36:26 INFO  Version:54 - HHH000412: Hibernate Core {4.3.11.Final}
+2016-04-26 14:36:26 INFO  Environment:239 - HHH000206: hibernate.properties not found
+2016-04-26 14:36:26 INFO  Environment:346 - HHH000021: Bytecode provider name : javassist
+2016-04-26 14:36:26 INFO  Configuration:2075 - HHH000043: Configuring from resource: /hibernate.cfg.xml
+2016-04-26 14:36:26 INFO  Configuration:2094 - HHH000040: Configuration resource: /hibernate.cfg.xml
+2016-04-26 14:36:26 WARN  DTDEntityResolver:75 - HHH000223: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/. Use namespace http://www.hibernate.org/dtd/ instead. Refer to Hibernate 3.6 Migration Guide!
+2016-04-26 14:36:26 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Tiposusuario.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Origen.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Departamento.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:759 - HHH000221: Reading mappings from resource: mx/trillas/ControlEnvio/persistence/pojos/Destinatario.hbm.xml
+2016-04-26 14:36:27 INFO  Configuration:2216 - HHH000041: Configured SessionFactory: null
+2016-04-26 14:36:27 WARN  DriverManagerConnectionProviderImpl:93 - HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2016-04-26 14:36:27 INFO  DriverManagerConnectionProviderImpl:166 - HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull]
+2016-04-26 14:36:27 INFO  DriverManagerConnectionProviderImpl:175 - HHH000046: Connection properties: {user=controlenvios, password=****}
+2016-04-26 14:36:27 INFO  DriverManagerConnectionProviderImpl:180 - HHH000006: Autocommit mode: false
+2016-04-26 14:36:27 INFO  DriverManagerConnectionProviderImpl:102 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-04-26 14:36:28 INFO  Dialect:145 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-04-26 14:36:28 INFO  LobCreatorBuilder:97 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2016-04-26 14:36:28 INFO  TransactionFactoryInitiator:62 - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-04-26 14:36:28 INFO  ASTQueryTranslatorFactory:47 - HHH000397: Using ASTQueryTranslatorFactory
