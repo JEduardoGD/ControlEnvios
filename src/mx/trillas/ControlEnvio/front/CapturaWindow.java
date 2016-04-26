@@ -14,14 +14,20 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.backend.CapturarRegistro;
+import mx.trillas.ControlEnvio.persistence.dao.UsuarioDAO;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
+import org.apache.log4j.Logger;
 
 public class CapturaWindow {
 
+	private static Logger logger = Logger.getLogger(CapturaWindow.class);
 	
 	/* Solo datos de ejemplo */
 	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
@@ -115,7 +121,7 @@ public class CapturaWindow {
 			otroDeptoField.setDisable(true);
 			otroDestinatarioField.setDisable(true);
 
-			Label origenMensajeria = new Label("Origen ");
+			Label origenMensajeria = new Label("Origen");
 
 			ComboBox<Object> origenCombo = new ComboBox<>();
 			origenCombo.getItems().addAll("Chihuahua", "Durango", "DF", "Sonora", "Chiapas", "Zacatecas", "Otro");
@@ -134,13 +140,10 @@ public class CapturaWindow {
 					}
 				}
 			});
-
 			rootVBox.getChildren().addAll(origenPane);
 
 			Label otroOrigenLabel = new Label("Otro origen");
-
 			otroOrigenPane.getChildren().addAll(otroOrigenLabel, otroOrigenField);
-
 
 			rootVBox.getChildren().addAll(otroOrigenPane);
 
@@ -155,9 +158,7 @@ public class CapturaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					if (deptoCombo.getValue().equals("Otro")) {
-					}
+
 					if (deptoCombo.getValue().equals("Otro")) {
 						otroDeptoField.setDisable(false);
 					} else {
@@ -194,8 +195,8 @@ public class CapturaWindow {
 			destinatarioPane.getChildren().addAll(destinatarioLabel, destinatarioCombo);
 			rootVBox.getChildren().addAll(destinatarioPane);
 
-			Label otroDestinatarioLabel = new Label("Otro destinatario ");
-			Label otroDeptoLabel = new Label("Otro deparamento ");
+			Label otroDestinatarioLabel = new Label("Otro destinatario");
+			Label otroDeptoLabel = new Label("Otro deparamento");
 
 			otroDestinatarioPane.getChildren().addAll(otroDestinatarioLabel, otroDestinatarioField);
 			rootVBox.getChildren().addAll(otroDestinatarioPane);
@@ -203,7 +204,7 @@ public class CapturaWindow {
 			otroDeptoPane.getChildren().addAll(otroDeptoLabel, otroDeptoField);
 			rootVBox.getChildren().addAll(otroDeptoPane);
 
-			Label observacionLabel = new Label("Observacion ");
+			Label observacionLabel = new Label("Observacion");
 
 			TextField observacionField = new TextField();
 			observacionPane.getChildren().addAll(observacionLabel, observacionField);
@@ -221,12 +222,14 @@ public class CapturaWindow {
 			clearPane.getChildren().addAll(clearButton);
 
 			Button submitButton = new Button("Aceptar");
+			
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					System.out.println(CapturarRegistro.checkStructData(guiaField.getText(), otroOrigenField.getText(), otroDeptoField.getText(), otroDestinatarioField.getText()));
+				
 				}
 			});
 

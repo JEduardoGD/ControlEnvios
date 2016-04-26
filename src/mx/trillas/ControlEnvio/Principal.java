@@ -11,9 +11,6 @@ public class Principal extends Application {
 		
 		LoginWindow login = new LoginWindow();
 		login.LoginStage(rootStage);
-		
-		ReportWindow report = new ReportWindow();
-//		report.GenerarReporteStage(rootStage);
 	}
 
 	public static void main(String[] args) {
