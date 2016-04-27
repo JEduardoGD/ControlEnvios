@@ -1,6 +1,7 @@
 package mx.trillas.ControlEnvio.front;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -15,9 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.DropShadow;
@@ -26,26 +27,36 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillas.ControlEnvio.backend.Login;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
 import mx.trillas.ControlEnvio.persistence.dao.MensajeriaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.MensajeriaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
-import mx.trillas.ControlEnvio.persistence.pojos.Origen;
-import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class MensajeriaWindow {
 
 	private static Logger logger = Logger.getLogger(MensajeriaWindow.class);
 	private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
-	
+
 	/* Solo datos de ejemplo */
 
-	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
-			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Controlenvio(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private final ObservableList<Mensajeria> data = FXCollections.observableArrayList();
+
+	public ObservableList<Mensajeria> getMensajeriaData() throws Exception {
+
+		List<Mensajeria> mensajerias = new ArrayList<Mensajeria>();
+
+		try {
+			mensajerias = mensajeriaDAO.getMensajeriaList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+		for (Mensajeria element : mensajerias) {
+			data.add(element);
+		}
+		
+		return data;
+	}
 
 	public void mensajeriaStage(Stage stage) {
 
@@ -112,17 +123,17 @@ public class MensajeriaWindow {
 
 					try {
 						mensajeriaObj = mensajeriaDAO.getMensajeria(mensajeriaField.getText());
-					} catch(Exception e) {
+					} catch (Exception e) {
 						logger.error(e.getMessage());
 					}
-					
+
 					if (mensajeriaField.getText() == null || mensajeriaField.getText().equals("")) {
 						logger.error("El nombre de empresa de mensajeria no debe ir vacio");
 					} else if (!(MensajeriaBackend.checkString(mensajeriaField.getText()))) {
 						logger.error("El nombre de empresa de mensajeria no contiene la estructura requerida");
 					} else if (mensajeriaObj != null) {
 						logger.info("La empresa de mensajeria que intenta crear ya existe.");
-					}else {
+					} else {
 						logger.info("Intento guardar la empresa de mensajeria");
 						confirmarMensajeriaStage(stage, mensajeriaField.getText());
 					}
@@ -158,6 +169,15 @@ public class MensajeriaWindow {
 
 	public void modificarMensajeriaStage(Stage stage) {
 
+		ObservableList<Mensajeria> datos = null;
+		
+		try {
+			datos = getMensajeriaData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
+		
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
@@ -166,24 +186,23 @@ public class MensajeriaWindow {
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
-			TableView<Controlenvio> table = new TableView<Controlenvio>();
+			TableView<Mensajeria> table = new TableView<Mensajeria>();
 			table.setEditable(true);
 
-			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
+			TableColumn<Mensajeria, String> idCol = new TableColumn<>("Id");
 			idCol.setMinWidth(170);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Controlenvio, String> mensajeraCol = new TableColumn<>("Nombre");
+			TableColumn<Mensajeria, String> mensajeraCol = new TableColumn<>("Nombre");
 			mensajeraCol.setMinWidth(185);
-			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("mensajeria"));
+			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
-			mensajeraCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			mensajeraCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setMensajeria(t.getNewValue());
+			mensajeraCol.setCellFactory(TextFieldTableCell.<Mensajeria> forTableColumn());
+			mensajeraCol.setOnEditCommit((CellEditEvent<Mensajeria, String> t) -> {
+				((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue());
 			});
-			table.setItems(data);
+			table.setItems(datos);
 			table.getColumns().addAll(idCol, mensajeraCol);
 
 			paneVbox.setSpacing(10);
@@ -247,11 +266,11 @@ public class MensajeriaWindow {
 					// TODO Auto-generated method stub
 					try {
 						MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
-						
+
 						MenuWindow menu = new MenuWindow();
 						menu.AdminMenuStage(stage);
 						// Ir a ventana de confirmar
-						
+
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
