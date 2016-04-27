@@ -28,12 +28,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mx.trillas.ControlEnvio.backend.Login;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
+import mx.trillas.ControlEnvio.persistence.dao.MensajeriaDAO;
+import mx.trillas.ControlEnvio.persistence.impl.MensajeriaDAODBImpl;
+import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
+import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class MensajeriaWindow {
 
 	private static Logger logger = Logger.getLogger(MensajeriaWindow.class);
-
+	private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
+	
 	/* Solo datos de ejemplo */
 
 	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
@@ -103,13 +108,23 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
+					Mensajeria mensajeriaObj = null;
+
+					try {
+						mensajeriaObj = mensajeriaDAO.getMensajeria(mensajeriaField.getText());
+					} catch(Exception e) {
+						logger.error(e.getMessage());
+					}
+					
 					if (mensajeriaField.getText() == null || mensajeriaField.getText().equals("")) {
 						logger.error("El nombre de empresa de mensajeria no debe ir vacio");
 					} else if (!(MensajeriaBackend.checkString(mensajeriaField.getText()))) {
 						logger.error("El nombre de empresa de mensajeria no contiene la estructura requerida");
-					} else {
+					} else if (mensajeriaObj != null) {
+						logger.info("La empresa de mensajeria que intenta crear ya existe.");
+					}else {
 						logger.info("Intento guardar la empresa de mensajeria");
-						ConfirmarMensajeriaStage(stage, mensajeriaField.getText());
+						confirmarMensajeriaStage(stage, mensajeriaField.getText());
 					}
 				}
 			});
@@ -206,7 +221,7 @@ public class MensajeriaWindow {
 		}
 	}
 
-	public void ConfirmarMensajeriaStage(Stage stage, String nombreMensajeria) {
+	public void confirmarMensajeriaStage(Stage stage, String nombreMensajeria) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -230,7 +245,6 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
 					try {
 						MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
 						

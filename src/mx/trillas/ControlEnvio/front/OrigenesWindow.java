@@ -28,10 +28,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
 import mx.trillas.ControlEnvio.backend.OrigenBackend;
+import mx.trillas.ControlEnvio.persistence.dao.OrigenesDAO;
+import mx.trillas.ControlEnvio.persistence.impl.OrigenesDAODBImpl;
+import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
+import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class OrigenesWindow {
-
+	private static OrigenesDAO origenDAO = new OrigenesDAODBImpl();
 	private static Logger logger = Logger.getLogger(OrigenesWindow.class);
 	/* Solo datos de ejemplo*/
 
@@ -104,13 +108,23 @@ public class OrigenesWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
+					Origen origenObj = null;
+
+					try {
+						origenObj = origenDAO.getOrigen(nombreField.getText());
+					} catch(Exception e) {
+						logger.error(e.getMessage());
+					}
+					
 					if (nombreField.getText() == null || nombreField.getText().equals("")) {
 						logger.error("El nombre de origen no debe ir vacio");
 					} else if (!(OrigenBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre de origen no contiene la estructura requerida");
+					} else if (origenObj != null) {
+						logger.info("El origen que intenta crear ya existe.");
 					} else {
 						logger.info("Intento guardar el nuevo origen");
-						ConfirmarOrigenesStage(stage, nombreField.getText());
+						confirmarOrigenesStage(stage, nombreField.getText());
 					}
 				}
 			});
@@ -206,7 +220,7 @@ public class OrigenesWindow {
 		}
 	}
 
-	public void ConfirmarOrigenesStage(Stage stage, String nombreOrigen) {
+	public void confirmarOrigenesStage(Stage stage, String nombreOrigen) {
 		DropShadow shadow = new DropShadow();
 
 		try {
