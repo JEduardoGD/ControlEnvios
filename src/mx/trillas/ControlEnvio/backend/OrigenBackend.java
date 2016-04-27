@@ -9,7 +9,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class OrigenBackend {
 	
-	 private static final String STRING_PATTERN = "([a-zA-Z]){4,45}";
+	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
 	 private static OrigenesDAO origenDAO = new OrigenesDAODBImpl();
 	
 	public static boolean checkString(String phrase){

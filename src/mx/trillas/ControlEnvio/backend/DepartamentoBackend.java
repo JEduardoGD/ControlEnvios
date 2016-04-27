@@ -14,7 +14,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 
 public class DepartamentoBackend {
 
-	 private static final String STRING_PATTERN = "([a-zA-Z]){4,45}";
+	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
 	 
 	 private static Logger logger = Logger.getLogger(Departamento.class);
 	 
@@ -30,8 +30,8 @@ public class DepartamentoBackend {
 		  
 		  return matcher.matches();
 	 }
-	 
-	 public static void loadMensajeriaData(String nombreDepartamento) throws Exception {
+
+	 public static void loadDepartamentoData(String nombreDepartamento) throws Exception {
 		 Departamento departamento = null;
 		 departamento  = new Departamento();
 		 
