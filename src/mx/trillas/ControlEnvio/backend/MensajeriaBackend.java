@@ -12,6 +12,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 public class MensajeriaBackend {
 
 	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
+	 private static final String RIGHT_PATTERN = "^[a-zA-Z]*";
 	 
 	 private static Logger logger = Logger.getLogger(MensajeriaBackend.class);
 	 
@@ -27,7 +28,16 @@ public class MensajeriaBackend {
 		  
 		  return matcher.matches();
 	 }
+	  public static boolean checkRightString(String phrase){
+		  
+		  Pattern pattern;
+		  Matcher matcher;
 	 
+		  pattern = Pattern.compile(RIGHT_PATTERN);
+		  matcher = pattern.matcher(phrase);
+		  
+		  return matcher.matches();
+	 }
 	 public static void loadMensajeriaData(String nombreMensajeria) throws Exception{
 		 Mensajeria mensajeria = null;
 		 mensajeria  = new Mensajeria();

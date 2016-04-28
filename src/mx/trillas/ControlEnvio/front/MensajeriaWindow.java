@@ -9,10 +9,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -36,7 +39,7 @@ public class MensajeriaWindow {
 
 	private static Logger logger = Logger.getLogger(MensajeriaWindow.class);
 	private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
-
+	private List<Mensajeria> mensajeriaList = new ArrayList<Mensajeria>();
 	/* Solo datos de ejemplo */
 
 	private final ObservableList<Mensajeria> data = FXCollections.observableArrayList();
@@ -54,7 +57,7 @@ public class MensajeriaWindow {
 		for (Mensajeria element : mensajerias) {
 			data.add(element);
 		}
-		
+
 		return data;
 	}
 
@@ -99,7 +102,12 @@ public class MensajeriaWindow {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					MensajeriaWindow mensajeria = new MensajeriaWindow();
-					mensajeria.modificarMensajeriaStage(stage);
+					try {
+						mensajeria.modificarMensajeriaStage(stage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						logger.error("Ocurrio un error al procesar cambios");
+					}
 				}
 			});
 
@@ -167,24 +175,39 @@ public class MensajeriaWindow {
 		}
 	}
 
-	public void modificarMensajeriaStage(Stage stage) {
+	public void modificarMensajeriaStage(Stage stage) throws Exception {
 
 		ObservableList<Mensajeria> datos = null;
-		
+
 		try {
 			datos = getMensajeriaData();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error(e.getMessage());
 		}
-		
+
 		try {
 			VBox paneVbox = new VBox();
+			FlowPane returnPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(paneVbox, 360, 430);
+			Scene scene = new Scene(paneVbox, 400, 490);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+			scene.getStylesheets()
+					.add(getClass().getClassLoader().getResource("style/mensajeria.css").toExternalForm());
+
+			Button backButton = new Button("Regresar");
+			backButton.getStyleClass().add("backButton");
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					MensajeriaWindow window = new MensajeriaWindow();
+					window.mensajeriaStage(stage);
+				}
+			});
+			returnPane.getChildren().addAll(backButton);
+			paneVbox.getChildren().addAll(returnPane);
 
 			TableView<Mensajeria> table = new TableView<Mensajeria>();
 			table.setEditable(true);
@@ -195,12 +218,47 @@ public class MensajeriaWindow {
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
 			TableColumn<Mensajeria, String> mensajeraCol = new TableColumn<>("Nombre");
-			mensajeraCol.setMinWidth(185);
+			mensajeraCol.setMinWidth(240);
 			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
 			mensajeraCol.setCellFactory(TextFieldTableCell.<Mensajeria> forTableColumn());
+//			mensajeraCol.editStartEvent((EventType<Mensajeria, String> t) -> {
+//			});
 			mensajeraCol.setOnEditCommit((CellEditEvent<Mensajeria, String> t) -> {
-				((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue());
+//				String oldName = t.getTableView().getItems().get(t.getTablePosition().getRow()).getNombre();
+				
+				
+				System.out.println("1: "+ MensajeriaBackend.checkString(t.getNewValue()));
+				System.out.println("2: "+ MensajeriaBackend.checkRightString(t.getNewValue()));
+				System.out.println("t.getNewValue(): " + t.getNewValue());
+				System.out.println("t.getOldValue(): " + t.getOldValue());
+				
+				if (!(t.getNewValue().equals("")) && MensajeriaBackend.checkString(t.getNewValue()) == true && MensajeriaBackend.checkRightString(t.getNewValue())) {
+					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setNombre(t.getNewValue());
+				
+					Mensajeria mensajeria = new Mensajeria();
+					mensajeria.setId(t.getTableView().getItems().get(t.getTablePosition().getRow()).getId());
+					mensajeria.setNombre(t.getNewValue());
+
+					Mensajeria mensajeriaObj = null;
+					try {
+						mensajeriaObj = mensajeriaDAO.getMensajeriaById(mensajeria.getId());
+						mensajeriaObj.setNombre(mensajeria.getNombre());
+					} catch (Exception e) {
+						logger.error("Ocurrio un error al intentar conseguir una empresa de mensajeria");
+					}
+					mensajeriaList.add(mensajeriaObj);
+				} else {
+					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+					.setNombre(t.getOldValue());
+					
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Modificaciones en mensajería");
+					alert.setHeaderText("Alerta");
+					alert.setContentText("Debe ingresar datos válidos");
+					alert.showAndWait();
+				}
 			});
 			table.setItems(datos);
 			table.getColumns().addAll(idCol, mensajeraCol);
@@ -214,7 +272,15 @@ public class MensajeriaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					if (mensajeriaList.isEmpty()) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Modificaciones en mensajería");
+						alert.setHeaderText("Alerta");
+						alert.setContentText("Aún no ha hecho cambios en registros");
+						alert.showAndWait();
+					} else {
+						confirmarModificacionesMensajerias(stage, mensajeriaList);
+					}
 				}
 			});
 			Button cancelButton = new Button("Cancelar");
@@ -227,11 +293,94 @@ public class MensajeriaWindow {
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(aceptarButton, cancelButton);
+			buttonsPane.getChildren().addAll(aceptarButton);
 			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Modificar empresa de mensajeria");
+			stage.setResizable(false);
+			stage.show();
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public void confirmarModificacionesMensajerias(Stage stage, List<Mensajeria> mensajerias) {
+
+		DropShadow shadow = new DropShadow();
+
+		try {
+			final VBox rootVbox = new VBox();
+			FlowPane flowPane = new FlowPane();
+
+			rootVbox.setSpacing(10);
+			rootVbox.setPadding(new Insets(30, 30, 30, 30));
+
+			Scene scene = new Scene(rootVbox, 450, 270);
+			rootVbox.setAlignment(Pos.CENTER);
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/confirmar.css").toExternalForm());
+
+			Text text = new Text("Desea guardar los cambios?\n");
+			String output = "";
+			for (Mensajeria element : mensajerias) {
+				output += "\nEmpresa de mensajería: " + element.getNombre();
+			}
+			text.setText(output);
+			rootVbox.getChildren().addAll(text);
+
+			Button aceptarButton = new Button(" Guardar ");
+			aceptarButton.setEffect(shadow);
+			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					try {
+						mensajeriaDAO.altaMensajeriaByList(mensajerias);
+
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Cambios en mensajerias");
+						alert.setHeaderText(null);
+						alert.setContentText("Los cambios se guardaron exitosamente");
+						alert.showAndWait();
+
+						MensajeriaWindow window = new MensajeriaWindow();
+						window.modificarMensajeriaStage(stage);
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Cambios en mensajerias");
+						alert.setHeaderText(null);
+						alert.setContentText("Ocurrió un error al intentar realizar cambios en mensajerias");
+						alert.showAndWait();
+
+						MenuWindow menu = new MenuWindow();
+						menu.AdminMenuStage(stage);
+
+						logger.error(e.getMessage());
+					}
+				}
+			});
+
+			Button cancelarButton = new Button("Cancelar");
+			cancelarButton.setEffect(shadow);
+			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					MensajeriaWindow window = new MensajeriaWindow();
+					window.mensajeriaStage(stage);
+				}
+			});
+
+			flowPane.setAlignment(Pos.CENTER);
+
+			flowPane.getChildren().addAll(aceptarButton, cancelarButton);
+			rootVbox.getChildren().addAll(flowPane);
+
+			stage.setScene(scene);
+			stage.setTitle("Confirmar mensajeria");
 			stage.setResizable(false);
 			stage.show();
 
@@ -266,6 +415,12 @@ public class MensajeriaWindow {
 					// TODO Auto-generated method stub
 					try {
 						MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
+
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Cambios en mensajerias");
+						alert.setHeaderText(null);
+						alert.setContentText("La empresa de mensajería se ha guardado exitosamente");
+						alert.showAndWait();
 
 						MenuWindow menu = new MenuWindow();
 						menu.AdminMenuStage(stage);

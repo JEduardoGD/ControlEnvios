@@ -46,7 +46,6 @@ public class LoginWindow {
 			Label usernameLabel = new Label("Usuario");
 			usernameLabel.getStyleClass().add("labels");
 			TextField usernameField = new TextField();
-
 			usernamePane.getChildren().addAll(usernameLabel, usernameField);
 
 			Label passwdLabel = new Label("Contraseña");
