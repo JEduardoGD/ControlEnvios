@@ -12,11 +12,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -67,6 +69,9 @@ public class DepartamentoWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Departamentos");
+			
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,14 +123,24 @@ public class DepartamentoWindow {
 					} catch(Exception e) {
 						logger.error(e.getMessage());
 					}
-						
+					
 					// TODO Auto-generated method stub
 					if (nombreField.getText() == null || nombreField.getText().equals("")) {
 						logger.error("El nombre del departamento no debe ir vacio");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del departamento \nno debe ir vacio");
+						alert.showAndWait();
 					} else if (!(DepartamentoBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre del departamento no contiene la estructura requerida");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del departamento no \ncontiene la estructura requerida");
+						alert.showAndWait();
 					} else if (departamentoObj != null) {
 						logger.error("El departamento que intenta crear ya existe.");
+						alert.setAlertType(AlertType.WARNING);
+						alert.setHeaderText(null);
+						alert.setContentText("El nombre del departamento que intenta \ncrear ya existe");
+						alert.showAndWait();
 					} else {
 						logger.info("Intento guardar el nuevo departamento");
 						confirmarDepartamentoStage(stage, nombreField.getText());
@@ -252,6 +267,12 @@ public class DepartamentoWindow {
 					try {
 						DepartamentoBackend.loadDepartamentoData(nombreDepartamento);
 						
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Cambios en departamentos");
+						alert.setHeaderText(null);
+						alert.setContentText("Los cambios se guardaron exitosamente");
+						alert.showAndWait();
+						
 						MenuWindow menu = new MenuWindow();
 						menu.AdminMenuStage(stage);
 						// Ir a ventana de confirmar
@@ -259,6 +280,12 @@ public class DepartamentoWindow {
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
+						
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Cambios en departamentos");
+						alert.setHeaderText(null);
+						alert.setContentText("Ocurrió un error al intentar realizar cambios en departamentos");
+						alert.showAndWait();
 					}
 				}
 			});

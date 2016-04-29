@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
+import javafx.scene.input.KeyEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +25,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -79,6 +81,9 @@ public class MensajeriaWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Mensajeria");
+			
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -137,13 +142,24 @@ public class MensajeriaWindow {
 
 					if (mensajeriaField.getText() == null || mensajeriaField.getText().equals("")) {
 						logger.error("El nombre de empresa de mensajeria no debe ir vacio");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre de empresa de mensajeria \nno debe ir vacio");
+						alert.showAndWait();
 					} else if (!(MensajeriaBackend.checkString(mensajeriaField.getText()))) {
 						logger.error("El nombre de empresa de mensajeria no contiene la estructura requerida");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre de empresa de mensajeria no \ncontiene la estructura requerida");
+						alert.showAndWait();
 					} else if (mensajeriaObj != null) {
 						logger.info("La empresa de mensajeria que intenta crear ya existe.");
+						alert.setAlertType(AlertType.WARNING);
+						alert.setHeaderText(null);
+						alert.setContentText("La empresa de mensajeria que intenta \ncrear ya existe");
+						alert.showAndWait();
 					} else {
 						logger.info("Intento guardar la empresa de mensajeria");
 						confirmarMensajeriaStage(stage, mensajeriaField.getText());
+						
 					}
 				}
 			});
@@ -219,28 +235,18 @@ public class MensajeriaWindow {
 
 			TableColumn<Mensajeria, String> mensajeraCol = new TableColumn<>("Nombre");
 			mensajeraCol.setMinWidth(240);
+			mensajeraCol.setEditable(true);
 			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-
 			mensajeraCol.setCellFactory(TextFieldTableCell.<Mensajeria> forTableColumn());
-//			mensajeraCol.editStartEvent((EventType<Mensajeria, String> t) -> {
-//			});
 			mensajeraCol.setOnEditCommit((CellEditEvent<Mensajeria, String> t) -> {
-//				String oldName = t.getTableView().getItems().get(t.getTablePosition().getRow()).getNombre();
-				
-				
-				System.out.println("1: "+ MensajeriaBackend.checkString(t.getNewValue()));
-				System.out.println("2: "+ MensajeriaBackend.checkRightString(t.getNewValue()));
-				System.out.println("t.getNewValue(): " + t.getNewValue());
-				System.out.println("t.getOldValue(): " + t.getOldValue());
-				
+
 				if (!(t.getNewValue().equals("")) && MensajeriaBackend.checkString(t.getNewValue()) == true && MensajeriaBackend.checkRightString(t.getNewValue())) {
-					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-							.setNombre(t.getNewValue());
-				
+					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue());
+					
 					Mensajeria mensajeria = new Mensajeria();
 					mensajeria.setId(t.getTableView().getItems().get(t.getTablePosition().getRow()).getId());
 					mensajeria.setNombre(t.getNewValue());
-
+				
 					Mensajeria mensajeriaObj = null;
 					try {
 						mensajeriaObj = mensajeriaDAO.getMensajeriaById(mensajeria.getId());
@@ -250,15 +256,13 @@ public class MensajeriaWindow {
 					}
 					mensajeriaList.add(mensajeriaObj);
 				} else {
-					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-					.setNombre(t.getOldValue());
-					
+					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getOldValue());
 					Alert alert = new Alert(AlertType.WARNING);
 					alert.setTitle("Modificaciones en mensajería");
 					alert.setHeaderText("Alerta");
 					alert.setContentText("Debe ingresar datos válidos");
 					alert.showAndWait();
-				}
+				} 
 			});
 			table.setItems(datos);
 			table.getColumns().addAll(idCol, mensajeraCol);
