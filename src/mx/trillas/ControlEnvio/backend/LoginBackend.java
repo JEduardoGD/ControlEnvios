@@ -55,7 +55,7 @@ public class LoginBackend {
 						menu.AdminMenuStage(stage);
 					} 
 					else if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_CAPTURISTA))) {
-						menu.UserMenuStage(stage);
+						menu.UserMenuStage(stage, usuario);
 					}
 					else {
 						logger.error("Usuario no contiene los permisos necesarios de acceso.");

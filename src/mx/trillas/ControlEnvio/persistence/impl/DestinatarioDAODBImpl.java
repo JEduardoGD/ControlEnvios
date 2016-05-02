@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
-
 public class DestinatarioDAODBImpl implements DestinatarioDAO {
 
 	@Override
@@ -45,6 +44,7 @@ public class DestinatarioDAODBImpl implements DestinatarioDAO {
 			Object destinatarioObj = criteria.uniqueResult();
 			if (destinatarioObj != null && destinatarioObj instanceof Destinatario) {
 				destinatario = (Destinatario) destinatarioObj;
+				HibernateUtil.initializeObject(destinatario.getDepartamento()); 
 			}
 		} catch (Exception e) {
 			throw e;

@@ -10,7 +10,12 @@ import java.util.Date;
 public class Guia  implements java.io.Serializable {
 
 
-     private Integer id;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private Integer id;
      private Destinatario destinatario;
      private Mensajeria mensajeria;
      private Origen origen;
@@ -20,6 +25,7 @@ public class Guia  implements java.io.Serializable {
      private Date fecha;
      private String otroorigen;
      private String otrodestinatario;
+     private String otrodepartamento;
 
     public Guia() {
     }
@@ -31,7 +37,7 @@ public class Guia  implements java.io.Serializable {
         this.numero = numero;
         this.fecha = fecha;
     }
-    public Guia(Destinatario destinatario, Mensajeria mensajeria, Origen origen, Usuario usuario, String numero, String observacion, Date fecha, String otroorigen, String otrodestinatario) {
+    public Guia(Destinatario destinatario, Mensajeria mensajeria, Origen origen, Usuario usuario, String numero, String observacion, Date fecha, String otroorigen, String otrodestinatario, String otrodepartamento) {
        this.destinatario = destinatario;
        this.mensajeria = mensajeria;
        this.origen = origen;
@@ -41,6 +47,7 @@ public class Guia  implements java.io.Serializable {
        this.fecha = fecha;
        this.otroorigen = otroorigen;
        this.otrodestinatario = otrodestinatario;
+       this.otrodepartamento = otrodepartamento;
     }
    
     public Integer getId() {
@@ -113,10 +120,14 @@ public class Guia  implements java.io.Serializable {
     public void setOtrodestinatario(String otrodestinatario) {
         this.otrodestinatario = otrodestinatario;
     }
-
-
-
-
+    
+    public String getOtrodepartamento() {
+        return this.otrodestinatario;
+    }
+    
+    public void setOtrodepartamento(String otrodepartamento) {
+        this.otrodepartamento = otrodepartamento;
+    }
 }
 
 
