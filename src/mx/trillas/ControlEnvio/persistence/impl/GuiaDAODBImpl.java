@@ -15,7 +15,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
-		
+
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			transaction = session.beginTransaction();
@@ -24,7 +24,8 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		} catch (Exception ex) {
 			if (transaction != null)
 				transaction.rollback();
-			ex.printStackTrace();
+//			ex.printStackTrace();
+			throw ex;
 		} finally {
 			if (session != null)
 				session.close();

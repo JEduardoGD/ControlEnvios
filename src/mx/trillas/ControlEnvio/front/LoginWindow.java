@@ -78,10 +78,30 @@ public class LoginWindow {
 			
 			Button submitButton = new Button("Aceptar");
 			submitButton.setId("submitButton");
+			
+			submitButton.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			    @Override
+			    public void handle(KeyEvent keyEvent) {
+			        if (keyEvent.getCode() == KeyCode.ENTER)  {
+
+			        	if (Login.checkLoginData(usernameField, passwdField)) {
+							try {
+								Login.getMenuUser(stage, usernameField.getText(), passwdField.getText());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								logger.error(e.getMessage());
+							}
+						} else {
+							
+						}
+			        }
+			    }
+			});
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
+					
 					if (Login.checkLoginData(usernameField, passwdField)) {
 						try {
 							Login.getMenuUser(stage, usernameField.getText(), passwdField.getText());

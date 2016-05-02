@@ -10,14 +10,12 @@ import java.util.Set;
  */
 public class Departamento  implements java.io.Serializable {
 
-
      private Integer id;
      private String nombre;
      private Set destinatarios = new HashSet(0);
 
     public Departamento() {
     }
-
 	
     public Departamento(String nombre) {
         this.nombre = nombre;

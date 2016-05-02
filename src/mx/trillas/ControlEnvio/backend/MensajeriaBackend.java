@@ -11,9 +11,9 @@ import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 
 public class MensajeriaBackend {
 
-	 private static final String STRING_PATTERN = "([a-zA-Z]){4,45}";
+	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
 	 
-	 private static Logger logger = Logger.getLogger(Mensajeria.class);
+	 private static Logger logger = Logger.getLogger(MensajeriaBackend.class);
 	 
 	 private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
 	 

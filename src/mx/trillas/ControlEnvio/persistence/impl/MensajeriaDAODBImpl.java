@@ -1,5 +1,8 @@
 package mx.trillas.ControlEnvio.persistence.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -53,5 +56,31 @@ public class MensajeriaDAODBImpl implements MensajeriaDAO {
 				session.close();
 		}
 		return mensajeria;
+	}
+	
+	@Override
+	public List<Mensajeria> getMensajeriaList() throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		List<Mensajeria>  mensajerias = new ArrayList<Mensajeria>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Mensajeria.class);
+
+			List<?> objList = criteria.list();
+			for (Object mensajeriaObj : objList) {
+				if (mensajeriaObj != null && mensajeriaObj instanceof Mensajeria) {
+					Mensajeria mensajeria = (Mensajeria) mensajeriaObj;
+					mensajerias.add(mensajeria);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return mensajerias;
 	}
 }

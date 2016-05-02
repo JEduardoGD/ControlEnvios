@@ -2,6 +2,8 @@ package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,9 +27,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.backend.DestinatarioBackend;
+import mx.trillas.ControlEnvio.backend.OrigenBackend;
+import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
+import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
+import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
+import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class DestinatariosWindow {
+
+	private static Logger logger = Logger.getLogger(DestinatariosWindow.class);
+	private static DestinatarioDAO destinatarioDAO = new DestinatarioDAODBImpl();
 
 	/* Solo datos de ejemplo */
 
@@ -109,7 +120,6 @@ public class DestinatariosWindow {
 			ComboBox<Object> deptoCombo = new ComboBox<>();
 			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas");
 			deptoCombo.setPromptText("Seleccione una opcion...");
-
 			deptoPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVbox.getChildren().addAll(deptoPane);
 
@@ -118,7 +128,27 @@ public class DestinatariosWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					
+					Destinatario destinatarioObj = null;
+					try {
+						destinatarioObj = destinatarioDAO.getDestinatarioByName(destinatarioField.getText());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						logger.error("Ocurrio un error al intentar buscar un destinatario");
+					}
+					
+					if (destinatarioField.getText() == null || destinatarioField.getText().equals("")) {
+						logger.error("El nombre del destinatario no debe ir vacio");
+					} else if (deptoCombo.getValue() == null || deptoCombo.getValue().toString() == null || deptoCombo.getValue().toString().equals("")) {
+						logger.error("El nombre del departamento no debe ir vacio");
+					} else if (!(DestinatarioBackend.checkString(destinatarioField.getText()))) {
+						logger.error("El nombre del destinatario no contiene la estructura requerida");
+					} else if (destinatarioObj != null) {
+						logger.info("El destinatario ya existe en otro departamento");
+					} else {
+						logger.info("Intento guardar el nuevo destinatario");
+						confirmarDestinatariosStage(stage, destinatarioField.getText(), deptoCombo.getValue().toString());
+					}
 				}
 			});
 
@@ -128,7 +158,8 @@ public class DestinatariosWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					MenuWindow menu = new MenuWindow();
+					menu.AdminMenuStage(stage);
 				}
 			});
 
@@ -224,7 +255,7 @@ public class DestinatariosWindow {
 		}
 	}
 
-	public void ConfirmarDestinatariosStage(Stage stage, Controlenvio controlEnvio) {
+	public void confirmarDestinatariosStage(Stage stage, String nombreDestinatario, String nombreDepartamento) {
 		DropShadow shadow = new DropShadow();
 
 		try {
@@ -234,8 +265,8 @@ public class DestinatariosWindow {
 			rootVbox.setSpacing(10);
 			rootVbox.setPadding(new Insets(30, 30, 30, 30));
 
-			Text text = new Text("Desea guardar los cambios?\n" + "\nDestinatario: " + controlEnvio.getDestinatario()
-					+ "\nDepartamento: " + controlEnvio.getDepartamento());
+			Text text = new Text("Desea guardar los cambios?\n" + "\nDestinatario: " + nombreDestinatario
+					+ "\nDepartamento: " + nombreDepartamento);
 
 			Scene scene = new Scene(rootVbox, 450, 270);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -249,7 +280,18 @@ public class DestinatariosWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					if (OrigenBackend.checkString(nombreDestinatario)) {
+						try {
+							DestinatarioBackend.loadDestinatarioData(nombreDestinatario, nombreDepartamento);
+							
+							MenuWindow menu = new MenuWindow();
+							menu.AdminMenuStage(stage);
+								//		Ir a ventana de confirmar
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							logger.error(e.getMessage());
+						}
+					}
 				}
 			});
 
@@ -259,7 +301,8 @@ public class DestinatariosWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-
+					MenuWindow menu = new MenuWindow();
+					menu.AdminMenuStage(stage);
 				}
 			});
 
