@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class ReportWindow {
@@ -36,7 +37,7 @@ public class ReportWindow {
 			new Controlenvio(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
 			new Controlenvio(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
 
-	public void GenerarReporteStage(Stage stage) {
+	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
 		try {
 			BorderPane border = new BorderPane();
@@ -61,7 +62,7 @@ public class ReportWindow {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					MenuWindow menu = new MenuWindow();
-					menu.UserMenuStage(stage);
+					menu.UserMenuStage(stage, usuario);
 				}
 			});
 
@@ -110,7 +111,7 @@ public class ReportWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					reporteViewStage(stage);
+					reporteViewStage(stage, usuario);
 				}
 			});
 
@@ -225,7 +226,7 @@ public class ReportWindow {
 		return vbox;
 	}
 
-	public void reporteViewStage(Stage stage) {
+	public void reporteViewStage(Stage stage, Usuario usuario) {
 
 		try {
 			VBox paneVbox = new VBox();
@@ -250,7 +251,7 @@ public class ReportWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GenerarReporteStage(stage);
+					GenerarReporteStage(stage, usuario);
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);

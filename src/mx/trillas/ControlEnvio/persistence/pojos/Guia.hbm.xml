@@ -35,5 +35,8 @@
         <property name="otrodestinatario" type="string">
             <column name="otrodestinatario" length="45" />
         </property>
+        <property name="otrodepartamento" type="string">
+            <column name="otrodepartamento" length="45" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -12,12 +12,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -75,6 +77,9 @@ public class DestinatariosWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Destinatarios");
+			
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -139,12 +144,25 @@ public class DestinatariosWindow {
 					
 					if (destinatarioField.getText() == null || destinatarioField.getText().equals("")) {
 						logger.error("El nombre del destinatario no debe ir vacio");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del destinatario\n no debe ir vacio");
+						alert.showAndWait();
 					} else if (deptoCombo.getValue() == null || deptoCombo.getValue().toString() == null || deptoCombo.getValue().toString().equals("")) {
 						logger.error("El nombre del departamento no debe ir vacio");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del departamento \nno  debe ir vacio");
+						alert.showAndWait();
 					} else if (!(DestinatarioBackend.checkString(destinatarioField.getText()))) {
 						logger.error("El nombre del destinatario no contiene la estructura requerida");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del destinatario \nno contiene la estructura requerida");
+						alert.showAndWait();
 					} else if (destinatarioObj != null) {
 						logger.info("El destinatario ya existe en otro departamento");
+						alert.setAlertType(AlertType.WARNING);
+						alert.setHeaderText(null);
+						alert.setContentText("El destinatario ya existe en \notro departamento");
+						alert.showAndWait();
 					} else {
 						logger.info("Intento guardar el nuevo destinatario");
 						confirmarDestinatariosStage(stage, destinatarioField.getText(), deptoCombo.getValue().toString());
@@ -284,6 +302,11 @@ public class DestinatariosWindow {
 						try {
 							DestinatarioBackend.loadDestinatarioData(nombreDestinatario, nombreDepartamento);
 							
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Cambios en destinatarios");
+							alert.setHeaderText(null);
+							alert.setContentText("El destinatario se ha guardado exitosamente");
+							alert.showAndWait();
 							MenuWindow menu = new MenuWindow();
 							menu.AdminMenuStage(stage);
 								//		Ir a ventana de confirmar
