@@ -53,9 +53,10 @@ public class Mensajeria  implements java.io.Serializable {
         this.guias = guias;
     }
 
-
+    public String toString(){
+    	return this.getNombre();
+    }
 
 
 }
-
 

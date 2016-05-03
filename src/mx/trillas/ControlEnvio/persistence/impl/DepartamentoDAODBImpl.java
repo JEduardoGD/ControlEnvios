@@ -1,5 +1,8 @@
 package mx.trillas.ControlEnvio.persistence.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,6 +12,7 @@ import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
+import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class DepartamentoDAODBImpl implements DepartamentoDAO {
 
@@ -55,4 +59,31 @@ public class DepartamentoDAODBImpl implements DepartamentoDAO {
 		}
 		return departamento;
 	}
+	
+	@Override
+	public List<Departamento> getDepartamentoList() throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		List<Departamento> departamentos = new ArrayList<Departamento>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Departamento.class);
+
+			List<?> objList = criteria.list();
+			for (Object departamentoObj : objList) {
+				if (departamentoObj != null && departamentoObj instanceof Departamento) {
+					Departamento departamento = (Departamento) departamentoObj;
+					departamentos.add(departamento);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return departamentos;
+	}
+
 }

@@ -64,9 +64,10 @@ public class Destinatario  implements java.io.Serializable {
         this.guias = guias;
     }
 
-
+    public String toString(){
+    	return this.getNombre();
+    }
 
 
 }
-
 

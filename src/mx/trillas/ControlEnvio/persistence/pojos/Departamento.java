@@ -47,9 +47,10 @@ public class Departamento  implements java.io.Serializable {
         this.destinatarios = destinatarios;
     }
 
-
+    public String toString(){
+    	return this.getNombre();
+    }
 
 
 }
-
 
