@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class Login {
+public class LoginBackend {
 	
-	private static Logger logger = Logger.getLogger(Login.class);
+	private static Logger logger = Logger.getLogger(LoginBackend.class);
 	
 	private static UsuarioDAO usuarioDAO = ImplFactory.getUsuarioDAO();
 	private static TipousuarioDAO tipousuarioDAO = new TipousuarioDAODBImpl();
@@ -55,7 +55,7 @@ public class Login {
 						menu.AdminMenuStage(stage);
 					} 
 					else if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_CAPTURISTA))) {
-						menu.UserMenuStage(stage);
+						menu.UserMenuStage(stage, usuario);
 					}
 					else {
 						logger.error("Usuario no contiene los permisos necesarios de acceso.");
@@ -66,5 +66,21 @@ public class Login {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	public static boolean existUser(String username, String passwd) throws Exception {
+		
+		Usuario usuario = null;
+		
+		try {
+			usuario = usuarioDAO.getByUsernameAndPassword(username, passwd);
+
+			if (usuario != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return false;
 	}
 }

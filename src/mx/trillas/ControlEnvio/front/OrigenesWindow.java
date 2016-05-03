@@ -12,11 +12,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -65,6 +67,9 @@ public class OrigenesWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Origenes");
+			
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,10 +123,20 @@ public class OrigenesWindow {
 					
 					if (nombreField.getText() == null || nombreField.getText().equals("")) {
 						logger.error("El nombre de origen no debe ir vacio");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del nuevo origen \nno debe ir vacio");
+						alert.showAndWait();
 					} else if (!(OrigenBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre de origen no contiene la estructura requerida");
+						alert.setHeaderText("Error al ingresar datos");
+						alert.setContentText("El nombre del nuevo origen no \ncontiene la estructura requerida");
+						alert.showAndWait();
 					} else if (origenObj != null) {
 						logger.info("El origen que intenta crear ya existe.");
+						alert.setAlertType(AlertType.WARNING);
+						alert.setHeaderText(null);
+						alert.setContentText("El origen que intenta \ncrear ya existe");
+						alert.showAndWait();
 					} else {
 						logger.info("Intento guardar el nuevo origen");
 						confirmarOrigenesStage(stage, nombreField.getText());
@@ -248,6 +263,12 @@ public class OrigenesWindow {
 					if (OrigenBackend.checkString(nombreOrigen)) {
 						try {
 							OrigenBackend.loadOrigenData(nombreOrigen);
+							
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Cambios en origenes");
+							alert.setHeaderText(null);
+							alert.setContentText("El origen se ha guardado exitosamente");
+							alert.showAndWait();
 							
 							MenuWindow menu = new MenuWindow();
 							menu.AdminMenuStage(stage);

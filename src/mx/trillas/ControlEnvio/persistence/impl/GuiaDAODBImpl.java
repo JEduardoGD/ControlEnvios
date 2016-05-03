@@ -21,11 +21,10 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			transaction = session.beginTransaction();
 			session.save(guia);
 			transaction.commit();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			if (transaction != null)
 				transaction.rollback();
-//			ex.printStackTrace();
-			throw ex;
+			throw e;
 		} finally {
 			if (session != null)
 				session.close();

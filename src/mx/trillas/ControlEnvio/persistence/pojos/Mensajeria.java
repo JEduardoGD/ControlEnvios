@@ -11,7 +11,11 @@ import java.util.Set;
 public class Mensajeria  implements java.io.Serializable {
 
 
-     private Integer id;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Integer id;
      private String nombre;
      private Set guias = new HashSet(0);
 
