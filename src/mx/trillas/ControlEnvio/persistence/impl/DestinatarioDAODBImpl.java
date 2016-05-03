@@ -12,6 +12,7 @@ import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
+import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 public class DestinatarioDAODBImpl implements DestinatarioDAO {
 
@@ -75,6 +76,33 @@ public class DestinatarioDAODBImpl implements DestinatarioDAO {
 				if (destinatarioObj != null && destinatarioObj instanceof Destinatario) {
 					Destinatario destinatarioCast = (Destinatario) destinatarioObj;
 					destinatarios.add(destinatarioCast);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return destinatarios;
+	}
+	
+	@Override
+	public List<Destinatario> getDestinatarioList() throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		List<Destinatario>  destinatarios = new ArrayList<Destinatario>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Destinatario.class);
+
+			List<?> objList = criteria.list();
+			for (Object destinatarioObj : objList) {
+				if (destinatarioObj != null && destinatarioObj instanceof Destinatario) {
+					Destinatario destinatario = (Destinatario) destinatarioObj;
+					destinatarios.add(destinatario);
+					HibernateUtil.initializeObject(destinatario.getDepartamento());
 				}
 			}
 		} catch (Exception e) {

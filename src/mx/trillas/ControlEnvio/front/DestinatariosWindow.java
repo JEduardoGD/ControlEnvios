@@ -21,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.DropShadow;
@@ -29,27 +30,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.converter.DefaultStringConverter;
+import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.backend.DestinatarioBackend;
 import mx.trillas.ControlEnvio.backend.OrigenBackend;
+import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
+import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
+import mx.trillas.ControlEnvio.persistence.pojos.Guia;
+import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class DestinatariosWindow {
 
 	private static Logger logger = Logger.getLogger(DestinatariosWindow.class);
 	private static DestinatarioDAO destinatarioDAO = new DestinatarioDAODBImpl();
-
-	/* Solo datos de ejemplo */
-
-	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
-			new Controlenvio(new Integer(0), "DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Controlenvio(new Integer(1), "Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Controlenvio(new Integer(2), "Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Controlenvio(new Integer(3), "ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
-
+//	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
+	
 	public void destinatariosStage(Stage stage) {
 
 		try {
@@ -115,15 +115,20 @@ public class DestinatariosWindow {
 			Label destinatarioLabel = new Label("Destinatario ");
 			destinatarioLabel.getStyleClass().add(".inputs");
 			TextField destinatarioField = new TextField();
-
+			destinatarioField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (destinatarioField.getText().length() > 44) {
+		                String s = destinatarioField.getText().substring(0, 44);
+		                destinatarioField.setText(s);
+		            }
+			});
 			nombrePane.getChildren().addAll(destinatarioLabel, destinatarioField);
 			rootVbox.getChildren().addAll(nombrePane);
 
 			Label deptoLabel = new Label("Departamento ");
 			deptoLabel.getStyleClass().add(".inputs");
-
-			ComboBox<Object> deptoCombo = new ComboBox<>();
-			deptoCombo.getItems().addAll("Contaduria", "Abogacia", "Sistemas", "Jefaturas");
+			
+			ComboBox<Object> deptoCombo = DepartamentoBackend.getDeptosListCombo();
+			
 			deptoCombo.setPromptText("Seleccione una opcion...");
 			deptoPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVbox.getChildren().addAll(deptoPane);
@@ -198,6 +203,28 @@ public class DestinatariosWindow {
 
 	public void modificarDestinatariosStage(Stage stage) {
 
+		/* get lista de departamentos para combo */
+		 ObservableList<String> deptosList = null;
+		 ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
+
+		try {
+			deptosList = DepartamentoBackend.getDepartamentoData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
+		
+		/* get lista de datos destinatarios para tabla  */
+		ObservableList<Destinatario> destinatariosList = null;
+
+		try {
+			destinatariosList = DestinatarioBackend.getDestinatarioData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
+		System.out.println("deptosList: " + deptosList);
+		System.out.println("destino: " + destinatariosList);
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
@@ -207,35 +234,33 @@ public class DestinatariosWindow {
 			scene.getStylesheets()
 					.add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
 
-			TableView<Controlenvio> table = new TableView<Controlenvio>();
+			TableView<Destinatario> table = new TableView<Destinatario>();
 			table.setEditable(true);
 
-			TableColumn<Controlenvio, String> idCol = new TableColumn<>("Id");
+			TableColumn<Destinatario, String> idCol = new TableColumn<>("Id");
 			idCol.setMinWidth(80);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Controlenvio, String> destinatarioCol = new TableColumn<>("Destinatario");
+			TableColumn<Destinatario, String> destinatarioCol = new TableColumn<>("Destinatario");
 			destinatarioCol.setMinWidth(190);
-			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("destinatario"));
-
-			destinatarioCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			destinatarioCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setDestinatario(t.getNewValue());
+			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+			destinatarioCol.setCellFactory(TextFieldTableCell.<Destinatario> forTableColumn());
+			destinatarioCol.setOnEditCommit((CellEditEvent<Destinatario, String> t) -> {
+				((Destinatario) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setNombre(t.getNewValue().toString());
 			});
 
-			TableColumn<Controlenvio, String> deptoCol = new TableColumn<>("Departamento");
+			TableColumn<Destinatario, String> deptoCol = new TableColumn<>("Departamento");
 			deptoCol.setMinWidth(140);
 			deptoCol.setCellValueFactory(new PropertyValueFactory<>("departamento"));
-
-			deptoCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			deptoCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setDepartamento(t.getNewValue());
+			deptoCol.setCellFactory(ComboBoxTableCell.forTableColumn(null, deptosList));
+			deptoCol.setOnEditCommit((CellEditEvent<Destinatario, String> t) -> {
+				((Destinatario) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.getDepartamento().setNombre(t.getNewValue());
 			});
 
-			table.setItems(data);
+			table.setItems(destinatariosList);
 			table.getColumns().addAll(idCol, destinatarioCol, deptoCol);
 
 			paneVbox.setSpacing(10);

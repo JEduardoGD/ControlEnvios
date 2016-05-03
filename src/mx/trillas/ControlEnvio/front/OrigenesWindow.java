@@ -104,6 +104,12 @@ public class OrigenesWindow {
 
 			Label nombreLabel = new Label("Origen ");
 			TextField nombreField = new TextField();
+			nombreField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (nombreField.getText().length() > 44) {
+		                String s = nombreField.getText().substring(0, 44);
+		                nombreField.setText(s);
+		            }
+			});
 
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);

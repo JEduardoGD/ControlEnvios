@@ -1,16 +1,21 @@
 package mx.trillas.ControlEnvio.backend;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
+import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 
 public class DestinatarioBackend {
@@ -57,4 +62,21 @@ public class DestinatarioBackend {
 			throw e;
 		}
 	 }
+	 
+	 public static ObservableList<Destinatario> getDestinatarioData() throws Exception {
+
+			List<Destinatario> destinatarios = new ArrayList<Destinatario>();
+			ObservableList<Destinatario> data = FXCollections.observableArrayList();
+			
+			try {
+				destinatarios = destinatarioDAO.getDestinatarioList();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw e;
+			}
+			for (Destinatario element : destinatarios) {
+				data.add(element);
+			}
+			return data;
+	}
 }
