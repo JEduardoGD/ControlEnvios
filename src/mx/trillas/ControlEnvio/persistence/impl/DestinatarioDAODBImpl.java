@@ -1,5 +1,8 @@
 package mx.trillas.ControlEnvio.persistence.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -7,7 +10,9 @@ import org.hibernate.criterion.Restrictions;
 
 import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
+import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
+import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 public class DestinatarioDAODBImpl implements DestinatarioDAO {
 
 	@Override
@@ -53,5 +58,31 @@ public class DestinatarioDAODBImpl implements DestinatarioDAO {
 				session.close();
 		}
 		return destinatario;
+	}
+
+	@Override
+	public List<Destinatario> getDestinatarioFromDeptoList(Departamento departamento) throws Exception {
+		Session session = null;
+		List<Destinatario> destinatarios = new ArrayList<Destinatario>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Destinatario.class);
+			criteria.add(Restrictions.and(Restrictions.eq("departamento", departamento)));
+			
+			List<?> objList = criteria.list();
+			for (Object destinatarioObj : objList) {
+				if (destinatarioObj != null && destinatarioObj instanceof Destinatario) {
+					Destinatario destinatarioCast = (Destinatario) destinatarioObj;
+					destinatarios.add(destinatarioCast);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return destinatarios;
 	}
 }	

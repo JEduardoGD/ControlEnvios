@@ -49,9 +49,11 @@ public class Origen  implements java.io.Serializable {
         this.guias = guias;
     }
 
-
+    public String toString(){
+    	return this.getNombre();
+    }
 
 
 }
 
-
+	
