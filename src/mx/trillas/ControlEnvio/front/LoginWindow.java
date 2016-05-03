@@ -51,12 +51,26 @@ public class LoginWindow {
 
 			Label usernameLabel = new Label("Usuario");
 			usernameLabel.getStyleClass().add("labels");
+			
 			TextField usernameField = new TextField();
+			usernameField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (usernameField.getText().length() > 44) {
+		                String s = usernameField.getText().substring(0, 44);
+		                usernameField.setText(s);
+		            }
+			});
 			usernamePane.getChildren().addAll(usernameLabel, usernameField);
 
 			Label passwdLabel = new Label("Contraseña");
 			passwdLabel.getStyleClass().add("labels");
+			
 			PasswordField passwdField = new PasswordField();
+			passwdField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (passwdField.getText().length() > 44) {
+		                String s = passwdField.getText().substring(0, 44);
+		                passwdField.setText(s);
+		            }
+			});
 			usernamePane.setAlignment(Pos.CENTER);
 			passwdPane.setAlignment(Pos.CENTER);
 			

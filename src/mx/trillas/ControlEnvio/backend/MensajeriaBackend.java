@@ -1,10 +1,14 @@
 package mx.trillas.ControlEnvio.backend;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import mx.trillas.ControlEnvio.persistence.dao.MensajeriaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.MensajeriaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
@@ -52,4 +56,21 @@ public class MensajeriaBackend {
 			throw e;
 		}
 	 }
+	 
+	public static ObservableList<Mensajeria> getMensajeriaData() throws Exception {
+
+			List<Mensajeria> mensajerias = new ArrayList<Mensajeria>();
+			ObservableList<Mensajeria> data = FXCollections.observableArrayList();
+			
+			try {
+				mensajerias = mensajeriaDAO.getMensajeriaList();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw e;
+			}
+			for (Mensajeria element : mensajerias) {
+				data.add(element);
+			}
+			return data;
+	}
 }

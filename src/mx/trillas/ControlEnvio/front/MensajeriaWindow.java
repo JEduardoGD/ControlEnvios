@@ -42,26 +42,6 @@ public class MensajeriaWindow {
 	private static Logger logger = Logger.getLogger(MensajeriaWindow.class);
 	private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
 	private List<Mensajeria> mensajeriaList = new ArrayList<Mensajeria>();
-	/* Solo datos de ejemplo */
-
-	private final ObservableList<Mensajeria> data = FXCollections.observableArrayList();
-
-	public ObservableList<Mensajeria> getMensajeriaData() throws Exception {
-
-		List<Mensajeria> mensajerias = new ArrayList<Mensajeria>();
-
-		try {
-			mensajerias = mensajeriaDAO.getMensajeriaList();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw e;
-		}
-		for (Mensajeria element : mensajerias) {
-			data.add(element);
-		}
-
-		return data;
-	}
 
 	public void mensajeriaStage(Stage stage) {
 
@@ -124,6 +104,12 @@ public class MensajeriaWindow {
 
 			Label nombreLabel = new Label("Mensajería:");
 			TextField mensajeriaField = new TextField();
+			mensajeriaField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (mensajeriaField.getText().length() > 44) {
+		                String s = mensajeriaField.getText().substring(0, 44);
+		                mensajeriaField.setText(s);
+		            }
+			});
 			nombrePane.getChildren().addAll(nombreLabel, mensajeriaField);
 			rootVbox.getChildren().addAll(nombrePane);
 
@@ -196,7 +182,7 @@ public class MensajeriaWindow {
 		ObservableList<Mensajeria> datos = null;
 
 		try {
-			datos = getMensajeriaData();
+			datos = MensajeriaBackend.getMensajeriaData();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error(e.getMessage());
