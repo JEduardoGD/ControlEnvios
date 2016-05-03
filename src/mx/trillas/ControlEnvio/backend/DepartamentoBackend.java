@@ -37,6 +37,7 @@ public class DepartamentoBackend {
 		 try {
 			 departamentoDAO.altaDepartamento(departamento);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw e;
 		}
 	 }
