@@ -27,20 +27,16 @@ import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
 import mx.trillas.ControlEnvio.persistence.dao.MensajeriaDAO;
 import mx.trillas.ControlEnvio.persistence.dao.OrigenesDAO;
-import mx.trillas.ControlEnvio.persistence.dao.UsuarioDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
-import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.MensajeriaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.OrigenesDAODBImpl;
-import mx.trillas.ControlEnvio.persistence.impl.UsuarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
-import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class CapturaWindow {
 
@@ -52,7 +48,7 @@ public class CapturaWindow {
 	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
 	// private static ObservacionesDAO observacionesDAO = new
 	// ObservacionesDAODBImpl();
-	private static UsuarioDAO usuarioDAO = new UsuarioDAODBImpl();
+//	private static UsuarioDAO usuarioDAO = new UsuarioDAODBImpl();
 
 	public void CapturaStage(Stage stage, Usuario usuario) {
 		try {
@@ -138,21 +134,40 @@ public class CapturaWindow {
 			Label guiaLabel = new Label("Numero guia");
 
 			TextField guiaField = new TextField();
-			/*
-			 * guiaField.textProperty().addListener(new ChangeListener<String>()
-			 * {
-			 * 
-			 * @Override public void changed(final ObservableValue<? extends
-			 * String> ov, final String oldValue, final String newValue) { if
-			 * (tf.getText().length() > maxLength) { String s =
-			 * tf.getText().substring(0, maxLength); tf.setText(s); } } });
-			 */ guiaPane.getChildren().addAll(guiaLabel, guiaField);
+			guiaField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (guiaField.getText().length() > 44) {
+		                String s = guiaField.getText().substring(0, 44);
+		                guiaField.setText(s);
+		            }
+			});
+			  
+			guiaPane.getChildren().addAll(guiaLabel, guiaField);
 			rootVBox.getChildren().addAll(guiaPane);
 
 			TextField otroOrigenField = new TextField();
+			otroOrigenField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (otroOrigenField.getText().length() > 44) {
+		                String s = otroOrigenField.getText().substring(0, 44);
+		                otroOrigenField.setText(s);
+		            }
+			});
+			
 			TextField otroDeptoField = new TextField();
+			otroDeptoField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (otroDeptoField.getText().length() > 44) {
+		                String s = otroDeptoField.getText().substring(0, 44);
+		                otroDeptoField.setText(s);
+		            }
+			});
+			
 			TextField otroDestinatarioField = new TextField();
-
+			otroDestinatarioField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (otroDestinatarioField.getText().length() > 44) {
+		                String s = otroDestinatarioField.getText().substring(0, 44);
+		                otroDestinatarioField.setText(s);
+		            }
+			});
+			
 			otroOrigenField.setDisable(true);
 			otroDeptoField.setDisable(true);
 			otroDestinatarioField.setDisable(true);
@@ -168,21 +183,25 @@ public class CapturaWindow {
 						+ element.toString().substring(1);
 				origenCombo.getItems().add(elementFormat);
 			}
+			origenCombo.getItems().add("Otro");
 			origenCombo.setPromptText("Seleccione una opción...");
-			origenPane.getChildren().addAll(origenMensajeria, origenCombo);
-
 			origenCombo.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					if (origenCombo.getValue().equals("Otro")) {
-						otroOrigenField.setDisable(false);
-					} else {
-						otroOrigenField.setDisable(true);
+					try {
+						if (origenCombo != null && origenCombo.getValue().equals("Otro")) {
+							otroOrigenField.setDisable(false);
+						} else {
+							otroOrigenField.setDisable(true);
+						}
+					} catch (Exception e) {
+						logger.error(e.getMessage());
 					}
 				}
 			});
+			origenPane.getChildren().addAll(origenMensajeria, origenCombo);
 			rootVBox.getChildren().addAll(origenPane);
 
 			Label otroOrigenLabel = new Label("Otro origen");
@@ -210,34 +229,37 @@ public class CapturaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 
-					Departamento departamentoForCombo = null;
-					ObservableList<Destinatario> destinatarioList = null;
-
-					try {
-						departamentoForCombo = departamentoDAO.getDepartamento(deptoCombo.getValue().toString());
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error(e.getMessage());
-					}
-
-					try {
-						destinatarioList = FXCollections.observableArrayList(
-								destinatarioDAO.getDestinatarioFromDeptoList(departamentoForCombo));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error(e.getMessage());
-					}
-					destinatarioCombo.getItems().clear();
-					for (Destinatario element : destinatarioList) {
-						String elementFormat = element.toString().substring(0, 1).toUpperCase()
-								+ element.toString().substring(1);
-
-						destinatarioCombo.getItems().add(elementFormat);
+					if ( deptoCombo.getValue() != null ) {
+						Departamento departamentoForCombo = null;
+						ObservableList<Destinatario> destinatarioList = null;
+	
+						try {
+							departamentoForCombo = departamentoDAO.getDepartamento(deptoCombo.getValue().toString());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							logger.error(e.getMessage());
+						}
+	
+						try {
+							destinatarioList = FXCollections.observableArrayList(destinatarioDAO.getDestinatarioFromDeptoList(departamentoForCombo));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							logger.error(e.getMessage());
+						}
+						destinatarioCombo.getItems().clear();
+						for (Destinatario element : destinatarioList) {
+							String elementFormat = element.toString().substring(0, 1).toUpperCase()
+									+ element.toString().substring(1);
+	
+							destinatarioCombo.getItems().add(elementFormat);
+						}
+						if (!(destinatarioCombo.getItems().contains("Otro"))) {
+							destinatarioCombo.getItems().add("Otro");
+						}
 					}
 					
-					destinatarioCombo.getItems().add("Otro");
 					
-					if (deptoCombo.getValue().equals("Otro")) {
+					if (deptoCombo.getValue() != null && deptoCombo.getValue().equals("Otro")) {
 						otroDeptoField.setDisable(false);
 						otroDestinatarioField.setDisable(false);
 						destinatarioCombo.setDisable(true);
@@ -248,7 +270,7 @@ public class CapturaWindow {
 					}
 				}
 			});
-
+			
 			deptosPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVBox.getChildren().addAll(deptosPane);
 
@@ -259,18 +281,21 @@ public class CapturaWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					if (destinatarioCombo.getValue().equals("Otro") || deptoCombo.getValue().equals("Otro")) {
-						otroDeptoField.setDisable(false);
-						otroDestinatarioField.setDisable(false);
-						deptoCombo.setDisable(true);
-					} else {
-						otroDeptoField.setDisable(true);
-						otroDestinatarioField.setDisable(true);
-						deptoCombo.setDisable(false);
+					
+					if (destinatarioCombo.getValue() != null && deptoCombo.getValue() != null) {
+						if (destinatarioCombo.getValue().equals("Otro") || deptoCombo.getValue().equals("Otro")) {
+							otroDeptoField.setDisable(false);
+							otroDestinatarioField.setDisable(false);
+							deptoCombo.setDisable(true);
+						} else {
+							otroDeptoField.setDisable(true);
+							otroDestinatarioField.setDisable(true);
+							deptoCombo.setDisable(false);
+						}
 					}
 				}
 			});
-
+			
 			destinatarioPane.getChildren().addAll(destinatarioLabel, destinatarioCombo);
 			rootVBox.getChildren().addAll(destinatarioPane);
 
@@ -286,6 +311,12 @@ public class CapturaWindow {
 			Label observacionLabel = new Label("Observacion");
 
 			TextField observacionField = new TextField();
+			observacionField.textProperty().addListener(( observable, oldValue, newValue) -> {
+				   if (observacionField.getText().length() > 44) {
+		                String s = observacionField.getText().substring(0, 44);
+		                observacionField.setText(s);
+		            }
+			});
 			observacionPane.getChildren().addAll(observacionLabel, observacionField);
 			rootVBox.getChildren().addAll(observacionPane);
 
@@ -294,8 +325,17 @@ public class CapturaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
+					mensajeriaCombo.setValue(null);
+					origenCombo.setValue(null);
+					destinatarioCombo.getItems().clear();
+					destinatarioCombo.setValue(null);
+					deptoCombo.setValue(null);
+					
+					observacionField.clear();
+					otroDeptoField.clear();
+					otroDestinatarioField.clear();
+					otroOrigenField.clear();
+					guiaField.clear();
 				}
 			});
 			clearPane.getChildren().addAll(clearButton);
@@ -310,7 +350,7 @@ public class CapturaWindow {
 					Boolean flag = true;
 					Mensajeria mensajeria = null;
 					Origen origen = null;
-					Departamento departamento = null;
+//					Departamento departamento = null;
 					Destinatario destinatario = null;
 
 					if (mensajeriaCombo.getValue() == null || mensajeriaCombo.getValue().toString() == null
@@ -381,13 +421,32 @@ public class CapturaWindow {
 						guia.setOrigen(origen);
 					}
 
-					if (deptoCombo.getValue().toString().equals("Otro")
-							|| destinatarioCombo.getValue().toString().equals("Otro")) {
+					/* Filtro para Departamento y destinatarios */
+					if (deptoCombo.getValue() == null || deptoCombo.getValue().toString() == null	|| deptoCombo.getValue().toString().equals("") || destinatarioCombo.getValue() == null || destinatarioCombo.getValue().toString() == null || destinatarioCombo.getValue().toString().equals("")) 
+					{
+							logger.error("Los datos departamento y destinatario no pueden ir vacios");
+							alert.setHeaderText("Los datos departamento y destinatario no pueden ir vacios");
+							alert.setContentText("Los datos departamento y destinatario no pueden ir vacios");
+							alert.showAndWait();
+							flag = false;
+					} else {
+							try {
+							destinatario = destinatarioDAO.getDestinatarioByName(destinatarioCombo.getValue().toString());
+							guia.setDestinatario(destinatario);
+							guia.setFecha(new Date());
+							guia.setUsuario(usuario);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							logger.error(e.getMessage());
+						}	
+					}
+					
+					/* Filtro para otros Departamento y destinatarios */
+					if (deptoCombo.getValue() != null && deptoCombo.getValue().toString().equals("Otro") || destinatarioCombo.getValue() != null && destinatarioCombo.getValue().toString().equals("Otro")) {
 						if (otroDeptoField.getText() == null || otroDeptoField.getText().equals("")) {
 							logger.error("El valor Otro Departamento no puede ir vacio");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText(
-									"El valor de Otro Departamento no puede ir vacio.\nComplete el campo o seleccione un departamento");
+							alert.setContentText("El valor de Otro Departamento no puede ir vacio.\nComplete el campo o seleccione un departamento");
 							alert.showAndWait();
 							flag = false;
 						} else if (!(CapturarRegistro.checkString(otroDeptoField.getText()))) {
@@ -399,29 +458,11 @@ public class CapturaWindow {
 						} else {
 							guia.setOtrodepartamento(otroDeptoField.getText());
 						}
-
-						if (deptoCombo.getValue() == null || deptoCombo.getValue().toString() == null
-								|| deptoCombo.getValue().toString().equals("")) {
-							logger.error("El dato departamento no puede ir vacio");
-							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El dato departamento no puede ir vacio");
-							alert.showAndWait();
-							flag = false;
-						} else if (destinatarioCombo.getValue() == null
-								|| destinatarioCombo.getValue().toString() == null
-								|| destinatarioCombo.getValue().toString().equals("")) {
-							logger.error("El dato destinatario no puede ir vacio");
-							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El dato destinatario no puede ir vacio");
-							alert.showAndWait();
-							flag = false;
-						}
-
+						
 						if (otroDestinatarioField.getText() == null || otroDestinatarioField.getText().equals("")) {
 							logger.error("El valor Otro destinatario no puede ir vacio");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText(
-									"El valor Otro destinatario no puede ir vacio.\nComplete el campo o seleccione un destinatario");
+							alert.setContentText("El valor Otro destinatario no puede ir vacio.\nComplete el campo o seleccione un destinatario");
 							alert.showAndWait();
 							flag = false;
 						} else if (!(CapturarRegistro.checkString(otroDestinatarioField.getText()))) {
@@ -432,19 +473,10 @@ public class CapturaWindow {
 							flag = false;
 						} else {
 							guia.setOtrodestinatario(otroDestinatarioField.getText());
-						}
-					} else {
-						try {
-							destinatario = destinatarioDAO
-									.getDestinatarioByName(destinatarioCombo.getValue().toString());
-							guia.setDestinatario(destinatario);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							logger.error(e.getMessage());
+							guia.setFecha(new Date());
+							guia.setUsuario(usuario);
 						}
 					}
-					guia.setFecha(new Date());
-					guia.setUsuario(usuario);
 
 					if (flag == true) {
 						confirmarStage(stage, guia, usuario);
@@ -486,7 +518,8 @@ public class CapturaWindow {
 				output += "\nOrigen: " + guia.getOrigen().getNombre();
 			if (guia.getDestinatario() != null && !(guia.getDestinatario().getNombre().toString().equals("")))
 				output += "\nDestinatario: " + guia.getDestinatario().getNombre();
-			if (guia.getDestinatario() != null && guia.getDestinatario().getDepartamento() != null && !(guia.getDestinatario().getDepartamento().getNombre().toString().equals("")))
+			if (guia.getDestinatario() != null && guia.getDestinatario().getDepartamento() != null
+					&& !(guia.getDestinatario().getDepartamento().getNombre().toString().equals("")))
 				output += "\nDepartamento: " + guia.getDestinatario().getDepartamento().getNombre();
 			if (guia.getOtrodepartamento() != null && !(guia.getOtrodepartamento().toString().equals("")))
 				output += "\nDepartamento: " + guia.getOtrodepartamento();
