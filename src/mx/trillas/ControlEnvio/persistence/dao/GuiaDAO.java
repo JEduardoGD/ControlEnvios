@@ -4,4 +4,5 @@ import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
 public interface GuiaDAO {
 	 public void altaGuia(Guia guia) throws Exception;
+	 public Guia getGuia(String numero) throws Exception;
 }
