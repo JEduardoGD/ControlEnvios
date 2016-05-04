@@ -57,6 +57,16 @@ public class Mensajeria  implements java.io.Serializable {
     	return this.getNombre();
     }
 
+  @Override
+  	public boolean equals(Object obj) {
+  		if (obj == null)
+  			return false;
+  		if (!(obj instanceof Mensajeria))
+  			return false;
+  		Mensajeria mensajeria = (Mensajeria) obj;
 
+  		if (this.id == mensajeria.getId())
+  			return true;
+  		return false;
+  	}
 }
-
