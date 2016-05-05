@@ -1,11 +1,15 @@
 package mx.trillas.ControlEnvio.front;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.tuple.entity.EntityMetamodel.GenerationStrategyPair;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +37,8 @@ import javafx.stage.Stage;
 import mx.trillas.ControlEnvio.backend.GuiaBackend;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
 import mx.trillas.ControlEnvio.backend.ReportBackend;
+import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
+import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojos.Origen;
@@ -42,7 +48,11 @@ import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 public class ReportWindow {
 
 	private static Logger logger = Logger.getLogger(ReportWindow.class);
+	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 	
+	Date dateInicio = new Date();
+	Date dateFin = new Date();
+
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
 		try {
@@ -94,18 +104,27 @@ public class ReportWindow {
 
 			DatePicker datePickerInicio = new DatePicker();
 			datePickerInicio.setOnAction(event -> {
-				LocalDate date = datePickerInicio.getValue();
+				
+				LocalDate localDate = datePickerInicio.getValue();
+				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+				dateInicio = Date.from(instant);
+				
+				System.out.println("Selected date: " + dateInicio);
 			});
 			pane.getChildren().addAll(datePickerInicio);
 
 			Label toCalendar = new Label("a");
 			pane.getChildren().add(toCalendar);
-
+			
 			DatePicker datePickerFin = new DatePicker();
-
 			datePickerFin.setOnAction(event -> {
-				LocalDate date = datePickerFin.getValue();
-				System.out.println("Selected date: " + date);
+				LocalDate localDate = datePickerFin.getValue();
+				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+				
+				dateFin = Date.from(instant);
+				dateFin.setHours(23);
+				
+				System.out.println("Selected date: " + dateFin);
 			});
 			pane.getChildren().addAll(datePickerFin);
 
@@ -117,17 +136,7 @@ public class ReportWindow {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					reporteViewStage(stage, usuario);
-				}
-			});
-
-			Button downloadButton = new Button("Descargar");
-			downloadButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
+					reporteViewStage(stage, usuario, dateInicio,  dateFin);
 				}
 			});
 			pane.getChildren().addAll(datePane);
@@ -148,22 +157,12 @@ public class ReportWindow {
 		}
 	}
 
-	public TableView<Guia> generarTable(Stage stage, Scene scene) {
+	public TableView<Guia> generarTable(Stage stage, Scene scene, ObservableList<Guia> datos ) {
 		
 		VBox vbox = new VBox();
 		FlowPane flowPane = new FlowPane();
 		TableView<Guia> table = null;
-		
-		List<Guia> guiaList = new ArrayList<Guia>();
-		ObservableList<Guia> datos = null;
 
-		try {
-			datos = GuiaBackend.getGuiaData();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.error(e.getMessage());
-		}
-		
 		try {
 			StackPane pane = new StackPane();
 			pane.setAlignment(Pos.CENTER);
@@ -245,7 +244,7 @@ public class ReportWindow {
 		return table;
 	}
 
-	public void reporteViewStage(Stage stage, Usuario usuario) {
+	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin) {
 
 		try {
 			VBox paneVbox = new VBox();
@@ -254,7 +253,24 @@ public class ReportWindow {
 			Scene scene = new Scene(paneVbox, 900, 500);
 			VBox vboxTable = new VBox();
 			
-			TableView<Guia> table = generarTable(stage, scene);
+//			List<Guia> guiaList = new ArrayList<Guia>();
+			
+			ObservableList<Guia> datos = null;
+			List<Guia> test = null;
+
+			try {
+				test = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage());
+			}
+			
+			for (Guia element : test) {
+				System.out.println("elemnt : " + element.getNumero());
+			}
+			
+			/*
+			TableView<Guia> table = generarTable(stage, scene, datos);
 			vboxTable.getChildren().add(table);
 			
 			paneVbox.setAlignment(Pos.CENTER);
@@ -267,7 +283,8 @@ public class ReportWindow {
 					// TODO Auto-generated method stub
 					
 					try {
-						ReportBackend.printForTable(table);
+						
+//						ReportBackend.printForTable(table);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
@@ -291,6 +308,7 @@ public class ReportWindow {
 			stage.setTitle("Control de paquetería -Generar reporte");
 			stage.setResizable(true);
 			stage.show();
+			*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
