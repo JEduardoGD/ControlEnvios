@@ -204,8 +204,7 @@ public class MensajeriaWindow {
 
 			Scene scene = new Scene(paneVbox, 400, 490);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets()
-					.add(getClass().getClassLoader().getResource("style/mensajeria.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/mensajeria.css").toExternalForm());
 
 			Button backButton = new Button("Regresar");
 			backButton.getStyleClass().add("backButton");
@@ -238,6 +237,9 @@ public class MensajeriaWindow {
 //				((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue());
 //				mensajeriaObj = mensajeriaDAO.getMensajeriaById(mensajeria.getId());
 //				mensajeriaObj.setNombre(mensajeria.getNombre());
+				System.out.println("table: " + table.getFocusModel().getFocusedCell().getRow());
+//				t.getTableView().getItems().get( table.getFocusModel().getFocusedCell().getRow()) ;
+				
 				
 				if (!(t.getNewValue().equals("")) && MensajeriaBackend.checkString(t.getNewValue()) == true) {
 
@@ -345,8 +347,9 @@ public class MensajeriaWindow {
 			rootVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/confirmar.css").toExternalForm());
 
-			Text text = new Text("Desea guardar los cambios?\n");
-			String output = "";
+			Text text = new Text();
+			String output = "Desea guardar los cambios?\n";
+			
 			for (Mensajeria element : mensajerias) {
 				output += "\nEmpresa de mensajería: " + element.getNombre();
 			}

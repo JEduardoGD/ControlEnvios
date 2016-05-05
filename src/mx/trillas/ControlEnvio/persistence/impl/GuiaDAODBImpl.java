@@ -1,6 +1,9 @@
 package mx.trillas.ControlEnvio.persistence.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -55,5 +58,32 @@ public class GuiaDAODBImpl implements GuiaDAO {
 				session.close();
 		}
 		return guia;
+	}
+	
+	
+	@Override
+	public List<Guia> getGuiaList() throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		List<Guia>  guias = new ArrayList<Guia>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Guia.class);
+
+			List<?> objList = criteria.list();
+			for (Object guiaObj : objList) {
+				if (guiaObj != null && guiaObj instanceof Guia) {
+					Guia guia = (Guia) guiaObj;
+					guias.add(guia);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return guias;
 	}
 }
