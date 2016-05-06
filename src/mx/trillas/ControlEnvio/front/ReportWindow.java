@@ -1,16 +1,17 @@
 package mx.trillas.ControlEnvio.front;
 
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.tuple.entity.EntityMetamodel.GenerationStrategyPair;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,9 +23,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
@@ -34,22 +36,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mx.trillas.ControlEnvio.backend.GuiaBackend;
-import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
+import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.ReportBackend;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
-import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
-import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class ReportWindow {
 
 	private static Logger logger = Logger.getLogger(ReportWindow.class);
 	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
-	
 	Date dateInicio = new Date();
 	Date dateFin = new Date();
 
@@ -60,7 +57,7 @@ public class ReportWindow {
 			HBox headerPane = new HBox ();
 			VBox pane = new VBox();
 
-			Scene scene = new Scene(border, 850, 500);
+			Scene scene = new Scene(border, 950, 560);
 
 			FlowPane labelsPane = new FlowPane(60, 80);
 			FlowPane datePane = new FlowPane(20, 40);
@@ -118,11 +115,19 @@ public class ReportWindow {
 			
 			DatePicker datePickerFin = new DatePicker();
 			datePickerFin.setOnAction(event -> {
+			 
 				LocalDate localDate = datePickerFin.getValue();
 				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 				
 				dateFin = Date.from(instant);
-				dateFin.setHours(23);
+
+				Calendar calendar = Calendar.getInstance();
+		        calendar.setTime(dateFin);
+		        calendar.set(Calendar.SECOND, 59);
+		        calendar.set(Calendar.MINUTE, 59);
+		        calendar.set(Calendar.HOUR, 23);
+		     
+		        dateFin = calendar.getTime();
 				
 				System.out.println("Selected date: " + dateFin);
 			});
@@ -135,7 +140,6 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					reporteViewStage(stage, usuario, dateInicio,  dateFin);
 				}
 			});
@@ -157,6 +161,67 @@ public class ReportWindow {
 		}
 	}
 
+	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin) {
+
+		try {
+			VBox paneVbox = new VBox();
+			FlowPane buttonsPane = new FlowPane();
+
+			Scene scene = new Scene(paneVbox, 1030, 560);
+			VBox vboxTable = new VBox();
+			
+			ObservableList<Guia> datos = FXCollections.observableArrayList(); 
+			List<Guia> dataList = null;
+
+			try {
+				dataList = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+			
+			for (Guia element : dataList) {
+				datos.add(element);
+			}
+			
+			TableView<Guia> table = generarTable(stage, scene, datos);
+			vboxTable.getChildren().add(table);
+
+			paneVbox.setAlignment(Pos.CENTER);
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+
+			Button printButton = new Button("Imprimir");
+			printButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					try {
+						
+						ReportBackend.printForTable(table);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+			});
+			
+			Button cancelButton = new Button("Cancelar");
+			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					GenerarReporteStage(stage, usuario);
+				}
+			});
+			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
+			buttonsPane.getChildren().addAll(printButton, cancelButton);
+			paneVbox.getChildren().addAll(vboxTable, buttonsPane);
+
+			stage.setScene(scene);
+			stage.setTitle("Control de paquetería -Generar reporte");
+			stage.setResizable(true);
+			stage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public TableView<Guia> generarTable(Stage stage, Scene scene, ObservableList<Guia> datos ) {
 		
 		VBox vbox = new VBox();
@@ -181,7 +246,7 @@ public class ReportWindow {
 			table.setEditable(false);
 
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
-			numeroCol.setMinWidth(100);
+			numeroCol.setMinWidth(190);
 			numeroCol.setCellValueFactory(new PropertyValueFactory<>("numero"));
 			numeroCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			numeroCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
@@ -190,23 +255,56 @@ public class ReportWindow {
 			
 			TableColumn<Guia, String> mensajeraCol = new TableColumn<>("Mensajeria");
 			mensajeraCol.setMinWidth(120);
-			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("mensajeria.nombre"));
+			mensajeraCol.setCellValueFactory(new Callback<CellDataFeatures<Guia,String>,ObservableValue<String>>(){
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+                	SimpleStringProperty ssp = null;
+                	if (param.getValue().getMensajeria() != null) {
+                		ssp = new SimpleStringProperty(param.getValue().getMensajeria().getNombre());
+                    	return ssp;
+                	} else {	
+                    	return new SimpleStringProperty("");
+                	}
+                }
+            });
 			mensajeraCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			mensajeraCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
 				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getMensajeria().setNombre(t.getNewValue());
 			});
 
 			TableColumn<Guia, String> origenCol = new TableColumn<>("Origen");
-			origenCol.setMinWidth(140);
-			origenCol.setCellValueFactory(new PropertyValueFactory<>("origen.nombre"));
+			origenCol.setMinWidth(120);
+			origenCol.setCellValueFactory(new Callback<CellDataFeatures<Guia,String>,ObservableValue<String>>(){
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+                	SimpleStringProperty ssp = null;
+                	if (param.getValue().getOrigen() != null) {
+                		ssp = new SimpleStringProperty(param.getValue().getOrigen().getNombre());
+                    	return ssp;
+                	} else {
+                    	return new SimpleStringProperty(param.getValue().getOtroorigen());
+                	}
+                }
+            });
 			origenCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			origenCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
 				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getOrigen().setNombre(t.getNewValue());
 			});
 
 			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("Destinatario");
-			destinatarioCol.setMinWidth(140);
-			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("f_destinatario"));
+			destinatarioCol.setMinWidth(120);
+			destinatarioCol.setCellValueFactory(new Callback<CellDataFeatures<Guia,String>,ObservableValue<String>>(){
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+                	SimpleStringProperty ssp = null;
+                	if (param.getValue().getDestinatario() != null) {
+                		ssp = new SimpleStringProperty(param.getValue().getDestinatario().getNombre());
+                    	return ssp;
+                	} else {
+                    	return new SimpleStringProperty(param.getValue().getOtrodestinatario());
+                	}
+                }
+            });
 			destinatarioCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			destinatarioCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
 				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getDestinatario().setNombre(t.getNewValue());
@@ -217,7 +315,7 @@ public class ReportWindow {
 			fechaCol.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
 			TableColumn<Guia, String> observacionCol = new TableColumn<>("Observacion");
-			observacionCol.setMinWidth(140);
+			observacionCol.setMinWidth(160);
 			observacionCol.setCellValueFactory(new PropertyValueFactory<>("observacion"));
 			observacionCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			observacionCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
@@ -225,7 +323,7 @@ public class ReportWindow {
 			});
 
 			TableColumn<Guia, String> firmaCol = new TableColumn<>("Firma");
-			firmaCol.setMinWidth(180);
+			firmaCol.setMinWidth(150);
 
 			table.setItems(datos);
 			table.getColumns().addAll(numeroCol, mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol, firmaCol);
@@ -240,78 +338,6 @@ public class ReportWindow {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return table;
-	}
-
-	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin) {
-
-		try {
-			VBox paneVbox = new VBox();
-			FlowPane buttonsPane = new FlowPane();
-
-			Scene scene = new Scene(paneVbox, 900, 500);
-			VBox vboxTable = new VBox();
-			
-//			List<Guia> guiaList = new ArrayList<Guia>();
-			
-			ObservableList<Guia> datos = null;
-			List<Guia> test = null;
-
-			try {
-				test = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				logger.error(e.getMessage());
-			}
-			
-			for (Guia element : test) {
-				System.out.println("elemnt : " + element.getNumero());
-			}
-			
-			/*
-			TableView<Guia> table = generarTable(stage, scene, datos);
-			vboxTable.getChildren().add(table);
-			
-			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
-
-			Button printButton = new Button("Imprimir");
-			printButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					
-					try {
-						
-//						ReportBackend.printForTable(table);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error(e.getMessage());
-					}
-				}
-			});
-			
-			Button cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					GenerarReporteStage(stage, usuario);
-				}
-			});
-			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll(vboxTable, buttonsPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería -Generar reporte");
-			stage.setResizable(true);
-			stage.show();
-			*/
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

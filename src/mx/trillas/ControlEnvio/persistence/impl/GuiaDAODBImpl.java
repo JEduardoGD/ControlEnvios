@@ -49,6 +49,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			Object guiaObj = criteria.uniqueResult();
 			if (guiaObj != null && guiaObj instanceof Guia) {
 				guia = (Guia) guiaObj;
+				HibernateUtil.initializeObject(guia.getOrigen());
 			}
 		} catch (Exception e) {
 			throw e;
@@ -94,15 +95,23 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Criteria criteria = session.createCriteria(Guia.class);
-//			criteria.add(Restrictions.between("fecha", fechaInicio, fechaFin));
+
 			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
 			criteria.add(Restrictions.le("fecha", fechaFin));
-			
 			
 			List<?> objList = criteria.list();
 			for (Object guiaObj : objList) {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
+					if (guia.getOrigen() != null) {
+						HibernateUtil.initializeObject(guia.getDestinatario());
+					}
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria() );
+					}
+					if (guia.getDestinatario() != null) {
+						HibernateUtil.initializeObject(guia.getDestinatario());
+					}
 					guias.add(guia);
 				}
 			}
