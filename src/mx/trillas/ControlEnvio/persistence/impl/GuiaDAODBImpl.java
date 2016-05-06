@@ -104,10 +104,10 @@ public class GuiaDAODBImpl implements GuiaDAO {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
 					if (guia.getOrigen() != null) {
-						HibernateUtil.initializeObject(guia.getDestinatario());
+						HibernateUtil.initializeObject(guia.getOrigen());
 					}
 					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria() );
+						HibernateUtil.initializeObject(guia.getMensajeria());
 					}
 					if (guia.getDestinatario() != null) {
 						HibernateUtil.initializeObject(guia.getDestinatario());

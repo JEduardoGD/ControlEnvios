@@ -34,7 +34,7 @@ public class ReportBackend {
 			printer = Printer.getDefaultPrinter();
 
 			if (printer != null) {
-				pageLayout = printer.createPageLayout(Paper.NA_LETTER, PageOrientation.PORTRAIT,
+				pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE,
 						Printer.MarginType.DEFAULT);
 
 				scaleX = pageLayout.getPrintableWidth() / table.getBoundsInParent().getWidth();
@@ -42,7 +42,9 @@ public class ReportBackend {
 
 				table.getTransforms().add(new Scale(scaleX, scaleY));
 
-				PrinterJob job = PrinterJob.createPrinterJob();
+				PrinterJob job = PrinterJob.createPrinterJob(printer);
+				job.getJobSettings().setPageLayout(pageLayout);
+				
 				if (job != null) {
 					boolean success = job.printPage(table);
 					if (success) {

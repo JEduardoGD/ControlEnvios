@@ -1,6 +1,5 @@
 package mx.trillas.ControlEnvio.front;
 
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -19,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -27,6 +27,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
@@ -100,6 +101,7 @@ public class ReportWindow {
 			pane.getChildren().addAll(labelsPane);
 
 			DatePicker datePickerInicio = new DatePicker();
+			datePickerInicio.setEditable(false);
 			datePickerInicio.setOnAction(event -> {
 				
 				LocalDate localDate = datePickerInicio.getValue();
@@ -114,6 +116,7 @@ public class ReportWindow {
 			pane.getChildren().add(toCalendar);
 			
 			DatePicker datePickerFin = new DatePicker();
+			datePickerFin.setEditable(false);
 			datePickerFin.setOnAction(event -> {
 			 
 				LocalDate localDate = datePickerFin.getValue();
@@ -128,7 +131,6 @@ public class ReportWindow {
 		        calendar.set(Calendar.HOUR, 23);
 		     
 		        dateFin = calendar.getTime();
-				
 				System.out.println("Selected date: " + dateFin);
 			});
 			pane.getChildren().addAll(datePickerFin);
@@ -140,7 +142,7 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					reporteViewStage(stage, usuario, dateInicio,  dateFin);
+					checkReport(stage, usuario, dateInicio,  dateFin);
 				}
 			});
 			pane.getChildren().addAll(datePane);
@@ -161,15 +163,12 @@ public class ReportWindow {
 		}
 	}
 
-	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin) {
+	public void checkReport(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin) {
 
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Alerta al generar reporte");
+		
 		try {
-			VBox paneVbox = new VBox();
-			FlowPane buttonsPane = new FlowPane();
-
-			Scene scene = new Scene(paneVbox, 1030, 560);
-			VBox vboxTable = new VBox();
-			
 			ObservableList<Guia> datos = FXCollections.observableArrayList(); 
 			List<Guia> dataList = null;
 
@@ -182,6 +181,29 @@ public class ReportWindow {
 			for (Guia element : dataList) {
 				datos.add(element);
 			}
+			
+			if (dataList.isEmpty()) {
+				logger.error("El rango de fechas no arroja ningún registro. Intente con otro rango.");
+				alert.setHeaderText("Consulta vacía");
+				alert.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango.");
+				alert.showAndWait();
+			} else {
+				reporteViewStage(stage, usuario, fechaInicio, fechaFin, datos);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin, ObservableList<Guia> datos) {
+
+		try {
+			VBox paneVbox = new VBox();
+			FlowPane buttonsPane = new FlowPane();
+
+			Scene scene = new Scene(paneVbox, 1030, 560);
+			VBox vboxTable = new VBox();
 			
 			TableView<Guia> table = generarTable(stage, scene, datos);
 			vboxTable.getChildren().add(table);
@@ -196,6 +218,8 @@ public class ReportWindow {
 					try {
 						
 						ReportBackend.printForTable(table);
+						GenerarReporteStage(stage, usuario);
+						
 					} catch (Exception e) {
 						logger.error(e.getMessage());
 					}
@@ -214,7 +238,7 @@ public class ReportWindow {
 			paneVbox.getChildren().addAll(vboxTable, buttonsPane);
 
 			stage.setScene(scene);
-			stage.setTitle("Control de paquetería -Generar reporte");
+			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.setResizable(true);
 			stage.show();
 		} catch (Exception e) {
