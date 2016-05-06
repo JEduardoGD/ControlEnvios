@@ -3,7 +3,6 @@ package mx.trillas.ControlEnvio.front;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,14 +25,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -48,17 +45,21 @@ public class ReportWindow {
 
 	private static Logger logger = Logger.getLogger(ReportWindow.class);
 	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
+	
 	Date dateInicio = new Date();
 	Date dateFin = new Date();
 
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
+		Alert alertWarn = new Alert(AlertType.WARNING);
+		alertWarn.setTitle("Alerta generando reporte");
+		
 		try {
 			BorderPane border = new BorderPane();
 			HBox headerPane = new HBox ();
 			VBox pane = new VBox();
 
-			Scene scene = new Scene(border, 950, 560);
+			Scene scene = new Scene(border, 880, 500);
 
 			FlowPane labelsPane = new FlowPane(60, 80);
 			FlowPane datePane = new FlowPane(20, 40);
@@ -101,13 +102,14 @@ public class ReportWindow {
 			pane.getChildren().addAll(labelsPane);
 
 			DatePicker datePickerInicio = new DatePicker();
+			DatePicker datePickerFin = new DatePicker();
+			
 			datePickerInicio.setEditable(false);
 			datePickerInicio.setOnAction(event -> {
 				
 				LocalDate localDate = datePickerInicio.getValue();
 				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 				dateInicio = Date.from(instant);
-				
 				System.out.println("Selected date: " + dateInicio);
 			});
 			pane.getChildren().addAll(datePickerInicio);
@@ -115,7 +117,6 @@ public class ReportWindow {
 			Label toCalendar = new Label("a");
 			pane.getChildren().add(toCalendar);
 			
-			DatePicker datePickerFin = new DatePicker();
 			datePickerFin.setEditable(false);
 			datePickerFin.setOnAction(event -> {
 			 
@@ -123,14 +124,8 @@ public class ReportWindow {
 				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 				
 				dateFin = Date.from(instant);
-
-				Calendar calendar = Calendar.getInstance();
-		        calendar.setTime(dateFin);
-		        calendar.set(Calendar.SECOND, 59);
-		        calendar.set(Calendar.MINUTE, 59);
-		        calendar.set(Calendar.HOUR, 23);
-		     
-		        dateFin = calendar.getTime();
+		        dateFin = ReportBackend.getCalendarOnHour(dateFin);
+		        
 				System.out.println("Selected date: " + dateFin);
 			});
 			pane.getChildren().addAll(datePickerFin);
@@ -142,7 +137,17 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					checkReport(stage, usuario, dateInicio,  dateFin);
+					if (datePickerInicio.getValue() == null ){
+						alertWarn.setHeaderText("Error en el manejo de datos");
+						alertWarn.setContentText("Seleccione la fecha de inicio");
+						alertWarn.showAndWait();
+					} else if (datePickerFin.getValue() == null ){
+						alertWarn.setHeaderText("Error en el manejo de datos");
+						alertWarn.setContentText("Seleccione la fecha fin");
+						alertWarn.showAndWait();
+					} else {
+						checkReport(stage, usuario, dateInicio,  dateFin);
+					}
 				}
 			});
 			pane.getChildren().addAll(datePane);
@@ -157,7 +162,6 @@ public class ReportWindow {
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.show();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -205,7 +209,7 @@ public class ReportWindow {
 			Scene scene = new Scene(paneVbox, 1030, 560);
 			VBox vboxTable = new VBox();
 			
-			TableView<Guia> table = generarTable(stage, scene, datos);
+			VBox table = generarTable(stage, scene, datos);
 			vboxTable.getChildren().add(table);
 
 			paneVbox.setAlignment(Pos.CENTER);
@@ -246,29 +250,19 @@ public class ReportWindow {
 		}
 	}
 	
-	public TableView<Guia> generarTable(Stage stage, Scene scene, ObservableList<Guia> datos ) {
+	public VBox generarTable(Stage stage, Scene scene, ObservableList<Guia> datos ) {
 		
 		VBox vbox = new VBox();
-		FlowPane flowPane = new FlowPane();
 		TableView<Guia> table = null;
 
+		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+
+		table = new TableView<Guia>();
+		table.setEditable(false);
+		
+		Text cabeceraTabla = new Text("Casa: departamento");
+		
 		try {
-			StackPane pane = new StackPane();
-			pane.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
-
-			Label reporteLabel = new Label("Buscar");
-			reporteLabel.getStyleClass().add("labelReport");
-			TextField buscador = new TextField();
-			buscador.getStyleClass().add("textFieldReport");
-
-			flowPane.getChildren().addAll(reporteLabel, buscador);
-
-			Text cabeceraTabla = new Text("Casa: departamento");
-
-			table = new TableView<Guia>();
-			table.setEditable(false);
-
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
 			numeroCol.setMinWidth(190);
 			numeroCol.setCellValueFactory(new PropertyValueFactory<>("numero"));
@@ -362,6 +356,6 @@ public class ReportWindow {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return table;
+		return vbox;
 	}
 }

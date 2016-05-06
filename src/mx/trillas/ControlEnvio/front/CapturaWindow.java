@@ -44,12 +44,12 @@ import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 public class CapturaWindow {
 
 	private static Logger logger = Logger.getLogger(CapturaWindow.class);
-
-	private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
+	
+	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 	private static OrigenesDAO origenDAO = new OrigenesDAODBImpl();
+	private static MensajeriaDAO mensajeriaDAO = new MensajeriaDAODBImpl();
 	private static DestinatarioDAO destinatarioDAO = new DestinatarioDAODBImpl();
 	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
-	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 
 	public void CapturaStage(Stage stage, Usuario usuario) {
 		try {
@@ -101,7 +101,6 @@ public class CapturaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					MenuWindow menu = new MenuWindow();
 					menu.UserMenuStage(stage, usuario);
 				}
@@ -277,8 +276,6 @@ public class CapturaWindow {
 			destinatarioCombo.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					
 					if (destinatarioCombo.getValue() != null && deptoCombo.getValue() != null) {
 						if (destinatarioCombo.getValue().equals("Otro") || deptoCombo.getValue().equals("Otro")) {
 							otroDeptoField.setDisable(false);
@@ -303,7 +300,7 @@ public class CapturaWindow {
 			vertical2.getChildren().addAll( otroDestinatarioField);
 
 			vertical1.getChildren().addAll(otroDeptoLabel);
-			vertical2.getChildren().addAll( otroDeptoField);
+			vertical2.getChildren().addAll(otroDeptoField);
 
 			Label observacionLabel = new Label("Observacion");
 
@@ -426,27 +423,17 @@ public class CapturaWindow {
 					}
 
 					/* Filtro para Departamento y destinatarios */
-					if (deptoCombo.getValue() == null || deptoCombo.getValue().toString() == null	|| deptoCombo.getValue().toString().equals("") || destinatarioCombo.getValue() == null || destinatarioCombo.getValue().toString() == null || destinatarioCombo.getValue().toString().equals("")) 
+					if (deptoCombo.getValue() == null  && deptoCombo.getValue().toString().equals("") && destinatarioCombo.getValue() == null && destinatarioCombo.getValue().toString().equals("")) 
 					{
 							logger.error("Los datos departamento y destinatario no pueden ir vacios");
 							alert.setHeaderText("Los datos departamento y destinatario no pueden ir vacios");
 							alert.setContentText("Los datos departamento y destinatario no pueden ir vacios");
 							alert.showAndWait();
 							flag = false;
-					} else {
-							try {
-							destinatario = destinatarioDAO.getDestinatarioByName(destinatarioCombo.getValue().toString());
-							guia.setDestinatario(destinatario);
-							guia.setFecha(new Date());
-							guia.setUsuario(usuario);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							logger.error(e.getMessage());
-						}	
 					}
 					
 					/* Filtro para otros Departamento y destinatarios */
-					if (deptoCombo.getValue() != null && deptoCombo.getValue().toString().equals("Otro") || destinatarioCombo.getValue() != null && destinatarioCombo.getValue().toString().equals("Otro")) {
+					else if (deptoCombo.getValue() != null && deptoCombo.getValue().toString().equals("Otro") || destinatarioCombo.getValue() != null && destinatarioCombo.getValue().toString().equals("Otro")) {
 						if (otroDeptoField.getText() == null || otroDeptoField.getText().equals("")) {
 							logger.error("El valor Otro Departamento no puede ir vacio");
 							alert.setHeaderText("Error al ingresar datos");
@@ -481,6 +468,20 @@ public class CapturaWindow {
 							guia.setUsuario(usuario);
 						}
 					}
+					 else {
+							try {
+							destinatario = destinatarioDAO.getDestinatarioByName(destinatarioCombo.getValue().toString());
+							guia.setDestinatario(destinatario);
+							guia.setFecha(new Date());
+							guia.setUsuario(usuario);
+							guia.setObservacion(observacionField.getText());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							logger.error(e.getMessage());
+						}	
+					}
+					
+					/* Concluye y verifica si el numero guia existe */
 					Guia guiaObj = null;
 					try {
 						guiaObj = guiaDAO.getGuia(guiaField.getText());

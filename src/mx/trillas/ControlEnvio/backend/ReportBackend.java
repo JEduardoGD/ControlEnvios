@@ -1,5 +1,8 @@
 package mx.trillas.ControlEnvio.backend;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import javafx.print.PageLayout;
@@ -8,16 +11,26 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.transform.Scale;
-import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
 public class ReportBackend {
 
 	private static Logger logger = Logger.getLogger(ReportBackend.class);
 
-	public static void printForTable(TableView<Guia> table) throws Exception {
+	public static Date getCalendarOnHour(Date date){
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.HOUR, 23);
+     
+        date = calendar.getTime();
+		return date;
+	}
+	
+	public static void printForTable(VBox table) throws Exception {
 
 		Alert alertWarn = new Alert(AlertType.WARNING);
 		alertWarn.setTitle("Alerta al imprimir");
