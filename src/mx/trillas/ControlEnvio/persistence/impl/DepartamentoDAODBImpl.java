@@ -86,4 +86,59 @@ public class DepartamentoDAODBImpl implements DepartamentoDAO {
 		return departamentos;
 	}
 
+	@Override
+	public Departamento getDepartamentoById(int id) throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		Departamento departamento = null;
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Departamento.class);
+			criteria.add(Restrictions.and(Restrictions.eq("id", id)));
+			Object departamentoObj = criteria.uniqueResult();
+			if (departamentoObj != null && departamentoObj instanceof Departamento) {
+				departamento = (Departamento) departamentoObj;
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return departamento;
+	}
+
+	@Override
+	public void altaDepartamentoByList(List<Departamento> departamentos) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			for (Departamento element : departamentos) {
+				updateDepartamento(element);
+			} 
+		} catch(Exception e){
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateDepartamento(Departamento departamento) throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(departamento);
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null)
+				transaction.rollback();
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
 }

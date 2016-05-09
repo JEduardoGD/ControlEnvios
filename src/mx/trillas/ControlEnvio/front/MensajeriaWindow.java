@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import javafx.scene.input.KeyEvent;
@@ -20,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -32,6 +34,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -64,7 +67,9 @@ public class MensajeriaWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.WARNING, "content text");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+					.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 			alert.setTitle("Mensajeria");
 
 			Button backButton = new Button("Regresar");
@@ -133,23 +138,22 @@ public class MensajeriaWindow {
 					if (mensajeriaField.getText() == null || mensajeriaField.getText().equals("")) {
 						logger.error("El nombre de empresa de mensajeria no debe ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre de empresa de mensajeria \nno debe ir vacio");
+						alert.setContentText("El nombre de empresa de mensajeria no debe ir vacio");
 						alert.showAndWait();
 					} else if (!(MensajeriaBackend.checkString(mensajeriaField.getText()))) {
 						logger.error("El nombre de empresa de mensajeria no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText(
-								"El nombre de empresa de mensajeria no \ncontiene la estructura requerida");
+						alert.setContentText("El nombre de empresa de mensajeria no contiene la estructura requerida");
 						alert.showAndWait();
 					} else if (mensajeriaObj != null) {
 						logger.info("La empresa de mensajeria que intenta crear ya existe.");
 						alert.setAlertType(AlertType.WARNING);
 						alert.setHeaderText(null);
-						alert.setContentText("La empresa de mensajeria que intenta \ncrear ya existe");
+						alert.setContentText("La empresa de mensajeria que intenta crear ya existe");
 						alert.showAndWait();
 					} else {
 						logger.info("Intento guardar la empresa de mensajeria");
-						confirmarMensajeriaStage(stage, mensajeriaField.getText());
+						confirmarMensajeriaStage(new Alert(AlertType.CONFIRMATION), mensajeriaField.getText());
 
 					}
 				}
@@ -182,28 +186,66 @@ public class MensajeriaWindow {
 		}
 	}
 
+	public void confirmarMensajeriaStage(Alert confirmation, String nombreMensajeria) {
+
+		Text text = new Text();
+		String output = "Mensajeria: " + nombreMensajeria;
+
+		confirmation.setTitle("Confirme los cambios");
+		confirmation.setHeaderText("¿Desea guardar los cambios?");
+
+		text.setText(output);
+		
+		confirmation.setContentText(text.getText());
+		
+		Optional<ButtonType> result = confirmation.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			try {
+				MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
+				
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Cambios en mensajerias");
+				alert.setHeaderText(null);
+				alert.setContentText("La empresa de mensajería se ha guardado exitosamente");
+				alert.showAndWait();
+			} catch (Exception e1) {
+				logger.error(e1.getMessage());
+			}
+		} else {
+			// hacer algo
+		}
+	}
+	
 	public void modificarMensajeriaStage(Stage stage) throws Exception {
 
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Mensajeria");
+		VBox paneVbox = new VBox();
+		paneVbox.setAlignment(Pos.CENTER);
 		
+		FlowPane returnPane = new FlowPane();
+		FlowPane buttonsPane = new FlowPane();
+
+		Scene scene = new Scene(paneVbox, 400, 490);
+		stage.setScene(scene);
+		stage.setTitle("Control de paquetería - Modificar empresa de mensajeria");
+		stage.setResizable(false);
+		stage.show();
+		
+		Alert alert = new Alert(AlertType.WARNING, "content text");
+		alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+		.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+		
+		alert.setTitle("Mensajeria");
+
 		List<Mensajeria> mensajeriaList = new ArrayList<Mensajeria>();
 		ObservableList<Mensajeria> datos = null;
 
 		try {
 			datos = MensajeriaBackend.getMensajeriaData();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage());
 		}
-		
-		try {
-			VBox paneVbox = new VBox();
-			FlowPane returnPane = new FlowPane();
-			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(paneVbox, 400, 490);
-			paneVbox.setAlignment(Pos.CENTER);
+		try {
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/mensajeria.css").toExternalForm());
 
 			Button backButton = new Button("Regresar");
@@ -234,17 +276,10 @@ public class MensajeriaWindow {
 			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 			mensajeraCol.setCellFactory(TextFieldTableCell.<Mensajeria> forTableColumn());
 			mensajeraCol.setOnEditCommit((CellEditEvent<Mensajeria, String> t) -> {
-//				((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue());
-//				mensajeriaObj = mensajeriaDAO.getMensajeriaById(mensajeria.getId());
-//				mensajeriaObj.setNombre(mensajeria.getNombre());
-				System.out.println("table: " + table.getFocusModel().getFocusedCell().getRow());
-//				t.getTableView().getItems().get( table.getFocusModel().getFocusedCell().getRow()) ;
-				
-				
-				if (!(t.getNewValue().equals("")) && MensajeriaBackend.checkString(t.getNewValue()) == true) {
 
-//					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue());
-					
+				if (!(t.getNewValue().equals("")) && MensajeriaBackend.checkString(t.getNewValue()) == true) {
+					((Mensajeria) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setNombre(t.getNewValue());
 					Mensajeria mensajeria = new Mensajeria();
 					mensajeria.setId(t.getTableView().getItems().get(t.getTablePosition().getRow()).getId());
 					mensajeria.setNombre(t.getNewValue());
@@ -258,7 +293,6 @@ public class MensajeriaWindow {
 					
 					for (Mensajeria element : mensajeriaList) {
 						counter = counter + 1;
-//						System.out.println("counter: " + counter + "  id: " + element.getId() + "  nombre : " + element.getNombre());
 						if (element.getId() == idObj) {
 							
 							mensajeriaList.remove(counter);
@@ -268,20 +302,16 @@ public class MensajeriaWindow {
 							mensajeriaList.add(mensajeria);
 							break;
 						}
-						
 					}
-					/*
-					for (Mensajeria element : mensajeriaList) {
-						System.out.println(element.getId() + " : " + element.getNombre());
-					}
-					*/
 				} else {
 					logger.error("El nombre de empresa de mensajeria no debe ir vacio");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El dato ingresado no contiene la estructura requerida.\nPor favor corrigalo");
+					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo");
 					alert.showAndWait();
+					
+					table.getColumns().get(0).setVisible(false);
+					table.getColumns().get(0).setVisible(true);
 				}
-				
 			});
 			table.setItems(datos);
 			table.getColumns().addAll(idCol, mensajeraCol);
@@ -295,7 +325,6 @@ public class MensajeriaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					if (mensajeriaList.isEmpty()) {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("Modificaciones en mensajería");
@@ -303,9 +332,8 @@ public class MensajeriaWindow {
 						alert.setContentText("Aún no ha hecho cambios en registros");
 						alert.showAndWait();
 					} else {
-//						stage.showAndWait();
-						/* ver stage showandwait exampler */
-						confirmarModificacionesMensajerias(new Stage(StageStyle.DECORATED), mensajeriaList);
+						confirmarModificacionesMensajerias(new Alert(AlertType.CONFIRMATION), mensajeriaList);
+						mensajeriaList.clear();
 					}
 				}
 			});
@@ -313,7 +341,6 @@ public class MensajeriaWindow {
 			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					MensajeriaWindow mensajeria = new MensajeriaWindow();
 					mensajeria.mensajeriaStage(stage);
 				}
@@ -321,176 +348,41 @@ public class MensajeriaWindow {
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(aceptarButton);
 			paneVbox.getChildren().addAll(buttonsPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Modificar empresa de mensajeria");
-			stage.setResizable(false);
-			stage.show();
-
-		} catch(Exception e)	{
+		} catch (Exception e) {
 			throw e;
 		}
 	}
 
-	public void confirmarModificacionesMensajerias(Stage stage, List<Mensajeria> mensajerias) {
+	public void confirmarModificacionesMensajerias(Alert confirmation, List<Mensajeria> mensajerias) {
+		
+		Text text = new Text();
+		String output = "";
+		
+		confirmation.setTitle("Confirme los cambios");
+		confirmation.setHeaderText("¿Desea guardar los cambios?");
 
-		DropShadow shadow = new DropShadow();
-
-		try {
-			final VBox rootVbox = new VBox();
-			FlowPane flowPane = new FlowPane();
-
-			rootVbox.setSpacing(10);
-			rootVbox.setPadding(new Insets(30, 30, 30, 30));
-
-			Scene scene = new Scene(rootVbox, 450, 270);
-			rootVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/confirmar.css").toExternalForm());
-
-			Text text = new Text();
-			String output = "Desea guardar los cambios?\n";
-			
-			for (Mensajeria element : mensajerias) {
-				output += "\nEmpresa de mensajería: " + element.getNombre();
-			}
-			text.setText(output);
-			rootVbox.getChildren().addAll(text);
-
-			Button aceptarButton = new Button(" Guardar ");
-			aceptarButton.setEffect(shadow);
-			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					try {
-						mensajeriaDAO.altaMensajeriaByList(mensajerias);
-
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Cambios en mensajerias");
-						alert.setHeaderText(null);
-						alert.setContentText("Los cambios se guardaron exitosamente");
-						alert.showAndWait();
-
-						MensajeriaWindow window = new MensajeriaWindow();
-						window.modificarMensajeriaStage(stage);
-
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						Alert alert = new Alert(AlertType.ERROR);
-						alert.setTitle("Cambios en mensajerias");
-						alert.setHeaderText(null);
-						alert.setContentText("Ocurrió un error al intentar realizar cambios en mensajerias");
-						alert.showAndWait();
-
-						MenuWindow menu = new MenuWindow();
-						menu.AdminMenuStage(stage);
-
-						logger.error(e.getMessage());
-					}
-				}
-			});
-
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setEffect(shadow);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					stage.close();
-				}
-			});
-
-			flowPane.setAlignment(Pos.CENTER);
-
-			flowPane.getChildren().addAll(aceptarButton, cancelarButton);
-			rootVbox.getChildren().addAll(flowPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Confirmar mensajeria");
-			stage.setResizable(false);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (Mensajeria element : mensajerias) {
+			output += "\nEmpresa: " + element.getNombre();
 		}
-	}
+		text.setText(output);
+		
+		confirmation.setContentText(text.getText());
+		
+		Optional<ButtonType> result = confirmation.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			try {
+				mensajeriaDAO.altaMensajeriaByList(mensajerias);
+			} catch (Exception e1) {
+				logger.error(e1.getMessage());
+			}
 
-	public void confirmarMensajeriaStage(Stage stage, String nombreMensajeria) {
-		DropShadow shadow = new DropShadow();
-
-		try {
-			final VBox rootVbox = new VBox();
-			FlowPane flowPane = new FlowPane();
-
-			rootVbox.setSpacing(10);
-			rootVbox.setPadding(new Insets(30, 30, 30, 30));
-
-			Text text = new Text("Desea guardar los cambios?\n" + "\nMensajeria: " + nombreMensajeria);
-
-			Scene scene = new Scene(rootVbox, 450, 270);
-			rootVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/confirmar.css").toExternalForm());
-
-			rootVbox.getChildren().addAll(text);
-
-			Button aceptarButton = new Button("Aceptar");
-			aceptarButton.setEffect(shadow);
-			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					try {
-						MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
-
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Cambios en mensajerias");
-						alert.setHeaderText(null);
-						alert.setContentText("La empresa de mensajería se ha guardado exitosamente");
-						alert.showAndWait();
-
-						MenuWindow menu = new MenuWindow();
-						menu.AdminMenuStage(stage);
-						// Ir a ventana de confirmar
-
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error(e.getMessage());
-					}
-				}
-			});
-
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setEffect(shadow);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					MenuWindow menu = new MenuWindow();
-					menu.AdminMenuStage(stage);
-				}
-			});
-
-			Button returnButton = new Button("");
-			returnButton.getStyleClass().add("backButton");
-			returnButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			flowPane.setAlignment(Pos.CENTER);
-
-			flowPane.getChildren().addAll(aceptarButton, cancelarButton);
-			rootVbox.getChildren().addAll(flowPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Confirmar mensajeria");
-			stage.setResizable(false);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Cambios en mensajerias");
+			alert.setHeaderText(null);
+			alert.setContentText("Los cambios se guardaron exitosamente");
+			alert.showAndWait();
+		} else {
+			// hacer algo
 		}
 	}
 }

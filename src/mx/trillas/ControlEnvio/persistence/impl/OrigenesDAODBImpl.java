@@ -84,4 +84,37 @@ public class OrigenesDAODBImpl implements OrigenesDAO {
 		}
 		return origenes;
 	}
+	
+	@Override
+	public void altaOrigenByList(List<Origen> origenes) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			for (Origen element : origenes) {
+				updateOrigen(element);
+			} 
+		} catch(Exception e){
+			throw e;
+		}
+	}
+	
+	@Override
+	public void updateOrigen(Origen origen) throws Exception {
+		// TODO Auto-generated method stub
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(origen);
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null)
+				transaction.rollback();
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
 }

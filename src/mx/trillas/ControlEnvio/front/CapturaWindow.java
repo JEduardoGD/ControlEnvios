@@ -1,6 +1,7 @@
 package mx.trillas.ControlEnvio.front;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
@@ -13,16 +14,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import mx.trillas.ControlEnvio.backend.CapturarRegistro;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
@@ -53,7 +54,10 @@ public class CapturaWindow {
 
 	public void CapturaStage(Stage stage, Usuario usuario) {
 		try {
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.WARNING, "content text");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+			.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+			
 			alert.setTitle("Captura de paquetería");
 			
 			VBox rootVBox = new VBox(10);
@@ -254,7 +258,6 @@ public class CapturaWindow {
 							destinatarioCombo.getItems().add("Otro");
 						}
 					}
-					
 					
 					if (deptoCombo.getValue() != null && deptoCombo.getValue().equals("Otro")) {
 						otroDeptoField.setDisable(false);
@@ -491,7 +494,7 @@ public class CapturaWindow {
 					}
 					if (flag == true) { 
 						if(guiaObj == null) {
-							confirmarStage(new Stage(StageStyle.DECORATED), guia, usuario);
+							confirmarStage(new Alert(AlertType.CONFIRMATION), guia, usuario);
 						} else if (guiaObj != null) {
 							logger.error("Un registro con el mismo número guía ya existe. Verifique el dato");
 							alert.setHeaderText("Error al guardar datos");
@@ -514,91 +517,49 @@ public class CapturaWindow {
 		}
 	}
 
-	public void confirmarStage(Stage stage, Guia guia, Usuario usuario) {
-		DropShadow shadow = new DropShadow();
+	public void confirmarStage(Alert confirmation, Guia guia, Usuario usuario) {
 
-		try {
-			final VBox rootVbox = new VBox();
-			FlowPane flowPane = new FlowPane();
+		Text text = new Text();
+		String output = "";
 
-			rootVbox.setSpacing(10);
-			rootVbox.setPadding(new Insets(30, 30, 30, 30));
+		confirmation.setTitle("Confirme los cambios");
+		confirmation.setHeaderText("¿Desea guardar los cambios?");
 
-			Text text = new Text();
-			String output = "Desea guardar los cambios?\n";
+		output += "\nPaquetería: " + guia.getMensajeria().getNombre();
+		output += "\nNúmero Guia: " + guia.getNumero();
 
-			output += "\nPaquetería: " + guia.getMensajeria().getNombre();
-			output += "\nNúmero Guia: " + guia.getNumero();
+		if (guia.getOrigen() != null && !(guia.getOrigen().getNombre().toString().equals("")))
+			output += "\nOrigen: " + guia.getOrigen().getNombre();
+		if (guia.getDestinatario() != null && !(guia.getDestinatario().getNombre().toString().equals("")))
+			output += "\nDestinatario: " + guia.getDestinatario().getNombre();
+		if (guia.getDestinatario() != null && guia.getDestinatario().getDepartamento() != null
+				&& !(guia.getDestinatario().getDepartamento().getNombre().toString().equals("")))
+			output += "\nDepartamento: " + guia.getDestinatario().getDepartamento().getNombre();
+		if (guia.getOtrodepartamento() != null && !(guia.getOtrodepartamento().toString().equals("")))
+			output += "\nDepartamento: " + guia.getOtrodepartamento();
+		if (guia.getOtrodestinatario() != null && !(guia.getOtrodestinatario().toString().equals("")))
+			output += "\nDestinatario: " + guia.getOtrodestinatario();
+		if (guia.getObservacion() != null && !(guia.getObservacion().toString().equals("")))
+			output += "\nObservaciones: " + guia.getObservacion().toString();
 
-			if (guia.getOrigen() != null && !(guia.getOrigen().getNombre().toString().equals("")))
-				output += "\nOrigen: " + guia.getOrigen().getNombre();
-			if (guia.getDestinatario() != null && !(guia.getDestinatario().getNombre().toString().equals("")))
-				output += "\nDestinatario: " + guia.getDestinatario().getNombre();
-			if (guia.getDestinatario() != null && guia.getDestinatario().getDepartamento() != null
-					&& !(guia.getDestinatario().getDepartamento().getNombre().toString().equals("")))
-				output += "\nDepartamento: " + guia.getDestinatario().getDepartamento().getNombre();
-			if (guia.getOtrodepartamento() != null && !(guia.getOtrodepartamento().toString().equals("")))
-				output += "\nDepartamento: " + guia.getOtrodepartamento();
-			if (guia.getOtrodestinatario() != null && !(guia.getOtrodestinatario().toString().equals("")))
-				output += "\nDestinatario: " + guia.getOtrodestinatario();
-			if (guia.getObservacion() != null && !(guia.getObservacion().toString().equals("")))
-				output += "\nObservaciones: " + guia.getObservacion().toString();
+		text.setText(output);
 
-			text.setText(output);
+		confirmation.setContentText(text.getText());
 
-			Scene scene = new Scene(rootVbox, 450, 270);
-			rootVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/confirmar.css").toExternalForm());
-
-			rootVbox.getChildren().addAll(text);
-
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Captura de registro");
-
-			Button aceptarButton = new Button("Aceptar");
-			aceptarButton.getStylesheets()
-					.add(getClass().getClassLoader().getResource("style/confirmar.css").toExternalForm());
-			aceptarButton.setEffect(shadow);
-			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-					try {
-						CapturarRegistro.loadCapturaData(guia);
-
-						alert.setHeaderText("Alerta de confirmación");
-						alert.setContentText("El registro se ha guardado exitosamente");
-						alert.showAndWait();
-						stage.close();
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-					}
-				}
-			});
-
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setEffect(shadow);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					stage.close();
-				}
-			});
-
-			flowPane.setAlignment(Pos.CENTER);
-
-			flowPane.getChildren().addAll(aceptarButton, cancelarButton);
-			rootVbox.getChildren().addAll(flowPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Alta y modificacion de mensajeria");
-			stage.setResizable(true);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		Optional<ButtonType> result = confirmation.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			try {
+				CapturarRegistro.loadCapturaData(guia);
+				
+				Alert alertInfo = new Alert(AlertType.INFORMATION);
+				alertInfo.setHeaderText("Alerta de confirmación");
+				alertInfo.setContentText("El registro se ha guardado exitosamente");
+				alertInfo.showAndWait();
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		} else {
+			// hacer algo
 		}
 	}
 }
