@@ -122,7 +122,7 @@ public class Guia  implements java.io.Serializable {
     }
     
     public String getOtrodepartamento() {
-        return this.otrodestinatario;
+        return this.otrodepartamento;
     }
     
     public void setOtrodepartamento(String otrodepartamento) {

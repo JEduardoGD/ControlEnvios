@@ -1,8 +1,15 @@
 package mx.trillas.ControlEnvio.front;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,41 +17,49 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import mx.trillas.ControlEnvio.backend.ReportBackend;
+import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
+import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
+import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
-import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class ReportWindow {
 
-	private final ObservableList<Controlenvio> data = FXCollections.observableArrayList(
-			new Controlenvio(new Integer(0),"DHL", "Chihuahua", "Maria Dominguez", "Contaduria", "", new Date()),
-			new Controlenvio(new Integer(1),"Volaris", "Acapulco", "Sofia Montes", "Sistemas", "", new Date()),
-			new Controlenvio(new Integer(2),"Fedex", "Zacatecas", "Mario Gutierrez", "Abogacia", "", new Date()),
-			new Controlenvio(new Integer(3),"ODM", "Durango", "Eduardo Ayala", "Pagos", "", new Date()));
+	private static Logger logger = Logger.getLogger(ReportWindow.class);
+	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
+	
+	Date dateInicio = new Date();
+	Date dateFin = new Date();
 
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
+		Alert alertWarn = new Alert(AlertType.WARNING);
+		alertWarn.setTitle("Alerta generando reporte");
+		
 		try {
 			BorderPane border = new BorderPane();
 			HBox headerPane = new HBox ();
 			VBox pane = new VBox();
 
-			Scene scene = new Scene(border, 850, 500);
+			Scene scene = new Scene(border, 880, 500);
 
 			FlowPane labelsPane = new FlowPane(60, 80);
 			FlowPane datePane = new FlowPane(20, 40);
@@ -87,19 +102,31 @@ public class ReportWindow {
 			pane.getChildren().addAll(labelsPane);
 
 			DatePicker datePickerInicio = new DatePicker();
+			DatePicker datePickerFin = new DatePicker();
+			
+			datePickerInicio.setEditable(false);
 			datePickerInicio.setOnAction(event -> {
-				LocalDate date = datePickerInicio.getValue();
+				
+				LocalDate localDate = datePickerInicio.getValue();
+				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+				dateInicio = Date.from(instant);
+				System.out.println("Selected date: " + dateInicio);
 			});
 			pane.getChildren().addAll(datePickerInicio);
 
 			Label toCalendar = new Label("a");
 			pane.getChildren().add(toCalendar);
-
-			DatePicker datePickerFin = new DatePicker();
-
+			
+			datePickerFin.setEditable(false);
 			datePickerFin.setOnAction(event -> {
-				LocalDate date = datePickerFin.getValue();
-				System.out.println("Selected date: " + date);
+			 
+				LocalDate localDate = datePickerFin.getValue();
+				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+				
+				dateFin = Date.from(instant);
+		        dateFin = ReportBackend.getCalendarOnHour(dateFin);
+		        
+				System.out.println("Selected date: " + dateFin);
 			});
 			pane.getChildren().addAll(datePickerFin);
 
@@ -110,18 +137,17 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					reporteViewStage(stage, usuario);
-				}
-			});
-
-			Button downloadButton = new Button("Descargar");
-			downloadButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
+					if (datePickerInicio.getValue() == null ){
+						alertWarn.setHeaderText("Error en el manejo de datos");
+						alertWarn.setContentText("Seleccione la fecha de inicio");
+						alertWarn.showAndWait();
+					} else if (datePickerFin.getValue() == null ){
+						alertWarn.setHeaderText("Error en el manejo de datos");
+						alertWarn.setContentText("Seleccione la fecha fin");
+						alertWarn.showAndWait();
+					} else {
+						checkReport(stage, usuario, dateInicio,  dateFin);
+					}
 				}
 			});
 			pane.getChildren().addAll(datePane);
@@ -136,81 +162,189 @@ public class ReportWindow {
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.show();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public VBox reportView(Stage stage, Scene scene) {
-		VBox vbox = new VBox();
-		FlowPane flowPane = new FlowPane();
+	public void checkReport(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin) {
+
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Alerta al generar reporte");
+		
+		try {
+			ObservableList<Guia> datos = FXCollections.observableArrayList(); 
+			List<Guia> dataList = null;
+
+			try {
+				dataList = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+			
+			for (Guia element : dataList) {
+				datos.add(element);
+			}
+			
+			if (dataList.isEmpty()) {
+				logger.error("El rango de fechas no arroja ningún registro. Intente con otro rango.");
+				alert.setHeaderText("Consulta vacía");
+				alert.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango.");
+				alert.showAndWait();
+			} else {
+				reporteViewStage(stage, usuario, fechaInicio, fechaFin, datos);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin, ObservableList<Guia> datos) {
 
 		try {
-			StackPane pane = new StackPane();
-			pane.setAlignment(Pos.CENTER);
+			VBox paneVbox = new VBox();
+			FlowPane buttonsPane = new FlowPane();
+
+			Scene scene = new Scene(paneVbox, 1030, 560);
+			VBox vboxTable = new VBox();
+			
+			VBox table = generarTable(stage, scene, datos);
+			vboxTable.getChildren().add(table);
+
+			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
-			Label reporteLabel = new Label("Buscar");
-			reporteLabel.getStyleClass().add("labelReport");
-			TextField buscador = new TextField();
-			buscador.getStyleClass().add("textFieldReport");
+			Button printButton = new Button("Imprimir");
+			printButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					try {
+						
+						ReportBackend.printForTable(table);
+						GenerarReporteStage(stage, usuario);
+						
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+			});
+			
+			Button cancelButton = new Button("Cancelar");
+			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					GenerarReporteStage(stage, usuario);
+				}
+			});
+			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
+			buttonsPane.getChildren().addAll(printButton, cancelButton);
+			paneVbox.getChildren().addAll(vboxTable, buttonsPane);
 
-			flowPane.getChildren().addAll(reporteLabel, buscador);
+			stage.setScene(scene);
+			stage.setTitle("Control de paquetería - Generar reporte");
+			stage.setResizable(true);
+			stage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public VBox generarTable(Stage stage, Scene scene, ObservableList<Guia> datos ) {
+		
+		VBox vbox = new VBox();
+		TableView<Guia> table = null;
 
-			Text cabeceraTabla = new Text("Casa: departamento");
+		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
-			TableView<Controlenvio> table = new TableView<Controlenvio>();
-			table.setEditable(false);
-
-			TableColumn<Controlenvio, String> mensajeraCol = new TableColumn<>("Mensajeria");
-			mensajeraCol.setMinWidth(140);
-			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("mensajeria"));
-
-			mensajeraCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			mensajeraCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setMensajeria(t.getNewValue());
+		table = new TableView<Guia>();
+		table.setEditable(false);
+		
+		Text cabeceraTabla = new Text("Casa: departamento");
+		
+		try {
+			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
+			numeroCol.setMinWidth(190);
+			numeroCol.setCellValueFactory(new PropertyValueFactory<>("numero"));
+			numeroCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
+			numeroCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
+				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getMensajeria().setNombre(t.getNewValue());
+			});
+			
+			TableColumn<Guia, String> mensajeraCol = new TableColumn<>("Mensajeria");
+			mensajeraCol.setMinWidth(120);
+			mensajeraCol.setCellValueFactory(new Callback<CellDataFeatures<Guia,String>,ObservableValue<String>>(){
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+                	SimpleStringProperty ssp = null;
+                	if (param.getValue().getMensajeria() != null) {
+                		ssp = new SimpleStringProperty(param.getValue().getMensajeria().getNombre());
+                    	return ssp;
+                	} else {	
+                    	return new SimpleStringProperty("");
+                	}
+                }
+            });
+			mensajeraCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
+			mensajeraCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
+				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getMensajeria().setNombre(t.getNewValue());
 			});
 
-			TableColumn<Controlenvio, String> origenCol = new TableColumn<>("Origen");
-			origenCol.setMinWidth(140);
-			origenCol.setCellValueFactory(new PropertyValueFactory<>("origen"));
-
-			origenCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			origenCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrigen(t.getNewValue());
+			TableColumn<Guia, String> origenCol = new TableColumn<>("Origen");
+			origenCol.setMinWidth(120);
+			origenCol.setCellValueFactory(new Callback<CellDataFeatures<Guia,String>,ObservableValue<String>>(){
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+                	SimpleStringProperty ssp = null;
+                	if (param.getValue().getOrigen() != null) {
+                		ssp = new SimpleStringProperty(param.getValue().getOrigen().getNombre());
+                    	return ssp;
+                	} else {
+                    	return new SimpleStringProperty(param.getValue().getOtroorigen());
+                	}
+                }
+            });
+			origenCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
+			origenCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
+				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getOrigen().setNombre(t.getNewValue());
 			});
 
-			TableColumn<Controlenvio, String> destinatarioCol = new TableColumn<>("Destinatario");
-			destinatarioCol.setMinWidth(140);
-			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("destinatario"));
-
-			destinatarioCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			destinatarioCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setDestinatario(t.getNewValue());
+			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("Destinatario");
+			destinatarioCol.setMinWidth(120);
+			destinatarioCol.setCellValueFactory(new Callback<CellDataFeatures<Guia,String>,ObservableValue<String>>(){
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+                	SimpleStringProperty ssp = null;
+                	if (param.getValue().getDestinatario() != null) {
+                		ssp = new SimpleStringProperty(param.getValue().getDestinatario().getNombre());
+                    	return ssp;
+                	} else {
+                    	return new SimpleStringProperty(param.getValue().getOtrodestinatario());
+                	}
+                }
+            });
+			destinatarioCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
+			destinatarioCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
+				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getDestinatario().setNombre(t.getNewValue());
 			});
 
-			TableColumn<Controlenvio, String> fechaCol = new TableColumn<>("Fecha");
+			TableColumn<Guia, String> fechaCol = new TableColumn<>("Fecha");
 			fechaCol.setMinWidth(160);
 			fechaCol.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
-			TableColumn<Controlenvio, String> observacionCol = new TableColumn<>("Observacion");
-			observacionCol.setMinWidth(140);
-			observacionCol.setCellValueFactory(new PropertyValueFactory<>("Observacion"));
-
-			observacionCol.setCellFactory(TextFieldTableCell.<Controlenvio> forTableColumn());
-			observacionCol.setOnEditCommit((CellEditEvent<Controlenvio, String> t) -> {
-				((Controlenvio) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setObservacion(t.getNewValue());
+			TableColumn<Guia, String> observacionCol = new TableColumn<>("Observacion");
+			observacionCol.setMinWidth(160);
+			observacionCol.setCellValueFactory(new PropertyValueFactory<>("observacion"));
+			observacionCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
+			observacionCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
+				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).setObservacion(t.getNewValue());
 			});
 
-			TableColumn<Controlenvio, String> firmaCol = new TableColumn<>("Firma");
-			observacionCol.setMinWidth(250);
+			TableColumn<Guia, String> firmaCol = new TableColumn<>("Firma");
+			firmaCol.setMinWidth(150);
 
-			table.setItems(data);
-			table.getColumns().addAll(mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol, firmaCol);
+			table.setItems(datos);
+			table.getColumns().addAll(numeroCol, mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol, firmaCol);
 
 			vbox.setSpacing(10);
 			vbox.setPadding(new Insets(4, 4, 4, 4));
@@ -222,49 +356,6 @@ public class ReportWindow {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return vbox;
-	}
-
-	public void reporteViewStage(Stage stage, Usuario usuario) {
-
-		try {
-			VBox paneVbox = new VBox();
-			FlowPane buttonsPane = new FlowPane();
-
-			Scene scene = new Scene(paneVbox, 900, 500);
-
-			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
-
-			VBox vbox = reportView(stage, scene);
-
-			Button printButton = new Button("Imprimir");
-			printButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-				}
-			});
-			Button cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					GenerarReporteStage(stage, usuario);
-				}
-			});
-			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll(vbox, buttonsPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería -Generar reporte");
-			stage.setResizable(true);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }
