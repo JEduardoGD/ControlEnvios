@@ -11,7 +11,11 @@ import java.util.Set;
 public class Mensajeria  implements java.io.Serializable {
 
 
-     private Integer id;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Integer id;
      private String nombre;
      private Set guias = new HashSet(0);
 
@@ -49,9 +53,20 @@ public class Mensajeria  implements java.io.Serializable {
         this.guias = guias;
     }
 
+    public String toString(){
+    	return this.getNombre();
+    }
 
+  @Override
+  	public boolean equals(Object obj) {
+  		if (obj == null)
+  			return false;
+  		if (!(obj instanceof Mensajeria))
+  			return false;
+  		Mensajeria mensajeria = (Mensajeria) obj;
 
-
+  		if (this.id == mensajeria.getId())
+  			return true;
+  		return false;
+  	}
 }
-
-

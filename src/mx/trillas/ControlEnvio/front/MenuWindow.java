@@ -9,10 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 
 public class MenuWindow {
 
-	public void UserMenuStage(Stage stage) {
+	public void UserMenuStage(Stage stage, Usuario usuario) {
 
 		try {
 			VBox rootVBox = new VBox();
@@ -33,7 +34,7 @@ public class MenuWindow {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					CapturaWindow captura = new CapturaWindow();
-					captura.CapturaStage(stage);
+					captura.CapturaStage(stage, usuario);
 				}
 			});
 			rootVBox.getChildren().add(capturaButton);
@@ -45,7 +46,7 @@ public class MenuWindow {
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					ReportWindow reporte = new ReportWindow();
-					reporte.GenerarReporteStage(stage);
+					reporte.GenerarReporteStage(stage, usuario);
 				}
 			});
 			rootVBox.getChildren().add(generarReporteButton);
@@ -98,7 +99,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(mensajeriaButon);
 
-			Button origenesButton = new Button("Alta o modificar lugares origenes");
+			Button origenesButton = new Button("Alta o modificar lugares de origen");
 			origenesButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override

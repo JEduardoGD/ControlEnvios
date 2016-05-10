@@ -11,7 +11,12 @@ import java.util.Set;
 public class Destinatario  implements java.io.Serializable {
 
 
-     private Integer id;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private Integer id;
      private Departamento departamento;
      private String nombre;
      private Set guias = new HashSet(0);
@@ -59,9 +64,10 @@ public class Destinatario  implements java.io.Serializable {
         this.guias = guias;
     }
 
-
+    public String toString(){
+    	return this.getNombre();
+    }
 
 
 }
-
 

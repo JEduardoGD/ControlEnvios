@@ -1,52 +1,27 @@
 package mx.trillas.ControlEnvio.backend;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
-public class CapturarRegistro {
-	 
+public class GuiaBackend {
+
 	 private static final String NUMERO_GUIA_PATTERN = "([a-zA-Z]{1}[0-9]{3,44})";
 	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
 	 
 	 private static Logger logger = Logger.getLogger(CapturarRegistro.class);
 	 
-	 private static GuiaDAO capturaDAO = new GuiaDAODBImpl();
+	 private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 	 
-	 public static boolean checkStructData(String guia, String origen, String depto, String destinatario){
-	 
-		if (checkStructNumeroGuia(guia)) {
-			 return true;
-		} else {
-			logger.error("El numero guia ingresado no contiene la estructura requerida.");
-		}
-		
-		if (checkString(origen)) {
-			 return true;
-		} else {
-			logger.error("El origen ingresado no contiene la estructura requerida.");
-		} 
-				
-		if (checkString(depto)) {
-			 return true;
-		} else {
-			logger.error("El departamento ingresado no contiene la estructura requerida.");
-		}
-		
-		if (checkString(destinatario)) {
-			 return true;
-		} else {
-			logger.error("El destinatario ingresado no contiene la estructura requerida.");
-		}
-		
-		return false;
-	 }
- 
 	 public static boolean checkStructNumeroGuia(String guia){
 
 		  Pattern pattern;
@@ -71,9 +46,26 @@ public class CapturarRegistro {
 	 
 	 public static void loadCapturaData(Guia guia) throws Exception {
 		try {
-			 capturaDAO.altaGuia(guia);
+			 guiaDAO.altaGuia(guia);
 		} catch (Exception e) {
 			throw e;
 		}
 	 }
+	 
+	 public static ObservableList<Guia> getGuiaData() throws Exception {
+
+		List<Guia> guias = new ArrayList<Guia>();
+		ObservableList<Guia> data = FXCollections.observableArrayList();
+		
+		try {
+			guias = guiaDAO.getGuiaList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+		for (Guia element : guias) {
+			data.add(element);
+		}
+		return data;
+	}
 }

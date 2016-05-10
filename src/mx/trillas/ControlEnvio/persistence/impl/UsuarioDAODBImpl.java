@@ -37,4 +37,29 @@ public class UsuarioDAODBImpl implements UsuarioDAO {
 		}
 		return null;
 	}
+
+	@Override
+	public Usuario getUsuarioByUsername(String username) throws Exception {
+		// TODO Auto-generated method stub
+		Usuario usuario;
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Usuario.class);
+			SimpleExpression se1 = Restrictions.eq("username", username);
+			criteria.add(se1);
+			Object resObj = criteria.uniqueResult();
+			if (resObj != null && resObj instanceof Usuario) {
+				usuario = (Usuario) resObj;
+				HibernateUtil.initializeObject(usuario.getTiposusuario());
+				return usuario;
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return null;
+	}
 }
