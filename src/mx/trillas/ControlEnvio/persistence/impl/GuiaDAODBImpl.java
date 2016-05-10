@@ -11,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 
 import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
+import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
 public class GuiaDAODBImpl implements GuiaDAO {
@@ -85,6 +86,84 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		}
 		return guias;
 	}
+	@Override
+	public List<Guia> getGuiaListByDateyDepto(Date fechaInicio, Date fechaFin, Departamento departamento ) throws Exception {
+
+		Session session = null;
+		List<Guia> guias = new ArrayList<Guia>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Guia.class);
+
+			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
+			criteria.add(Restrictions.le("fecha", fechaFin));
+			criteria.add(Restrictions.le("departamento", departamento));
+			
+			List<?> objList = criteria.list();
+			for (Object guiaObj : objList) {
+				if (guiaObj != null && guiaObj instanceof Guia) {
+					Guia guia = (Guia) guiaObj;
+					if (guia.getOrigen() != null) {
+						HibernateUtil.initializeObject(guia.getOrigen());
+					}
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria());
+					}
+					if (guia.getDestinatario() != null) {
+						HibernateUtil.initializeObject(guia.getDestinatario());
+					}
+					guias.add(guia);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return guias;
+	}
+	
+	@Override
+	public List<Guia> getGuiaListByDateOtroDepto(Date fechaInicio, Date fechaFin, String nombreDepartamento ) throws Exception {
+
+		Session session = null;
+		List<Guia> guias = new ArrayList<Guia>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Guia.class);
+
+			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
+			criteria.add(Restrictions.le("fecha", fechaFin));
+			criteria.add(Restrictions.le("otrodepartamento", nombreDepartamento));
+			
+			List<?> objList = criteria.list();
+			for (Object guiaObj : objList) {
+				if (guiaObj != null && guiaObj instanceof Guia) {
+					Guia guia = (Guia) guiaObj;
+					if (guia.getOrigen() != null) {
+						HibernateUtil.initializeObject(guia.getOrigen());
+					}
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria());
+					}
+					if (guia.getDestinatario() != null) {
+						HibernateUtil.initializeObject(guia.getDestinatario());
+					}
+					guias.add(guia);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return guias;
+	}
+	
 	
 	@Override
 	public List<Guia> getGuiaListByDate(Date fechaInicio, Date fechaFin) throws Exception {

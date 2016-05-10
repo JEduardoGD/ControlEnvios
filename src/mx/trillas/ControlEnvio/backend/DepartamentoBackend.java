@@ -60,7 +60,19 @@ public class DepartamentoBackend {
 			return departamentos;
 	 }
 	 
-	 public static ObservableList<String> getDepartamentoData() throws Exception {
+	 public static ObservableList<Departamento> getDepartamentoData() throws Exception {
+
+			List<Departamento> departamentos = new ArrayList<Departamento>();
+			try {
+				departamentos = departamentoDAO.getDepartamentoList();
+			} catch (Exception e) {
+				throw e;
+			}
+			ObservableList<Departamento> data =  FXCollections.observableList(departamentos);
+			return data;
+	}
+	 
+	public static ObservableList<String> getDepartamentoCombo() throws Exception {
 
 			List<Departamento> departamentos = new ArrayList<Departamento>();
 			ObservableList<String> data = FXCollections.observableArrayList();

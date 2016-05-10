@@ -99,7 +99,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(mensajeriaButon);
 
-			Button origenesButton = new Button("Alta o modificar lugares origenes");
+			Button origenesButton = new Button("Alta o modificar lugares de origen");
 			origenesButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
