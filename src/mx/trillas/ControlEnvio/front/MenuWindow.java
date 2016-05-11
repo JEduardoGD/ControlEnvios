@@ -3,7 +3,7 @@ package mx.trillas.ControlEnvio.front;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +28,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(label);
 
 			Button capturaButton = new Button("Capturar registro");
+			capturaButton.setCursor(Cursor.HAND);
 			capturaButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -40,6 +41,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(capturaButton);
 
 			Button generarReporteButton = new Button("Generar reporte");
+			generarReporteButton.setCursor(Cursor.HAND);
 			generarReporteButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -52,6 +54,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(generarReporteButton);
 			
 			Button logOutButton = new Button("Log Out");
+			logOutButton.setCursor(Cursor.HAND);
 			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -88,6 +91,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(label);
 
 			Button mensajeriaButon = new Button("Alta o modificar empresa de mensajería");
+			mensajeriaButon.setCursor(Cursor.HAND);
 			mensajeriaButon.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -100,6 +104,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(mensajeriaButon);
 
 			Button origenesButton = new Button("Alta o modificar lugares de origen");
+			origenesButton.setCursor(Cursor.HAND);
 			origenesButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -112,6 +117,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(origenesButton);
 
 			Button personasButton = new Button("Alta o modificar personas destinatarias");
+			personasButton.setCursor(Cursor.HAND);
 			personasButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -124,6 +130,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(personasButton);
 
 			Button deptosButton = new Button("Alta o modificar departamentos");
+			deptosButton.setCursor(Cursor.HAND);
 			deptosButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -136,6 +143,7 @@ public class MenuWindow {
 			rootVBox.getChildren().add(deptosButton);
 			
 			Button logOutButton = new Button("Log Out");
+			logOutButton.setCursor(Cursor.HAND);
 			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {
 

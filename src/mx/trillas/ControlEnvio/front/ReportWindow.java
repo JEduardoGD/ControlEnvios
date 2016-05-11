@@ -1,12 +1,14 @@
 package mx.trillas.ControlEnvio.front;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.log4j.Logger;
+import org.apache.log4j.pattern.FullLocationPatternConverter;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -16,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -26,12 +29,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -39,21 +44,26 @@ import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.backend.ReportBackend;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
+import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
+import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
+import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 
 public class ReportWindow {
 
 	private static Logger logger = Logger.getLogger(ReportWindow.class);
+
 	private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
+	private static DestinatarioDAO destinatarioDAO = new DestinatarioDAODBImpl();
 
-	Date dateInicio = new Date();
-	Date dateFin = new Date();
+	private static Date dateInicio = new Date();
+	private static Date dateFin = new Date();
 
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
@@ -65,11 +75,10 @@ public class ReportWindow {
 			HBox headerPane = new HBox();
 			VBox pane = new VBox();
 
-			Scene scene = new Scene(border, 880, 500);
+			Scene scene = new Scene(border, 960, 500);
 
 			FlowPane labelsPane = new FlowPane(60, 80);
-			FlowPane datePane = new FlowPane(20, 40);
-			// FlowPane datePane = new FlowPane();
+			FlowPane datePane = new FlowPane(20, 100);
 			HBox footer = new HBox();
 
 			pane.setAlignment(Pos.CENTER);
@@ -78,12 +87,12 @@ public class ReportWindow {
 					.add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
 
 			Button backButton = new Button("Regresar");
+			backButton.setCursor(Cursor.HAND);
 			backButton.getStyleClass().add("backButton");
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					MenuWindow menu = new MenuWindow();
 					menu.UserMenuStage(stage, usuario);
 				}
@@ -97,16 +106,24 @@ public class ReportWindow {
 			welcomeLabel.setId("welcomeLabel");
 			pane.getChildren().addAll(welcomeLabel);
 
-			Label textInicio = new Label("Fecha Inicio");
-			textInicio.setPadding(new Insets(15, 70, 15, 8));
-			textInicio.setId("textInicio");
+			Label dateInicioLabel = new Label("Fecha Inicio");
+			dateInicioLabel.setPadding(new Insets(25, 25, 15, 25));
+			dateInicioLabel.getStyleClass().add("reportLabel");
 
-			Label textFin = new Label("Fecha fin");
-			textFin.setPadding(new Insets(15, 8, 15, 70));
-			textFin.setId("textFin");
+			Label dateFinLabel = new Label("Fecha fin");
+			dateFinLabel.setPadding(new Insets(35, 25, 15, 25));
+			dateFinLabel.getStyleClass().add("reportLabel");
+
+			Label deptoLabel = new Label("Departamento");
+			deptoLabel.setPadding(new Insets(45, 25, 15, 25));
+			deptoLabel.getStyleClass().add("reportLabel");
+
+			Label otroDepartamentoLabel = new Label("Otro Departamento");
+			otroDepartamentoLabel.setPadding(new Insets(55, 1, 15, 25));
+			otroDepartamentoLabel.getStyleClass().add("reportLabel");
 
 			labelsPane.setAlignment(Pos.CENTER);
-			labelsPane.getChildren().addAll(textInicio, textFin);
+			labelsPane.getChildren().addAll(dateInicioLabel, dateFinLabel, deptoLabel, otroDepartamentoLabel);
 			pane.getChildren().addAll(labelsPane);
 
 			DatePicker datePickerInicio = new DatePicker();
@@ -114,16 +131,12 @@ public class ReportWindow {
 
 			datePickerInicio.setEditable(false);
 			datePickerInicio.setOnAction(event -> {
-
 				LocalDate localDate = datePickerInicio.getValue();
 				Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 				dateInicio = Date.from(instant);
 				System.out.println("Selected date: " + dateInicio);
 			});
 			pane.getChildren().addAll(datePickerInicio);
-
-			Label toCalendar = new Label("a");
-			pane.getChildren().add(toCalendar);
 
 			datePickerFin.setEditable(false);
 			datePickerFin.setOnAction(event -> {
@@ -138,17 +151,40 @@ public class ReportWindow {
 			});
 			pane.getChildren().addAll(datePickerFin);
 
+			VBox container = new VBox();
+
+			TextField otroDeptoField = new TextField();
+			otroDeptoField.setPromptText("Otro departamento");
+			otroDeptoField.setDisable(true);
+
 			ComboBox<Object> deptoCombo = DepartamentoBackend.getDeptosListCombo();
 			deptoCombo.setPromptText("Seleccione una opcion...");
+			deptoCombo.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					try {
+						if (deptoCombo != null && deptoCombo.getValue().equals("Otro")) {
+							otroDeptoField.setDisable(false);
+						} else {
+							otroDeptoField.setDisable(true);
+						}
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+			});
+			deptoCombo.getItems().add("Todos");
+			deptoCombo.getItems().add("Otro");
 
-			datePane.getChildren().addAll(datePickerInicio, toCalendar, datePickerFin, deptoCombo);
+			container.getChildren().addAll(deptoCombo, otroDeptoField);
+			datePane.getChildren().addAll(datePickerInicio, datePickerFin, deptoCombo, otroDeptoField);
 			datePane.setAlignment(Pos.CENTER);
 
 			FlowPane deptoPane = new FlowPane();
-			VBox vbox = new VBox();
 			deptoPane.setAlignment(Pos.CENTER);
 
 			Button generarButton = new Button("Generar reporte");
+			generarButton.setCursor(Cursor.HAND);
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -160,11 +196,24 @@ public class ReportWindow {
 						alertWarn.setHeaderText("Error en el manejo de datos");
 						alertWarn.setContentText("Seleccione la fecha fin");
 						alertWarn.showAndWait();
+					} else if (deptoCombo.getValue() == null) {
+						alertWarn.setHeaderText("Error en el manejo de datos");
+						alertWarn.setContentText("Seleccione un departamento");
+						alertWarn.showAndWait();
+					} else if (deptoCombo.getValue().toString().equals("Otro") && otroDeptoField.getText().equals("")) {
+						alertWarn.setHeaderText("Error en el manejo de datos");
+						alertWarn.setContentText("Ingrese el nombre del otro departamento");
+						alertWarn.showAndWait();
 					} else {
-						if (deptoCombo.getValue() == null) {
-							checkReport(stage, usuario, dateInicio, dateFin, null);
+						if (deptoCombo.getValue().toString().equals("Todos")) {
+							checkReport(stage, usuario, dateInicio, dateFin, null, false, true,
+									otroDeptoField.getText());
+						} else if (deptoCombo.getValue().toString().equals("Otro")) {
+							checkReport(stage, usuario, dateInicio, dateFin, otroDeptoField.getText(), true, false,
+									otroDeptoField.getText());
 						} else {
-							checkReport(stage, usuario, dateInicio, dateFin, deptoCombo.getValue().toString());
+							checkReport(stage, usuario, dateInicio, dateFin, deptoCombo.getValue().toString(), false,
+									false, otroDeptoField.getText());
 						}
 					}
 				}
@@ -187,65 +236,88 @@ public class ReportWindow {
 		}
 	}
 
-	public void checkReport(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin, String nombreDepartamento) {
+	public void checkReport(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin, String nombreDepartamento,
+			Boolean flagOtro, Boolean flagTodos, String otroDeptoField) {
 
-		Alert alert = new Alert(AlertType.WARNING);
+		Alert alert = new Alert(AlertType.WARNING, "content text");
+		alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+				.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 		alert.setTitle("Alerta al generar reporte");
 
 		try {
 			ObservableList<Guia> datos = FXCollections.observableArrayList();
 			List<Guia> dataList = null;
+			List<Guia> dataFullList = null;
 
 			if (nombreDepartamento == null) {
 				try {
-					dataList = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
+					dataFullList = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 				}
 			} else {
 				try {
-//					Departamento depto = departamentoDAO.getDepartamento(nombreDepartamento);
-//					if (depto == null) {
-						dataList = guiaDAO.getGuiaListByDateOtroDepto(fechaInicio, fechaFin, nombreDepartamento);
-//
-//					} else {
-//						dataList = guiaDAO.getGuiaListByDateyDepto(fechaInicio, fechaFin, depto);
-//					} 
+					Departamento departamento = departamentoDAO.getDepartamento(nombreDepartamento);
+					if (flagOtro == false) {
+						if (departamento != null) {
+
+							List<Destinatario> destinatariosList = destinatarioDAO
+									.getDestinatarioFromDeptoList(departamento);
+
+							dataFullList = new ArrayList<Guia>();
+
+							for (Destinatario element : destinatariosList) {
+								dataList = guiaDAO.getGuiaListByDateyDestinatario(fechaInicio, fechaFin, element);
+								dataFullList.addAll(dataList);
+							}
+						} else {
+							logger.error(
+									"No existen registros con el departamento indicado. Intente con otra consulta");
+							alert.setHeaderText("Sin resultados");
+							alert.setContentText(
+									"No existen registros con el departamento indicado. Intente con otra consulta");
+							alert.showAndWait();
+						}
+					} else {
+						dataFullList = guiaDAO.getGuiaListByDateOtroDepto(fechaInicio, fechaFin, nombreDepartamento);
+					}
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 				}
 			}
 
-			for (Guia element : dataList) {
-				datos.add(element);
-			}
-
-			if (dataList.isEmpty()) {
-				logger.error("El rango de fechas no arroja ningún registro. Intente con otro rango.");
-				alert.setHeaderText("Consulta vacía");
-				alert.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango.");
+			if (dataFullList.isEmpty()) {
+				logger.error(
+						"El rango de fechas no arroja ningún registro. Intente otro rango de fechas u otro departamento.");
+				alert.setHeaderText("Sin resultados");
+				alert.setContentText(
+						"El rango de fechas no arroja ningún registro. Intente otro rango de fechas u otro departamento.");
 				alert.showAndWait();
 			} else {
-				reporteViewStage(stage, usuario, fechaInicio, fechaFin, datos);
+				if (nombreDepartamento != null) {
+					reporteViewStage(stage, usuario, fechaInicio, fechaFin, nombreDepartamento, flagTodos,
+							otroDeptoField, dataFullList);
+				} else {
+					reporteViewStage(stage, usuario, fechaInicio, fechaFin, null, flagTodos, otroDeptoField,
+							dataFullList);
+				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin,
-			ObservableList<Guia> datos) {
+			String nombreDepartamento, Boolean flagTodos, String otroDeptoField, List<Guia> dataList) {
+
+		ObservableList<Guia> datos = FXCollections.observableArrayList();
 
 		try {
+
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-
-			Scene scene = new Scene(paneVbox, 1030, 560);
+			Scene scene = new Scene(paneVbox, 1110, 700);
 			VBox vboxTable = new VBox();
-
-			VBox table = generarTable(stage, scene, datos);
-			vboxTable.getChildren().add(table);
 
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -254,11 +326,49 @@ public class ReportWindow {
 			printButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
+
 					try {
+						int count = 0;
+						VBox table = null;
 
-						ReportBackend.printForTable(table);
-						GenerarReporteStage(stage, usuario);
+						for (Guia element : dataList) {
 
+							count++;
+							datos.add(element);
+
+							if (count == 24) {
+								if (nombreDepartamento != null) {
+									table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos,
+											otroDeptoField);
+									ReportBackend.printForTable(table);
+								} else {
+									table = generarTable(stage, scene, datos, null, flagTodos, otroDeptoField);
+									ReportBackend.printForTable(table);
+								}
+								vboxTable.getChildren().addAll(table);
+								paneVbox.getChildren().addAll(vboxTable);
+								
+								datos.clear();
+								table = null;
+								count = 0;
+							} else if (count == dataList.size()) {
+								if (nombreDepartamento != null) {
+									table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos,
+											otroDeptoField);
+									ReportBackend.printForTable(table);
+								} else {
+									table = generarTable(stage, scene, datos, null, flagTodos, otroDeptoField);
+									ReportBackend.printForTable(table);
+								}
+								vboxTable.getChildren().addAll(table);
+								paneVbox.getChildren().addAll(vboxTable);
+								
+								datos.clear();
+								table = null;
+								count = 0;
+							}
+							
+						}
 					} catch (Exception e) {
 						logger.error(e.getMessage());
 					}
@@ -267,6 +377,7 @@ public class ReportWindow {
 
 			Button cancelButton = new Button("Cancelar");
 			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+
 				@Override
 				public void handle(ActionEvent event) {
 					GenerarReporteStage(stage, usuario);
@@ -274,28 +385,40 @@ public class ReportWindow {
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll(vboxTable, buttonsPane);
+			paneVbox.getChildren().addAll( buttonsPane);
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.setResizable(true);
 			stage.show();
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public VBox generarTable(Stage stage, Scene scene, ObservableList<Guia> datos) {
+	public VBox generarTable(Stage stage, Scene scene, ObservableList<Guia> datos, String nombreDepartamento,
+			Boolean flagTodos, String otroDeptoField) {
 
 		VBox vbox = new VBox();
 		TableView<Guia> table = null;
 
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
-
 		table = new TableView<Guia>();
 		table.setEditable(false);
+		table.setMinHeight(600);
+		FlowPane cabeceraFlow = new FlowPane(150, 5);
 
-		Text cabeceraTabla = new Text("Casa: departamento");
+		Text cabeceraText = new Text("Correspondencia");
+		cabeceraText.getStyleClass().add("cabeceraClass");
+		cabeceraFlow.getChildren().addAll(cabeceraText);
+
+		if (nombreDepartamento != null) {
+			Text nombreDepartamentoText = new Text(nombreDepartamento);
+			nombreDepartamentoText.getStyleClass().add("cabeceraClass");
+			cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
+		}
 
 		try {
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
@@ -308,7 +431,7 @@ public class ReportWindow {
 			});
 
 			TableColumn<Guia, String> mensajeraCol = new TableColumn<>("Mensajeria");
-			mensajeraCol.setMinWidth(120);
+			mensajeraCol.setMinWidth(130);
 			mensajeraCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
@@ -348,17 +471,29 @@ public class ReportWindow {
 			});
 
 			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("Destinatario");
-			destinatarioCol.setMinWidth(120);
+			destinatarioCol.setMinWidth(190);
 			destinatarioCol
 					.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
 						@Override
 						public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
 							SimpleStringProperty ssp = null;
 							if (param.getValue().getDestinatario() != null) {
-								ssp = new SimpleStringProperty(param.getValue().getDestinatario().getNombre());
+
+								String output = param.getValue().getDestinatario().getNombre().toString();
+								String outputDepto = param.getValue().getDestinatario().getDepartamento().getNombre()
+										.toString();
+
+								if (flagTodos == false) {
+									ssp = new SimpleStringProperty(
+											output.substring(0, 1).toUpperCase() + output.substring(1));
+								} else {
+									ssp = new SimpleStringProperty(output.substring(0, 1).toUpperCase()
+											+ output.substring(1) + "/" + outputDepto);
+								}
 								return ssp;
 							} else {
-								return new SimpleStringProperty(param.getValue().getOtrodestinatario());
+								return new SimpleStringProperty(param.getValue().getOtrodestinatario() + "/"
+										+ param.getValue().getOtrodepartamento());
 							}
 						}
 					});
@@ -370,7 +505,13 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> fechaCol = new TableColumn<>("Fecha");
 			fechaCol.setMinWidth(160);
-			fechaCol.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+			fechaCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+					SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+					return new SimpleStringProperty(formatter.format(param.getValue().getFecha().getTime()));
+				}
+			});
 
 			TableColumn<Guia, String> observacionCol = new TableColumn<>("Observacion");
 			observacionCol.setMinWidth(160);
@@ -387,9 +528,10 @@ public class ReportWindow {
 			table.getColumns().addAll(numeroCol, mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol,
 					firmaCol);
 
-			vbox.setSpacing(10);
+			vbox.setSpacing(8);
 			vbox.setPadding(new Insets(4, 4, 4, 4));
-			vbox.getChildren().addAll(cabeceraTabla);
+
+			vbox.getChildren().addAll(cabeceraFlow);
 			vbox.getChildren().addAll(table);
 			stage.setScene(scene);
 			stage.show();

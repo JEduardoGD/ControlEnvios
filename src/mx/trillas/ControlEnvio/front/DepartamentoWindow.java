@@ -73,7 +73,6 @@ public class DepartamentoWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					MenuWindow menu = new MenuWindow();
 					menu.AdminMenuStage(stage);
 				}
@@ -87,7 +86,6 @@ public class DepartamentoWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					DepartamentoWindow depto = new DepartamentoWindow();
 					depto.modificarDepartamentoStage(stage);
 				}
@@ -125,7 +123,6 @@ public class DepartamentoWindow {
 						logger.error(e.getMessage());
 					}
 
-					// TODO Auto-generated method stub
 					if (nombreField.getText() == null || nombreField.getText().equals("")) {
 						logger.error("El nombre del departamento no debe ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
@@ -204,12 +201,12 @@ public class DepartamentoWindow {
 			TableView<Departamento> table = new TableView<Departamento>();
 			table.setEditable(true);
 
-			TableColumn<Departamento, String> idCol = new TableColumn<>("Id");
+			TableColumn<Departamento, String> idCol = new TableColumn<Departamento, String>("Id");
 			idCol.setMinWidth(200);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-			TableColumn<Departamento, String> deptoCol = new TableColumn<>("Departamento");
+			TableColumn<Departamento, String> deptoCol = new TableColumn<Departamento, String>("Departamento");
 			deptoCol.setMinWidth(200);
 			deptoCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
@@ -276,11 +273,11 @@ public class DepartamentoWindow {
 					}
 				}
 			});
+			
 			Button cancelButton = new Button("Cancelar");
 			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					DepartamentoWindow depto = new DepartamentoWindow();
 					depto.departamentoStage(stage);
 				}
@@ -357,7 +354,6 @@ public class DepartamentoWindow {
 				alert.setContentText("Los cambios se guardaron exitosamente");
 				alert.showAndWait();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				logger.error(e.getMessage());
 
 				Alert alert = new Alert(AlertType.ERROR);
