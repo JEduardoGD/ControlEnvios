@@ -13,7 +13,6 @@ import javafx.scene.control.ComboBox;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 
 public class DepartamentoBackend {
 

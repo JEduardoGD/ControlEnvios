@@ -1,13 +1,11 @@
 package mx.trillas.ControlEnvio.front;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,7 +24,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -36,7 +33,6 @@ import javafx.stage.Stage;
 import mx.trillas.ControlEnvio.backend.OrigenBackend;
 import mx.trillas.ControlEnvio.persistence.dao.OrigenesDAO;
 import mx.trillas.ControlEnvio.persistence.impl.OrigenesDAODBImpl;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class OrigenesWindow {
@@ -115,7 +111,6 @@ public class OrigenesWindow {
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					Origen origenObj = null;
 
 					try {
@@ -358,80 +353,6 @@ public class OrigenesWindow {
 			}
 		} else {
 			// hacer algo
-		}
-	}
-
-	public void otroOrigenStage(Stage stage) {
-
-		try {
-			VBox rootVbox = new VBox(25);
-			rootVbox.setAlignment(Pos.CENTER);
-
-			FlowPane nombrePane = new FlowPane(18, 15);
-			nombrePane.setAlignment(Pos.CENTER);
-
-			FlowPane flowButtonsPane = new FlowPane();
-
-			HBox headerPane = new HBox(150);
-			Scene scene = new Scene(new Group(), 450, 450);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/otros.css").toExternalForm());
-
-			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
-
-			Button backButton = new Button("Regresar");
-			backButton.getStyleClass().add("backButton");
-			backButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			backButton.setAlignment(Pos.TOP_LEFT);
-
-			headerPane.getChildren().addAll(backButton);
-			rootVbox.getChildren().addAll(headerPane);
-
-			Text text = new Text("Ingrese el origen");
-			rootVbox.getChildren().addAll(text);
-
-			Label nombreLabel = new Label("Origen:");
-			TextField nombreField = new TextField();
-
-			nombrePane.getChildren().addAll(nombreLabel, nombreField);
-			rootVbox.getChildren().addAll(nombrePane);
-
-			Button aceptarButton = new Button("Aceptar");
-			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setAlignment(Pos.CENTER);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
-
-			rootVbox.getChildren().addAll(flowButtonsPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Otro origen");
-			stage.setResizable(true);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
@@ -17,8 +15,6 @@ public class GuiaBackend {
 
 	 private static final String NUMERO_GUIA_PATTERN = "([a-zA-Z]{1}[0-9]{3,44})";
 	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
-	 
-	 private static Logger logger = Logger.getLogger(CapturarRegistro.class);
 	 
 	 private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 	 

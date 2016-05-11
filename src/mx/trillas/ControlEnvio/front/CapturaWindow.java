@@ -125,7 +125,7 @@ public class CapturaWindow {
 						+ element.toString().substring(1);
 				mensajeriaCombo.getItems().add(elementFormat);
 			}
-
+			mensajeriaCombo.getItems().add("Personalmente");
 			mensajeriaCombo.getItems().addAll();
 			mensajeriaCombo.setPromptText("Seleccione una opción...");
 			
@@ -237,14 +237,12 @@ public class CapturaWindow {
 						try {
 							departamentoForCombo = departamentoDAO.getDepartamento(deptoCombo.getValue().toString());
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							logger.error(e.getMessage());
 						}
 	
 						try {
 							destinatarioList = FXCollections.observableArrayList(destinatarioDAO.getDestinatarioFromDeptoList(departamentoForCombo));
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							logger.error(e.getMessage());
 						}
 						destinatarioCombo.getItems().clear();
@@ -270,6 +268,7 @@ public class CapturaWindow {
 					}
 				}
 			});
+			
 			vertical1.getChildren().addAll(deptoLabel);
 			vertical2.getChildren().addAll( deptoCombo);
 
@@ -419,7 +418,6 @@ public class CapturaWindow {
 						try {
 							origen = origenDAO.getOrigen(origenCombo.getValue().toString());
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							logger.error(e.getMessage());
 						}
 						guia.setOrigen(origen);
@@ -471,6 +469,14 @@ public class CapturaWindow {
 							guia.setUsuario(usuario);
 						}
 					}
+					else if ((!(deptoCombo.getValue().toString().equals("Otro")) && destinatarioCombo.getValue() == null ) ||
+							((!destinatarioCombo.getValue().toString().equals("Otro")) && deptoCombo.getValue() == null)) {
+							logger.error("Seleccione un departamento y un destinatario, u escriba en los campos asignados");
+							alert.setHeaderText("Error al ingresar datos");
+							alert.setContentText("Seleccione un departamento y un destinatario, u escriba en los campos asignados");
+							alert.showAndWait();
+							flag = false;
+					}
 					 else {
 							try {
 							destinatario = destinatarioDAO.getDestinatarioByName(destinatarioCombo.getValue().toString());
@@ -479,7 +485,6 @@ public class CapturaWindow {
 							guia.setUsuario(usuario);
 							guia.setObservacion(observacionField.getText());
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							logger.error(e.getMessage());
 						}	
 					}

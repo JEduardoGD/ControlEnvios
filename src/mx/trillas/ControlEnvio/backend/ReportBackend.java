@@ -54,7 +54,6 @@ public class ReportBackend {
 				scaleY = pageLayout.getPrintableHeight() / table.getBoundsInParent().getHeight();
 
 				table.getTransforms().add(new Scale(scaleX, scaleY));
-
 				PrinterJob job = PrinterJob.createPrinterJob(printer);
 				job.getJobSettings().setPageLayout(pageLayout);
 				

@@ -81,20 +81,20 @@
 	-fx-opacity: 1;
 }
 
-#textInicio {
+.reportLabel {
 	-fx-font-size: 14pt;
     -fx-font-family: "Segoe UI Light";
 	-fx-color: #000;
 	-fx-opacity: 0.8;
 }
-
+/* 
 #textFin {
 	-fx-font-size: 14pt;
     -fx-font-family: "Segoe UI Light";
 	-fx-color: #000;
 	-fx-opacity: 0.8;
 }
-
+*/
 .text-field {
 	-fx-color: white;
 	-fx-pref-width: 200;

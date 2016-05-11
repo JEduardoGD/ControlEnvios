@@ -1,9 +1,21 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
+.cabeceraClass {
+	-fx-font-size: 10pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #333;
+    -fx-opacity: 0.8;
+}
+
+
 .labelReport {
 	-fx-color: white;
 	-fx-font-family: Arial;
 	-fx-text-fill: #333;
+}
+
+.text-field{
+	-fx-font-size: 6pt;
 }
 
 .textFieldReport {
