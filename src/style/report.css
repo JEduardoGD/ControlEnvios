@@ -1,7 +1,7 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 .cabeceraClass {
-	-fx-font-size: 10pt;
+	-fx-font-size: 11pt;
     -fx-font-family: "Arial";
     -fx-text-fill: #333;
     -fx-opacity: 0.8;

@@ -286,10 +286,6 @@ public class ReportWindow {
 				}
 			}
 
-			for (Guia element : dataFullList) {
-				datos.add(element);
-			}
-
 			if (dataFullList.isEmpty()) {
 				logger.error(
 						"El rango de fechas no arroja ningún registro. Intente otro rango de fechas u otro departamento.");
@@ -299,10 +295,11 @@ public class ReportWindow {
 				alert.showAndWait();
 			} else {
 				if (nombreDepartamento != null) {
-					reporteViewStage(stage, usuario, fechaInicio, fechaFin, datos, nombreDepartamento, flagTodos,
-							otroDeptoField);
+					reporteViewStage(stage, usuario, fechaInicio, fechaFin, nombreDepartamento, flagTodos,
+							otroDeptoField, dataFullList);
 				} else {
-					reporteViewStage(stage, usuario, fechaInicio, fechaFin, datos, null, flagTodos, otroDeptoField);
+					reporteViewStage(stage, usuario, fechaInicio, fechaFin, null, flagTodos, otroDeptoField,
+							dataFullList);
 				}
 			}
 		} catch (Exception e) {
@@ -311,17 +308,16 @@ public class ReportWindow {
 	}
 
 	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin,
-			ObservableList<Guia> datos, String nombreDepartamento, Boolean flagTodos, String otroDeptoField) {
+			String nombreDepartamento, Boolean flagTodos, String otroDeptoField, List<Guia> dataList) {
+
+		ObservableList<Guia> datos = FXCollections.observableArrayList();
 
 		try {
+
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-//			Scene scene = new Scene(paneVbox, 1110, 560);
 			Scene scene = new Scene(paneVbox, 1110, 700);
 			VBox vboxTable = new VBox();
-
-			VBox table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos, otroDeptoField);
-			vboxTable.getChildren().add(table);
 
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -330,11 +326,49 @@ public class ReportWindow {
 			printButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
+
 					try {
+						int count = 0;
+						VBox table = null;
 
-						ReportBackend.printForTable(table);
-						GenerarReporteStage(stage, usuario);
+						for (Guia element : dataList) {
 
+							count++;
+							datos.add(element);
+
+							if (count == 24) {
+								if (nombreDepartamento != null) {
+									table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos,
+											otroDeptoField);
+									ReportBackend.printForTable(table);
+								} else {
+									table = generarTable(stage, scene, datos, null, flagTodos, otroDeptoField);
+									ReportBackend.printForTable(table);
+								}
+								vboxTable.getChildren().addAll(table);
+								paneVbox.getChildren().addAll(vboxTable);
+								
+								datos.clear();
+								table = null;
+								count = 0;
+							} else if (count == dataList.size()) {
+								if (nombreDepartamento != null) {
+									table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos,
+											otroDeptoField);
+									ReportBackend.printForTable(table);
+								} else {
+									table = generarTable(stage, scene, datos, null, flagTodos, otroDeptoField);
+									ReportBackend.printForTable(table);
+								}
+								vboxTable.getChildren().addAll(table);
+								paneVbox.getChildren().addAll(vboxTable);
+								
+								datos.clear();
+								table = null;
+								count = 0;
+							}
+							
+						}
 					} catch (Exception e) {
 						logger.error(e.getMessage());
 					}
@@ -343,6 +377,7 @@ public class ReportWindow {
 
 			Button cancelButton = new Button("Cancelar");
 			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+
 				@Override
 				public void handle(ActionEvent event) {
 					GenerarReporteStage(stage, usuario);
@@ -350,13 +385,15 @@ public class ReportWindow {
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll(vboxTable, buttonsPane);
+			paneVbox.getChildren().addAll( buttonsPane);
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.setResizable(true);
 			stage.show();
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -370,8 +407,7 @@ public class ReportWindow {
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 		table = new TableView<Guia>();
 		table.setEditable(false);
-//table.setMaxHeight(920);
-table.setMinHeight(600);
+		table.setMinHeight(600);
 		FlowPane cabeceraFlow = new FlowPane(150, 5);
 
 		Text cabeceraText = new Text("Correspondencia");
