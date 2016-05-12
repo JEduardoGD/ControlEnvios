@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +31,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.OrigenBackend;
 import mx.trillas.ControlEnvio.persistence.dao.OrigenesDAO;
 import mx.trillas.ControlEnvio.persistence.impl.OrigenesDAODBImpl;
@@ -42,6 +44,14 @@ public class OrigenesWindow {
 
 	public void origenesStage(Stage stage) {
 
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		    }
+		});
+		
 		try {
 			VBox rootVbox = new VBox(25);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -170,6 +180,14 @@ public class OrigenesWindow {
 
 	public void modificarOrigenesStage(Stage stage) {
 
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		    }
+		});
+		
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();

@@ -19,7 +19,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 
 	@Override
 	public void altaGuia(Guia guia) throws Exception {
-		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
 
@@ -40,7 +39,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 
 	@Override
 	public Guia getGuia(String numero) throws Exception {
-		// TODO Auto-generated method stub
 		Session session = null;
 		Guia guia = null;
 
@@ -64,7 +62,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 
 	@Override
 	public List<Guia> getGuiaList() throws Exception {
-		// TODO Auto-generated method stub
 		Session session = null;
 		List<Guia> guias = new ArrayList<Guia>();
 
@@ -106,6 +103,9 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			for (Object guiaObj : objList) {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria());
+					}
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
 					}
@@ -146,6 +146,9 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			for (Object guiaObj : objList) {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria());
+					}
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
 					}
@@ -187,6 +190,9 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			for (Object guiaObj : objList) {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria());
+					}
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
 					}
@@ -223,6 +229,9 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			for (Object guiaObj : objList) {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
+					if (guia.getMensajeria() != null) {
+						HibernateUtil.initializeObject(guia.getMensajeria());
+					}
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
 					}

@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.log4j.pattern.FullLocationPatternConverter;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -40,6 +41,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.backend.ReportBackend;
@@ -70,6 +72,14 @@ public class ReportWindow {
 		Alert alertWarn = new Alert(AlertType.WARNING);
 		alertWarn.setTitle("Alerta generando reporte");
 
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		    	Platform.exit();
+				System.exit(0);
+		    }
+		});
+		
 		try {
 			BorderPane border = new BorderPane();
 			HBox headerPane = new HBox();
@@ -186,6 +196,7 @@ public class ReportWindow {
 			Button generarButton = new Button("Generar reporte");
 			generarButton.setCursor(Cursor.HAND);
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
+				
 				@Override
 				public void handle(ActionEvent event) {
 					if (datePickerInicio.getValue() == null) {
@@ -245,7 +256,7 @@ public class ReportWindow {
 		alert.setTitle("Alerta al generar reporte");
 
 		try {
-			ObservableList<Guia> datos = FXCollections.observableArrayList();
+//			ObservableList<Guia> datos = FXCollections.observableArrayList();
 			List<Guia> dataList = null;
 			List<Guia> dataFullList = null;
 
@@ -310,13 +321,19 @@ public class ReportWindow {
 	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin,
 			String nombreDepartamento, Boolean flagTodos, String otroDeptoField, List<Guia> dataList) {
 
-		ObservableList<Guia> datos = FXCollections.observableArrayList();
 
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		    }
+		});
+		
 		try {
 
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-			Scene scene = new Scene(paneVbox, 1110, 700);
+			Scene scene = new Scene(paneVbox, 610, 700);
 			VBox vboxTable = new VBox();
 
 			paneVbox.setAlignment(Pos.CENTER);
@@ -329,24 +346,28 @@ public class ReportWindow {
 
 					try {
 						int count = 0;
-						VBox table = null;
-
+//						VBox table = null;
+						ObservableList<Guia> datos = FXCollections.observableArrayList();
+						VBox table = new VBox(); 
+								
 						for (Guia element : dataList) {
 
 							count++;
 							datos.add(element);
-
-							if (count == 24) {
+						
+							if (count == 10) {
 								if (nombreDepartamento != null) {
 									table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos,
 											otroDeptoField);
+									vboxTable.getChildren().add(table);
+								
 									ReportBackend.printForTable(table);
-								} else {
+								}  else {
 									table = generarTable(stage, scene, datos, null, flagTodos, otroDeptoField);
 									ReportBackend.printForTable(table);
 								}
-								vboxTable.getChildren().addAll(table);
-								paneVbox.getChildren().addAll(vboxTable);
+//								vboxTable.getChildren().addAll(table);
+//								paneVbox.getChildren().addAll(vboxTable);
 								
 								datos.clear();
 								table = null;
@@ -356,16 +377,15 @@ public class ReportWindow {
 									table = generarTable(stage, scene, datos, nombreDepartamento, flagTodos,
 											otroDeptoField);
 									ReportBackend.printForTable(table);
-								} else {
+								}
+								 else {
+									 vboxTable.getChildren().addAll(table);
+										paneVbox.getChildren().addAll(vboxTable);
 									table = generarTable(stage, scene, datos, null, flagTodos, otroDeptoField);
 									ReportBackend.printForTable(table);
 								}
-								vboxTable.getChildren().addAll(table);
-								paneVbox.getChildren().addAll(vboxTable);
-								
-								datos.clear();
-								table = null;
-								count = 0;
+//								vboxTable.getChildren().addAll(table);
+//								paneVbox.getChildren().addAll(vboxTable);
 							}
 							
 						}
@@ -385,15 +405,13 @@ public class ReportWindow {
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll( buttonsPane);
+			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
 			stage.setResizable(true);
 			stage.show();
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -404,10 +422,12 @@ public class ReportWindow {
 		VBox vbox = new VBox();
 		TableView<Guia> table = null;
 
+		
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+		
 		table = new TableView<Guia>();
 		table.setEditable(false);
-		table.setMinHeight(600);
+//		table.setMinHeight(600);
 		FlowPane cabeceraFlow = new FlowPane(150, 5);
 
 		Text cabeceraText = new Text("Correspondencia");
@@ -440,7 +460,7 @@ public class ReportWindow {
 						ssp = new SimpleStringProperty(param.getValue().getMensajeria().getNombre());
 						return ssp;
 					} else {
-						return new SimpleStringProperty("");
+						return new SimpleStringProperty("Personalmente");
 					}
 				}
 			});
@@ -528,16 +548,15 @@ public class ReportWindow {
 			table.getColumns().addAll(numeroCol, mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol,
 					firmaCol);
 
-			vbox.setSpacing(8);
+			vbox.setSpacing(10);
 			vbox.setPadding(new Insets(4, 4, 4, 4));
-
-			vbox.getChildren().addAll(cabeceraFlow);
+//			vbox.getChildren().addAll(cabeceraFlow);
 			vbox.getChildren().addAll(table);
 			stage.setScene(scene);
 			stage.show();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return vbox;
 	}
