@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,6 +35,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.backend.DestinatarioBackend;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
@@ -55,6 +57,14 @@ public class DestinatariosWindow {
 
 	public void destinatariosStage(Stage stage) {
 
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		    }
+		});
+		
 		try {
 			VBox rootVbox = new VBox(25);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -210,6 +220,14 @@ public class DestinatariosWindow {
 
 	public void modificarDestinatariosStage(Stage stage) {
 
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		    }
+		});
+		
 		List<Departamento> deptosList = new ArrayList<Departamento>();
 		
 		ObservableList<String> deptosListCombo = null;

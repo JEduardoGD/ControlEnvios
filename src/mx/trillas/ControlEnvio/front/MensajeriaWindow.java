@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import javafx.scene.input.KeyEvent;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +40,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
 import mx.trillas.ControlEnvio.persistence.dao.MensajeriaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.MensajeriaDAODBImpl;
@@ -51,6 +53,14 @@ public class MensajeriaWindow {
 
 	public void mensajeriaStage(Stage stage) {
 
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		    	Platform.exit();
+				System.exit(0);
+		    }
+		});
+		
 		try {
 			VBox rootVbox = new VBox(25);
 			rootVbox.setAlignment(Pos.CENTER);
@@ -218,6 +228,14 @@ public class MensajeriaWindow {
 	
 	public void modificarMensajeriaStage(Stage stage) throws Exception {
 
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		    }
+		});
+		
 		VBox paneVbox = new VBox();
 		paneVbox.setAlignment(Pos.CENTER);
 		

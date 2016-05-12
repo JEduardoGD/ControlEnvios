@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.CapturarRegistro;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
@@ -53,6 +55,15 @@ public class CapturaWindow {
 	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
 
 	public void CapturaStage(Stage stage, Usuario usuario) {
+		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		    	Platform.exit();
+				System.exit(0);
+		    }
+		});
+	
 		try {
 			Alert alert = new Alert(AlertType.WARNING, "content text");
 			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
@@ -363,12 +374,14 @@ public class CapturaWindow {
 						alert.setContentText("El valor de la mensajería no puede ir vacio");
 						alert.showAndWait();
 						flag = false;
+					} else if (mensajeriaCombo.getValue().toString().equals("Personalmente")) {
+//						set null guia, mensajeria property
+						flag = true;
 					} else {
 						try {
 							mensajeria = mensajeriaDAO.getMensajeria(mensajeriaCombo.getValue().toString());
 							flag = true;
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							logger.error(e.getMessage());
 						}
 						guia.setMensajeria(mensajeria);
@@ -494,7 +507,6 @@ public class CapturaWindow {
 					try {
 						guiaObj = guiaDAO.getGuia(guiaField.getText());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
 					}
 					if (flag == true) { 
@@ -530,11 +542,17 @@ public class CapturaWindow {
 		confirmation.setTitle("Confirme los cambios");
 		confirmation.setHeaderText("¿Desea guardar los cambios?");
 
-		output += "\nPaquetería: " + guia.getMensajeria().getNombre();
+		if (guia.getMensajeria() != null && !(guia.getMensajeria().getNombre().toString().equals("")))
+			output += "\nPaquetería: " + guia.getMensajeria().getNombre();
+		else
+			output += "\nPaquetería: Personalmente";
+		
 		output += "\nNúmero Guia: " + guia.getNumero();
 
 		if (guia.getOrigen() != null && !(guia.getOrigen().getNombre().toString().equals("")))
 			output += "\nOrigen: " + guia.getOrigen().getNombre();
+		if (guia.getOrigen() == null)
+			output += "\nOrigen: " + guia.getOtroorigen();
 		if (guia.getDestinatario() != null && !(guia.getDestinatario().getNombre().toString().equals("")))
 			output += "\nDestinatario: " + guia.getDestinatario().getNombre();
 		if (guia.getDestinatario() != null && guia.getDestinatario().getDepartamento() != null
