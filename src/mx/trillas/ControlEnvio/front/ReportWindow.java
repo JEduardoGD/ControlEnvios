@@ -298,9 +298,7 @@ public class ReportWindow {
 				for (Guia element : dataFullList) {
 					datos.add(element);
 				}
-
 				reporteViewStage(stage, usuario, fechaInicio, fechaFin, datos);
-
 			}
 
 		} catch (Exception e) {
@@ -330,19 +328,17 @@ public class ReportWindow {
 			for (Guia element : dataList) {
 				if (datos == null)
 					datos = FXCollections.observableArrayList();
-				count++;
-				countRows++;
-				datos.add(element);
+					count++;
+					countRows++;
+					datos.add(element);
 
-				if (count == 23) {
+				if (count == 21) {
 
 					hashList.put(new Integer(counterList), datos);
 					counterList++;
 
 					count = 0;
 					datos = null;
-					// datos = null;
-					// datos = FXCollections.observableArrayList();
 				} else if (countRows == dataList.size()) {
 					hashList.put(new Integer(counterList), datos);
 					counterList++;
@@ -350,11 +346,8 @@ public class ReportWindow {
 			}
 
 			for (int i = 0; i < hashList.size(); i++) {
-				// table1 = generarTable(stage, scene, hashList.get(0));
 
-				vboxTable.getChildren().add(generarTable(stage, scene, hashList.get(i)));
-				// vboxTable.getChildren().get(0);
-				// ReportBackend.printForTable(table1);
+				vboxTable.getChildren().add((VBox) generarTable(hashList.get(i)));
 			}
 
 			// vboxTable.getChildren().add(table1);
@@ -365,17 +358,15 @@ public class ReportWindow {
 				public void handle(ActionEvent event) {
 					try {
 
-						for (int i = 0; i < hashList.size(); i++) {
-							if (vboxTable.getChildren().get(i) != null) {
+//						for (int i = 0; i < hashList.size(); i++) {
+//							if (vboxTable.getChildren().get(i) != null) {
 
-								if (vboxTable.getChildren().get(i) instanceof VBox) {
-									// table1 = generarTable(stage, scene,
-									// hashList.get(0));
-									ReportBackend.printForTable((VBox) vboxTable.getChildren().get(i));
-									// vboxTable.getChildren().remove(table);
-								}
-							}
-						}
+//								if (vboxTable.getChildren().get(i) instanceof VBox) {
+
+									ReportBackend.printForTable((VBox) vboxTable.getChildren().get(0));
+//								}
+//							}
+//						}
 						// ReportBackend.printForTable(table);
 						GenerarReporteStage(stage, usuario);
 
@@ -405,12 +396,12 @@ public class ReportWindow {
 		}
 	}
 
-	public VBox generarTable(Stage stage, Scene scene, ObservableList<Guia> datos) {
+	public VBox generarTable(ObservableList<Guia> datos) {
 
 		VBox vbox = new VBox();
 		TableView<Guia> table = null;
 
-		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+//		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
 		table = new TableView<Guia>();
 		table.setEditable(false);
@@ -511,8 +502,8 @@ public class ReportWindow {
 			vbox.setPadding(new Insets(4, 4, 4, 4));
 			vbox.getChildren().addAll(cabeceraTabla);
 			vbox.getChildren().addAll(table);
-			stage.setScene(scene);
-			stage.show();
+//			stage.setScene(scene);
+//			stage.show();
 
 		} catch (Exception e) {
 			e.printStackTrace();
