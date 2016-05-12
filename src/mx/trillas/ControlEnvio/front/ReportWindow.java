@@ -67,6 +67,7 @@ public class ReportWindow {
 	private static Date dateInicio = new Date();
 	private static Date dateFin = new Date();
 	VBox table1 = new VBox();
+
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
 		Alert alertWarn = new Alert(AlertType.WARNING);
@@ -316,63 +317,66 @@ public class ReportWindow {
 
 			Scene scene = new Scene(paneVbox, 1030, 560);
 			VBox vboxTable = new VBox();
-			
+
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
 			int count = 0;
 			int countRows = 0;
 			int counterList = 0;
-			
-			ObservableList<Guia> datos = FXCollections.observableArrayList();
-			
+
+			ObservableList<Guia> datos = null;
+
 			for (Guia element : dataList) {
+				if (datos == null)
+					datos = FXCollections.observableArrayList();
 				count++;
 				countRows++;
 				datos.add(element);
 
 				if (count == 23) {
-					
+
 					hashList.put(new Integer(counterList), datos);
-					counterList ++;
+					counterList++;
 
 					count = 0;
-					datos.clear();
-//					datos = null;
-//					datos = FXCollections.observableArrayList();
+					datos = null;
+					// datos = null;
+					// datos = FXCollections.observableArrayList();
 				} else if (countRows == dataList.size()) {
 					hashList.put(new Integer(counterList), datos);
 					counterList++;
 				}
 			}
-			
+
 			for (int i = 0; i < hashList.size(); i++) {
-//				table1 = generarTable(stage, scene, hashList.get(0));
-				
+				// table1 = generarTable(stage, scene, hashList.get(0));
+
 				vboxTable.getChildren().add(generarTable(stage, scene, hashList.get(i)));
-//				vboxTable.getChildren().get(0);
-//				ReportBackend.printForTable(table1);
+				// vboxTable.getChildren().get(0);
+				// ReportBackend.printForTable(table1);
 			}
-			
-//			vboxTable.getChildren().add(table1);
-			
+
+			// vboxTable.getChildren().add(table1);
+
 			Button printButton = new Button("Imprimir");
 			printButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					try {
 
-						for (int i=0; i < hashList.size(); i++) {
+						for (int i = 0; i < hashList.size(); i++) {
 							if (vboxTable.getChildren().get(i) != null) {
-								
+
 								if (vboxTable.getChildren().get(i) instanceof VBox) {
-//										table1 = generarTable(stage, scene, hashList.get(0));
-									ReportBackend.printForTable((VBox)vboxTable.getChildren().get(i));
-//										vboxTable.getChildren().remove(table);
+									// table1 = generarTable(stage, scene,
+									// hashList.get(0));
+									ReportBackend.printForTable((VBox) vboxTable.getChildren().get(i));
+									// vboxTable.getChildren().remove(table);
 								}
 							}
 						}
-//						ReportBackend.printForTable(table);
+						// ReportBackend.printForTable(table);
 						GenerarReporteStage(stage, usuario);
 
 					} catch (Exception e) {
@@ -380,7 +384,7 @@ public class ReportWindow {
 					}
 				}
 			});
-			
+
 			Button cancelButton = new Button("Cancelar");
 			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -390,7 +394,7 @@ public class ReportWindow {
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll( buttonsPane);
+			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Generar reporte");
