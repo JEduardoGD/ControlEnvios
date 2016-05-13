@@ -12,7 +12,7 @@
             <column name="f_destinatario" />
         </many-to-one>
         <many-to-one name="mensajeria" class="mx.trillas.ControlEnvio.persistence.pojos.Mensajeria" fetch="select">
-            <column name="f_mensajeria" not-null="true" />
+            <column name="f_mensajeria" />
         </many-to-one>
         <many-to-one name="origen" class="mx.trillas.ControlEnvio.persistence.pojos.Origen" fetch="select">
             <column name="f_origen" />

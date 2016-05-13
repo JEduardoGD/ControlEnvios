@@ -32,6 +32,53 @@ public class ReportBackend {
 		return date;
 	}
 	
+	public static void printForTable2(VBox table) throws Exception {
+
+		Printer printer = null;
+		PageLayout pageLayout = null;
+		double scaleX = 0;
+		double scaleY = 0;
+
+		try {
+			printer = Printer.getDefaultPrinter();
+
+			if (printer != null) {
+				pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
+
+				scaleX = pageLayout.getPrintableWidth() / table.getBoundsInParent().getWidth();
+				scaleY = pageLayout.getPrintableHeight() / table.getBoundsInParent().getHeight();
+				
+				table.setTranslateY(-340);
+				
+				table.getTransforms().add(new Scale(scaleX, scaleY));
+				PrinterJob job = PrinterJob.createPrinterJob(printer);
+				
+				job.getJobSettings().setPageLayout(pageLayout);
+				
+				if (job != null) {
+					boolean success = job.printPage(table);
+					if (success) {
+						job.endJob();
+					} else {
+						// put here any terrible message
+					}
+				}
+			} else {
+				logger.error("No existe impresora predeterminada");
+				
+				Alert alertWarn = new Alert(AlertType.WARNING, "content text");
+				alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+				alertWarn.setTitle("Alerta al imprimir");
+				
+				alertWarn.setHeaderText(null);
+				alertWarn.setContentText("No existe impresora predeterminada. Favor de configurar conexion de impresora en su equipo.");
+				alertWarn.showAndWait();
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	public static void printForTable(VBox table) throws Exception {
 
 		Printer printer = null;
@@ -43,12 +90,11 @@ public class ReportBackend {
 			printer = Printer.getDefaultPrinter();
 
 			if (printer != null) {
-				pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE,
-						Printer.MarginType.DEFAULT);
+				pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
 
 				scaleX = pageLayout.getPrintableWidth() / table.getBoundsInParent().getWidth();
 				scaleY = pageLayout.getPrintableHeight() / table.getBoundsInParent().getHeight();
-
+				
 				table.getTransforms().add(new Scale(scaleX, scaleY));
 				PrinterJob job = PrinterJob.createPrinterJob(printer);
 				
