@@ -374,7 +374,9 @@ public class ReportWindow {
 
 			for (int i = 0; i < hashList.size(); i++) {
 				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos, otroDeptoField) instanceof VBox) {
-					paneVbox.getChildren().addAll((VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField));
+					VBox vboxObj = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
+					vboxObj.setVisible(false);
+					paneVbox.getChildren().addAll(vboxObj);
 					countTableList++;
 				}
 			}
@@ -388,6 +390,7 @@ public class ReportWindow {
 							Node node = paneVbox.getChildren().get(i);
 							if (node != null && node instanceof VBox) {
 								VBox vboxPrinting = (VBox) node;
+								vboxPrinting.setVisible(true);
 								ReportBackend.printForTable(vboxPrinting);
 							}
 						}
