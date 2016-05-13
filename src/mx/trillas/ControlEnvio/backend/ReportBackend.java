@@ -11,6 +11,8 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.transform.Scale;
@@ -32,12 +34,6 @@ public class ReportBackend {
 	
 	public static void printForTable(VBox table) throws Exception {
 
-		Alert alertWarn = new Alert(AlertType.WARNING);
-		alertWarn.setTitle("Alerta al imprimir");
-
-		Alert alertInfo = new Alert(AlertType.INFORMATION);
-		alertInfo.setTitle("información");
-
 		Printer printer = null;
 		PageLayout pageLayout = null;
 		double scaleX = 0;
@@ -55,25 +51,27 @@ public class ReportBackend {
 
 				table.getTransforms().add(new Scale(scaleX, scaleY));
 				PrinterJob job = PrinterJob.createPrinterJob(printer);
+				
 				job.getJobSettings().setPageLayout(pageLayout);
 				
 				if (job != null) {
 					boolean success = job.printPage(table);
 					if (success) {
 						job.endJob();
-
-						alertInfo.setHeaderText(null);
-						alertInfo.setContentText("La Impresión ha concluido exitosamente");
-						alertInfo.showAndWait();
 					} else {
-						alertWarn.setHeaderText(null);
-						alertWarn.setContentText(
-								"La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
-						alertWarn.showAndWait();
+						// put here any terrible message
 					}
 				}
 			} else {
-				logger.error("No existe impresora instalada");
+				logger.error("No existe impresora predeterminada");
+				
+				Alert alertWarn = new Alert(AlertType.WARNING, "content text");
+				alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+				alertWarn.setTitle("Alerta al imprimir");
+				
+				alertWarn.setHeaderText(null);
+				alertWarn.setContentText("No existe impresora predeterminada. Favor de configurar conexion de impresora en su equipo.");
+				alertWarn.showAndWait();
 			}
 		} catch (Exception e) {
 			throw e;
