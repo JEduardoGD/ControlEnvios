@@ -77,7 +77,7 @@ public class ReportWindow {
 
 	Button printButton = new Button("Imprimir");
 	Button cancelButton = new Button("Cancelar");
-	
+
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -87,7 +87,7 @@ public class ReportWindow {
 				System.exit(0);
 		    }
 		});
-		
+
 		Alert alertWarn = new Alert(AlertType.WARNING, "content text");
 		alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 		alertWarn.setTitle("Alerta generando reporte");
@@ -104,7 +104,7 @@ public class ReportWindow {
 			HBox footer = new HBox();
 
 			List<Departamento> deptoList = departamentoDAO.getDepartamentoList();
-			
+
 			pane.setAlignment(Pos.CENTER);
 
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
@@ -211,7 +211,7 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					
+
 					Boolean flagOtroDeptoRepet = false;
 					if (deptoCombo.getValue().toString().equals("Otro") && !(otroDeptoField.getText().equals(""))) {
 						for (Departamento element : deptoList) {
@@ -339,16 +339,16 @@ public class ReportWindow {
 		        Platform.exit();
 		    }
 		});
-		
+
 		printButton.setVisible(true);
 		cancelButton.setVisible(true);
-		
+
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
-			
+
 			HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
-		
+
 //			Scene scene = new Scene(paneVbox, 300, 400);
 			Scene scene = new Scene(paneVbox, 610, 700);
 //			Scene scene = new Scene(paneVbox, 1110, 700);
@@ -364,7 +364,7 @@ public class ReportWindow {
 			for (Guia element : dataList) {
 				if (datos == null)
 					datos = FXCollections.observableArrayList();
-				
+
 				datos.add(element);
 
 				if (count == 22) {
@@ -373,7 +373,7 @@ public class ReportWindow {
 
 					count = 0;
 					datos = null;
-				} 
+				}
 				else if (countRows == dataList.size()-1) {
 					hashList.put(new Integer(counterList), datos);
 					counterList++;
@@ -390,7 +390,7 @@ public class ReportWindow {
 					countTableList++;
 				}
 			}
-		
+
 			cancelButton = new Button("Cancelar");
 			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -398,7 +398,7 @@ public class ReportWindow {
 					GenerarReporteStage(stage, usuario);
 				}
 			});
-			
+
 			printButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -407,32 +407,32 @@ public class ReportWindow {
 							Node node = paneVbox.getChildren().get(i);
 							if (node != null && node instanceof VBox) {
 								VBox vboxPrinting = (VBox) node;
-								
+
 								if (i == countTableList - 1) {
 									vboxPrinting.setTranslateY(-335);
 								}
 								vboxPrinting.setVisible(true);
-									
+
 								ReportBackend.printForTable(vboxPrinting);
 								printButton.setVisible(false);
 								cancelButton.setVisible(false);
 							}
 						}
-				        
+
 						Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
 						alertInfo.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 						alertInfo.setTitle("información");
-						
+
 						alertInfo.setHeaderText(null);
 						alertInfo.setContentText("La Impresión ha concluido exitosamente");
 						alertInfo.showAndWait();
-						
+
 //						datos = null;
 //						hashList = null;
 //						dateInicio = null;
 //						Date dateFin = null;
 //						countTableList = 0;
-						
+
 						GenerarReporteStage(stage, usuario);
 					} catch (Exception e) {
 						logger.error(e.getMessage());
@@ -440,7 +440,7 @@ public class ReportWindow {
 						Alert alertWarn = new Alert(AlertType.WARNING, "content text");
 						alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 						alertWarn.setTitle("Alerta al imprimir");
-						
+
 						alertWarn.setHeaderText(null);
 						alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
 						alertWarn.showAndWait();
@@ -457,12 +457,12 @@ public class ReportWindow {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		
+
 //		dateInicio = null;
 //		Date dateFin = null;
 //		countTableList = 0;
 	}
-	    
+
 	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos, String otroDeptoField) {
 
 		VBox vbox = new VBox();
@@ -470,9 +470,9 @@ public class ReportWindow {
 
 		table = new TableView<Guia>();
 		table.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
-		
+
 		table.setEditable(false);
-		
+
 		FlowPane cabeceraFlow = new FlowPane(150, 5);
 
 		Text cabeceraText = new Text("Correspondencia");
