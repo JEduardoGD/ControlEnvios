@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
+import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class ReportWindow {
 
@@ -73,7 +75,6 @@ public class ReportWindow {
 	
 	Button printButton = new Button("Imprimir");
 	Button cancelButton = new Button("Cancelar");
-
 	
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
@@ -193,8 +194,8 @@ public class ReportWindow {
 					}
 				}
 			});
-			deptoCombo.getItems().add("Todos");
 			deptoCombo.getItems().add("Otro");
+			deptoCombo.getItems().add("Todos");
 
 			container.getChildren().addAll(deptoCombo, otroDeptoField);
 			datePane.getChildren().addAll(datePickerInicio, datePickerFin, deptoCombo, otroDeptoField);
@@ -290,8 +291,7 @@ public class ReportWindow {
 					if (flagOtro == false) {
 						if (departamento != null) {
 
-							List<Destinatario> destinatariosList = destinatarioDAO
-									.getDestinatarioFromDeptoList(departamento);
+							List<Destinatario> destinatariosList = destinatarioDAO.getDestinatarioFromDeptoList(departamento);
 
 							dataFullList = new ArrayList<Guia>();
 
@@ -357,9 +357,19 @@ public class ReportWindow {
 			int countRows = 0;
 			int counterList = 0;
 
+			// sorting list
+			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
+			Collections.sort(ControlenvioList);
+			
+			List<Guia> dataSorted = new ArrayList<Guia>();
+			
+			for (Controlenvio controlenvio : ControlenvioList) {
+				dataSorted.add(controlenvio.getGuia());
+			}
+			
 			ObservableList<Guia> datos = null;
 
-			for (Guia element : dataList) {
+			for (Guia element : dataSorted) {
 				
 				if (datos == null) {
 					datos = FXCollections.observableArrayList();
@@ -402,10 +412,13 @@ public class ReportWindow {
 								VBox vboxPrinting = (VBox) node;
 								
 								if (i == countTableList - 1) {
-									if (countTableList == 1)
+									
+									if (countTableList == 1) {
 										vboxPrinting.setTranslateY(-111);
-									else 
+									}	
+									else { 
 										vboxPrinting.setTranslateY(-335);
+									}
 									
 									vboxPrinting.setVisible(true);
 									
@@ -416,7 +429,7 @@ public class ReportWindow {
 									
 									countTableList = 0;
 								} else {
-									vboxPrinting.setTranslateY(-335);
+//									vboxPrinting.setTranslateY(-335);
 									vboxPrinting.setVisible(true);
 										
 									ReportBackend.printForTable(vboxPrinting);
@@ -432,7 +445,7 @@ public class ReportWindow {
 						alertInfo.setTitle("información");
 						
 						alertInfo.setHeaderText(null);
-						alertInfo.setContentText("La Impresión ha concluido exitosamente");
+						alertInfo.setContentText("La Impresión ha finalizado correctamente");
 						alertInfo.showAndWait();
 												
 						GenerarReporteStage(stage, usuario);
@@ -457,7 +470,6 @@ public class ReportWindow {
 					GenerarReporteStage(stage, usuario);
 				}
 			});
-			
 		
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(printButton, cancelButton);
