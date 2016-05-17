@@ -375,7 +375,6 @@ public class CapturaWindow {
 						alert.showAndWait();
 						flag = false;
 					} else if (mensajeriaCombo.getValue().toString().equals("Personalmente")) {
-//						set null guia, mensajeria property
 						flag = true;
 					} else {
 						try {

@@ -1,4 +1,4 @@
-	package mx.trillas.ControlEnvio.persistence.impl;
+package mx.trillas.ControlEnvio.persistence.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,11 +7,11 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
-import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
@@ -86,7 +86,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 	}
 	
 	@Override
-	public List<Guia> getGuiaListByDateyDepto(Date fechaInicio, Date fechaFin, Departamento departamento ) throws Exception {
+	public List<Guia> getGuiaListBySortedDepto(Date fechaInicio, Date fechaFin) throws Exception {
 
 		Session session = null;
 		List<Guia> guias = new ArrayList<Guia>();
@@ -97,7 +97,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 
 			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
 			criteria.add(Restrictions.le("fecha", fechaFin));
-			criteria.add(Restrictions.eq("departamento", departamento));
+			criteria.addOrder(Order.asc("destinatario.departamento"));
 			
 			List<?> objList = criteria.list();
 			for (Object guiaObj : objList) {

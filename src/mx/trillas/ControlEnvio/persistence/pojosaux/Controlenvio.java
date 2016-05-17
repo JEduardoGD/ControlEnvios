@@ -1,77 +1,55 @@
 package mx.trillas.ControlEnvio.persistence.pojosaux;
 
-import java.util.Date;
+import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
-public class Controlenvio {
+public class Controlenvio implements Comparable<Controlenvio> {
+	
 	private Integer id;
-	private String mensajeria;
-	private String origen;
-	private String destinatario;
+	private Guia guia;
 	private String departamento;
-	private String observacion;
-	private Date fecha;
 	
 	public Controlenvio(){
 		
 	}
-	public Controlenvio(Integer id, String mensajeria, String origen, String destinatario, String departamento,
-			String observacion, Date fecha) {
+	
+	public Controlenvio(Integer id, Guia guia, String departamento) {
 		super();
 		this.id = id;
-		this.mensajeria = mensajeria;
-		this.origen = origen;
-		this.destinatario = destinatario;
 		this.departamento = departamento;
-		this.observacion = observacion;
-		this.fecha = fecha;
+		this.guia = guia;
 	}
+	
 	public Integer getId() {
 		return id;
 	}
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getMensajeria() {
-		return mensajeria;
+	
+	public Guia getGuia() {
+		return guia;
 	}
-	public void setMensajeria(String mensajeria) {
-		this.mensajeria = mensajeria;
+	
+	public void setGuia(Guia guia) {
+		this.guia = guia;
 	}
-	public String getOrigen() {
-		return origen;
-	}
-	public void setOrigen(String origen) {
-		this.origen = origen;
-	}
-	public String getDestinatario() {
-		return destinatario;
-	}
-	public void setDestinatario(String destinatario) {
-		this.destinatario = destinatario;
-	}
+	
 	public String getDepartamento() {
 		return departamento;
 	}
+	
 	public void setDepartamento(String departamento) {
 		this.departamento = departamento;
 	}
-	public String getObservacion() {
-		return observacion;
-	}
-	public void setObservacion(String observacion) {
-		this.observacion = observacion;
-	}
-	public Date getFecha() {
-		return fecha;
-	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	
+	@Override
+	public int compareTo(Controlenvio controlenvio) {
+		return this.getDepartamento().compareTo(controlenvio.getDepartamento());
 	}
 	
 	@Override
 	public String toString() {
-		return "Controlenvio [id=" + id + ", mensajeria=" + mensajeria + ", origen=" + origen + ", destinatario="
-				+ destinatario + ", departamento=" + departamento + ", observacion=" + observacion + ", fecha=" + fecha
-				+ "]";
+		return "Controlenvio [id=" + id + ", guiaNumber=" + guia.getNumero()  + ", departamento=" + departamento + "]";
 	}
 }

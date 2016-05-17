@@ -1,16 +1,55 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
+#confirmText {
+	-fx-font-size: 16pt;
+     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-text-fill: #000;
+    -fx-opacity: 0.8;
+}
+
 .cabeceraClass {
 	-fx-font-size: 8pt;
     -fx-font-family: "Arial";
-    -fx-text-fill: #333;
-    -fx-opacity: 0.8;
+    -fx-text-fill: #000;
+    -fx-opacity: 0.9;
 }
 
 .table-row-cell {
     -fx-cell-size: 12px;
     -fx-font-size:  7;
+    -fx-table-cell-border-color: #ccc;
 }
+
+.table-row-cell:odd{
+    -fx-table-cell-border-color: #ccc;
+}
+
+.table-row-cell:selected {
+    -fx-table-cell-border-color: #ccc;
+}
+
+.table-row-cell:focus{
+	-fx-table-cell-border-color: #ccc;
+}
+
+.table-row-cell:filled:selected { 
+  -fx-background: -fx-control-inner-background ;
+  -fx-background-color: -fx-table-cell-border-color, -fx-background ; 
+  -fx-background-insets: 0, 0 0 1 0 ;
+  /*  -fx-table-cell-border-color: derive(-fx-color, 5%);*/
+  -fx-table-cell-border-color: #ccc;
+}
+.table-row-cell:odd:filled:selected {
+  -fx-background: -fx-control-inner-background-alt ;
+}
+
+/* 
+.highlightedRow {
+    -fx-background-color: gray;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}*/
 
 .table-view {
     -fx-text-fill: red;

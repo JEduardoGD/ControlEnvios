@@ -5,11 +5,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
@@ -59,6 +58,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
+import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 
 public class ReportWindow {
 
@@ -68,13 +68,13 @@ public class ReportWindow {
 	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
 	private static DestinatarioDAO destinatarioDAO = new DestinatarioDAODBImpl();
 
-//	ObservableList<Guia> datos = FXCollections.observableArrayList();
-//	ObservableList<Guia> datosFull = FXCollections.observableArrayList();
+	TableView<Guia> table = null;
 
 	Date dateInicio = new Date();
 	Date dateFin = new Date();
-	int countTableList = 0;
 
+	int countTableList = 0;
+	
 	Button printButton = new Button("Imprimir");
 	Button cancelButton = new Button("Cancelar");
 
@@ -87,7 +87,7 @@ public class ReportWindow {
 				System.exit(0);
 		    }
 		});
-
+		
 		Alert alertWarn = new Alert(AlertType.WARNING, "content text");
 		alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 		alertWarn.setTitle("Alerta generando reporte");
@@ -104,7 +104,7 @@ public class ReportWindow {
 			HBox footer = new HBox();
 
 			List<Departamento> deptoList = departamentoDAO.getDepartamentoList();
-
+			
 			pane.setAlignment(Pos.CENTER);
 
 			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
@@ -196,8 +196,8 @@ public class ReportWindow {
 					}
 				}
 			});
-			deptoCombo.getItems().add("Todos");
 			deptoCombo.getItems().add("Otro");
+			deptoCombo.getItems().add("Todos");
 
 			container.getChildren().addAll(deptoCombo, otroDeptoField);
 			datePane.getChildren().addAll(datePickerInicio, datePickerFin, deptoCombo, otroDeptoField);
@@ -211,15 +211,16 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-
+					
 					Boolean flagOtroDeptoRepet = false;
-					if (deptoCombo.getValue().toString().equals("Otro") && !(otroDeptoField.getText().equals(""))) {
+					if (deptoCombo.getValue() != null && deptoCombo.getValue().toString().equals("Otro") && !(otroDeptoField.getText().equals(""))) {
 						for (Departamento element : deptoList) {
 							if (element.getNombre().equals(otroDeptoField.getText())){
 								flagOtroDeptoRepet = true;
 							}
 						}
 					}
+					
 					if (datePickerInicio.getValue() == null) {
 						alertWarn.setHeaderText("Error en el manejo de datos");
 						alertWarn.setContentText("Seleccione la fecha de inicio");
@@ -292,8 +293,7 @@ public class ReportWindow {
 					if (flagOtro == false) {
 						if (departamento != null) {
 
-							List<Destinatario> destinatariosList = destinatarioDAO
-									.getDestinatarioFromDeptoList(departamento);
+							List<Destinatario> destinatariosList = destinatarioDAO.getDestinatarioFromDeptoList(departamento);
 
 							dataFullList = new ArrayList<Guia>();
 
@@ -339,31 +339,51 @@ public class ReportWindow {
 		        Platform.exit();
 		    }
 		});
-
+		
+		VBox paneVbox = new VBox();
+		FlowPane buttonsPane = new FlowPane();
+		
+		Text confirmText = new Text("");
+		confirmText.setId("confirmText");
+		confirmText.setText("Se encontraron " + dataList.size() + " registros. ¿Desea mandar a imprimir?");
+		paneVbox.getChildren().add(confirmText);
+		
+		HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
+	
+//		Scene scene = new Scene(paneVbox, 610, 700);
+		Scene scene = new Scene(paneVbox, 1110, 700);
+		
+		paneVbox.setAlignment(Pos.CENTER);
+		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 		printButton.setVisible(true);
 		cancelButton.setVisible(true);
-
+		
 		try {
-			VBox paneVbox = new VBox();
-			FlowPane buttonsPane = new FlowPane();
-
-			HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
-
-//			Scene scene = new Scene(paneVbox, 300, 400);
-			Scene scene = new Scene(paneVbox, 610, 700);
-//			Scene scene = new Scene(paneVbox, 1110, 700);
-			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 
 			int count = 0;
 			int countRows = 0;
 			int counterList = 0;
 
+			// Sorting list
+			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
+			Collections.sort(ControlenvioList);
+			
+			List<Guia> dataSorted = new ArrayList<Guia>();
+
+			for (Controlenvio controlenvio : ControlenvioList) {
+				dataSorted.add(controlenvio.getGuia());
+			}
+			
 			ObservableList<Guia> datos = null;
 
-			for (Guia element : dataList) {
-				if (datos == null)
+			for (Guia element : dataSorted) {
+				
+				if (datos == null) {
 					datos = FXCollections.observableArrayList();
+				}
+				
+				count++;
+				countRows++;
 
 				datos.add(element);
 
@@ -373,66 +393,85 @@ public class ReportWindow {
 
 					count = 0;
 					datos = null;
-				}
+				} 
 				else if (countRows == dataList.size()-1) {
 					hashList.put(new Integer(counterList), datos);
 					counterList++;
 				}
-				count++;
-				countRows++;
 			}
 
+			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap2(ControlenvioList);
+			
+			for (int i = 0;  i < hashMap.size();  i++){
+				List<Guia> lista = hashMap.get(i);
+				
+				for (Guia element : lista) {
+					String depto = null;
+					
+					if (element.getDestinatario() == null) {
+						depto = element.getOtrodepartamento();
+					} else {
+						depto = element.getDestinatario().getDepartamento().getNombre();
+					}
+					
+					System.out.println("Lista " + i + "   element: " + element.getId() + "   " + depto  + "    " + element.getNumero());
+				}
+			}
+			
+			/*
 			for (int i = 0; i < hashList.size(); i++) {
 				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos, otroDeptoField) instanceof VBox) {
-					VBox vboxObj = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
-					vboxObj.setVisible(false);
-					paneVbox.getChildren().addAll(vboxObj);
+					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
+					tables.setVisible(false);
+					paneVbox.getChildren().addAll(tables);
 					countTableList++;
 				}
 			}
-
-			cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					GenerarReporteStage(stage, usuario);
-				}
-			});
-
+			*/
 			printButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
+					paneVbox.getChildren().remove(confirmText);
+					
+//					printButton.setVisible(false);
+//					cancelButton.setVisible(false);
+					
 					try {
 						for (int i = 0; i < countTableList; i++) {
 							Node node = paneVbox.getChildren().get(i);
 							if (node != null && node instanceof VBox) {
 								VBox vboxPrinting = (VBox) node;
-
+								
 								if (i == countTableList - 1) {
-									vboxPrinting.setTranslateY(-335);
+									
+									if (countTableList == 1) {
+										vboxPrinting.setTranslateY(-120);
+									}	
+									else { 
+										vboxPrinting.setTranslateY(-335);
+									}
+									
+									vboxPrinting.setVisible(true);
+									
+									ReportBackend.printForTable(vboxPrinting);
+									
+									countTableList = 0;
+								} else {
+									vboxPrinting.setVisible(true);
+									ReportBackend.printForTable(vboxPrinting);
 								}
-								vboxPrinting.setVisible(true);
-
-								ReportBackend.printForTable(vboxPrinting);
-								printButton.setVisible(false);
-								cancelButton.setVisible(false);
+								System.out.println("countTableList: " + countTableList);
 							}
 						}
-
+				        
 						Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
 						alertInfo.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 						alertInfo.setTitle("información");
-
+						
 						alertInfo.setHeaderText(null);
-						alertInfo.setContentText("La Impresión ha concluido exitosamente");
+						alertInfo.setContentText("La Impresión ha finalizado correctamente");
 						alertInfo.showAndWait();
-
-//						datos = null;
-//						hashList = null;
-//						dateInicio = null;
-//						Date dateFin = null;
-//						countTableList = 0;
-
+												
 						GenerarReporteStage(stage, usuario);
 					} catch (Exception e) {
 						logger.error(e.getMessage());
@@ -440,13 +479,22 @@ public class ReportWindow {
 						Alert alertWarn = new Alert(AlertType.WARNING, "content text");
 						alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 						alertWarn.setTitle("Alerta al imprimir");
-
+						
 						alertWarn.setHeaderText(null);
 						alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
 						alertWarn.showAndWait();
 					}
 				}
 			});
+			
+			cancelButton = new Button("Cancelar");
+			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					GenerarReporteStage(stage, usuario);
+				}
+			});
+		
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(printButton, cancelButton);
 			paneVbox.getChildren().addAll(buttonsPane);
@@ -457,22 +505,19 @@ public class ReportWindow {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-
-//		dateInicio = null;
-//		Date dateFin = null;
-//		countTableList = 0;
 	}
-
+	    
 	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos, String otroDeptoField) {
 
 		VBox vbox = new VBox();
-		TableView<Guia> table = null;
+//		TableView<Guia> table = null;
 
 		table = new TableView<Guia>();
 		table.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
-
 		table.setEditable(false);
-
+		
+		table.getSelectionModel().clearSelection();
+		
 		FlowPane cabeceraFlow = new FlowPane(150, 5);
 
 		Text cabeceraText = new Text("Correspondencia");
@@ -488,6 +533,7 @@ public class ReportWindow {
 		try {
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
 			numeroCol.setMinWidth(190);
+			numeroCol.setSortable(false);
 			numeroCol.setCellValueFactory(new PropertyValueFactory<>("numero"));
 			numeroCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			numeroCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
@@ -497,6 +543,7 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> mensajeraCol = new TableColumn<>("Mensajeria");
 			mensajeraCol.setMinWidth(130);
+			mensajeraCol.setSortable(false);
 			mensajeraCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
@@ -517,6 +564,7 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> origenCol = new TableColumn<>("Origen");
 			origenCol.setMinWidth(120);
+			origenCol.setSortable(false);
 			origenCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
@@ -537,6 +585,7 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("Destinatario");
 			destinatarioCol.setMinWidth(190);
+			destinatarioCol.setSortable(false);
 			destinatarioCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
@@ -569,6 +618,7 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> fechaCol = new TableColumn<>("Fecha");
 			fechaCol.setMinWidth(160);
+			fechaCol.setSortable(false);
 			fechaCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
@@ -579,6 +629,7 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> observacionCol = new TableColumn<>("Observacion");
 			observacionCol.setMinWidth(160);
+			observacionCol.setSortable(false);
 			observacionCol.setCellValueFactory(new PropertyValueFactory<>("observacion"));
 			observacionCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			observacionCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
@@ -587,7 +638,12 @@ public class ReportWindow {
 
 			TableColumn<Guia, String> firmaCol = new TableColumn<>("Firma");
 			firmaCol.setMinWidth(150);
+			firmaCol.setSortable(false);
 
+			table.focusedProperty().addListener((a,b,c) -> {
+				table.getSelectionModel().clearSelection();
+			});
+			
 			table.setItems(datos);
 			table.getColumns().addAll(numeroCol, mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol,
 					firmaCol);

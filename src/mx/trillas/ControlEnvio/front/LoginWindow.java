@@ -88,7 +88,7 @@ public class LoginWindow {
 							logger.error(e.getMessage());
 						}
 			        	if (!(existUserBoolean)) {
-			        		alert.setContentText("El usuario indicado no existe");
+			        		alert.setContentText("El usuario o la contraseña indicada no existe");
 							alert.showAndWait();
 			        	}
 			        	if (LoginBackend.checkLoginData(usernameField, passwdField)) {
