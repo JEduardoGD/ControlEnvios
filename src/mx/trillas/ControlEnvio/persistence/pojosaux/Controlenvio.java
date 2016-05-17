@@ -26,6 +26,7 @@ public class Controlenvio implements Comparable<Controlenvio> {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 	public Guia getGuia() {
 		return guia;
 	}

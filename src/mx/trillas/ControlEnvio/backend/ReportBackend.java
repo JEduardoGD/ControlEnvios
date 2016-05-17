@@ -3,10 +3,12 @@ package mx.trillas.ControlEnvio.backend;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import javafx.collections.ObservableList;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
@@ -35,23 +37,7 @@ public class ReportBackend {
         date = calendar.getTime();
 		return date;
 	}
-	
-	public static List<Controlenvio> guiaToControlenvio(List<Guia> guiaList) {
-		
-		List<Controlenvio> ControlenvioList = new ArrayList<Controlenvio>();
-		
-		for ( Guia guia : guiaList ) {
-			Controlenvio controlenvio = new Controlenvio();
-			controlenvio.setGuia(guia);
-			if (guia.getDestinatario() != null)
-				controlenvio.setDepartamento(guia.getDestinatario().getDepartamento().getNombre());
-			else 
-				controlenvio.setDepartamento(guia.getOtrodepartamento());
-			ControlenvioList.add(controlenvio);
-		}
-		return ControlenvioList;
-	}
-	
+
 	public static void printForTable(VBox table) throws Exception {
 
 		Printer printer = null;
@@ -95,5 +81,82 @@ public class ReportBackend {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	public static List<Controlenvio> guiaToControlenvio(List<Guia> guiaList) {
+		
+		List<Controlenvio> ControlenvioList = new ArrayList<Controlenvio>();
+		
+		for ( Guia guia : guiaList ) {
+			Controlenvio controlenvio = new Controlenvio();
+			controlenvio.setGuia(guia);
+			if (guia.getDestinatario() != null)
+				controlenvio.setDepartamento(guia.getDestinatario().getDepartamento().getNombre());
+			else 
+				controlenvio.setDepartamento(guia.getOtrodepartamento());
+			ControlenvioList.add(controlenvio);
+		}
+		return ControlenvioList;
+	}
+	
+	// Esta cosa devuelve un hashmap con las listas separadas por departamento
+	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap (List<Guia> dataSorted) {
+		
+		HashMap<Integer, ArrayList<Guia>> hashMap = new HashMap<Integer, ArrayList<Guia>>();
+		
+		int i = 0;
+		Boolean flag = true;
+		
+		while(flag==true) {
+		
+			hashMap.put(i, new ArrayList<Guia>());
+			
+			List<Guia> list = hashMap.get(i);
+			
+			for (int j = 0; j < dataSorted.size(); j++) {
+				if (j == dataSorted.size()){
+					flag = false;
+					break;
+				}
+				Guia guia = dataSorted.get(j);
+				String departamento = guia.getDestinatario().getDepartamento().getNombre();
+				
+				if (!list.contains(guia)) {
+					i++;
+					break;
+				} else {
+					list.add(guia);
+				}
+			}
+		}
+		return hashMap;
+	}
+
+	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap2 (List<Controlenvio> controlenvioList) {
+	
+		HashMap<Integer, ArrayList<Guia>> hashMap = new HashMap<Integer, ArrayList<Guia>>();
+		
+		String tempDepartamento = null;
+		
+		int i = 0;
+		hashMap.put(i, new ArrayList<Guia>());
+		
+		for (Controlenvio controlenvio : controlenvioList) {
+			
+			if (tempDepartamento == null)
+				tempDepartamento = controlenvio.getDepartamento();
+				
+			List<Guia> guiaList = hashMap.get(i);
+			String departamento = controlenvio.getDepartamento();
+				
+			if (tempDepartamento.equals(departamento)){
+				guiaList.add(controlenvio.getGuia());
+			} else {
+				i++;
+				hashMap.put(i, new ArrayList<Guia>());
+				tempDepartamento = controlenvio.getDepartamento();
+			}
+		}
+		return hashMap;
 	}
 }
