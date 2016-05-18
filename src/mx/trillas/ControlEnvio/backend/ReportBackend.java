@@ -54,7 +54,13 @@ public class ReportBackend {
 				scaleX = pageLayout.getPrintableWidth() / table.getBoundsInParent().getWidth();
 				scaleY = pageLayout.getPrintableHeight() / table.getBoundsInParent().getHeight();
 				
-				table.getTransforms().add(new Scale(scaleX, scaleY));
+				System.out.println(" scaleX=" + scaleX);
+				System.out.println(" scaleY=" + scaleY);
+				
+//				scaleX=0.6612612612612613
+//				scaleY=1.4580838323353293
+				
+				table.getTransforms().add(new Scale(0.6612612612612613, 1.4580838323353293));
 				PrinterJob job = PrinterJob.createPrinterJob(printer);
 				
 				job.getJobSettings().setPageLayout(pageLayout);
@@ -98,7 +104,7 @@ public class ReportBackend {
 		}
 		return ControlenvioList;
 	}
-	
+	/*
 	// Esta cosa devuelve un hashmap con las listas separadas por departamento
 	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap (List<Guia> dataSorted) {
 		
@@ -131,8 +137,8 @@ public class ReportBackend {
 		}
 		return hashMap;
 	}
-
-	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap2 (List<Controlenvio> controlenvioList) {
+*/
+	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap (List<Controlenvio> controlenvioList) {
 	
 		HashMap<Integer, ArrayList<Guia>> hashMap = new HashMap<Integer, ArrayList<Guia>>();
 		
@@ -155,6 +161,8 @@ public class ReportBackend {
 				i++;
 				hashMap.put(i, new ArrayList<Guia>());
 				tempDepartamento = controlenvio.getDepartamento();
+				List<Guia> tempList = hashMap.get(i);
+				tempList.add(controlenvio.getGuia());
 			}
 		}
 		return hashMap;

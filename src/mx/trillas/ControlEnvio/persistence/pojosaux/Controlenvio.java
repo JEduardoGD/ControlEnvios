@@ -45,7 +45,19 @@ public class Controlenvio implements Comparable<Controlenvio> {
 	
 	@Override
 	public int compareTo(Controlenvio controlenvio) {
-		return this.getDepartamento().compareTo(controlenvio.getDepartamento());
+		
+//		System.out.println("this.getDepartamento()=" +this.getDepartamento()
+//		+ "  controlenvio.getDepartamento()=" + controlenvio.getDepartamento() 
+//		+ "  compareTo=" + this.getDepartamento().compareTo(controlenvio.getDepartamento()));
+		
+		if (this.getDepartamento().compareTo(controlenvio.getDepartamento()) == 0)
+			return 0;
+		if (this.getDepartamento().compareTo(controlenvio.getDepartamento()) > 0)
+			return 1;
+		if (this.getDepartamento().compareTo(controlenvio.getDepartamento()) < 0)
+			return -1;
+		
+		return 0;
 	}
 	
 	@Override

@@ -59,6 +59,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
+import mx.trillas.ControlEnvio.persistence.pojosaux.VboxTable;
 
 public class ReportWindow {
 
@@ -368,41 +369,10 @@ public class ReportWindow {
 			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
 			Collections.sort(ControlenvioList);
 			
-			List<Guia> dataSorted = new ArrayList<Guia>();
-
-			for (Controlenvio controlenvio : ControlenvioList) {
-				dataSorted.add(controlenvio.getGuia());
-			}
+			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap(ControlenvioList);
+			HashMap<Integer, VboxTable> vboxTableMap = new HashMap<Integer, VboxTable>();
 			
-			ObservableList<Guia> datos = null;
-
-			for (Guia element : dataSorted) {
-				
-				if (datos == null) {
-					datos = FXCollections.observableArrayList();
-				}
-				
-				count++;
-				countRows++;
-
-				datos.add(element);
-
-				if (count == 22) {
-					hashList.put(new Integer(counterList), datos);
-					counterList++;
-
-					count = 0;
-					datos = null;
-				} 
-				else if (countRows == dataList.size()-1) {
-					hashList.put(new Integer(counterList), datos);
-					counterList++;
-				}
-			}
-
-			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap2(ControlenvioList);
-			
-			for (int i = 0;  i < hashMap.size();  i++){
+			for (int i = 0;  i < hashMap.size();  i++) {
 				List<Guia> lista = hashMap.get(i);
 				
 				for (Guia element : lista) {
@@ -414,94 +384,161 @@ public class ReportWindow {
 						depto = element.getDestinatario().getDepartamento().getNombre();
 					}
 					
-					System.out.println("Lista " + i + "   element: " + element.getId() + "   " + depto  + "    " + element.getNumero());
+					System.out.println("id=" + element.getId() + "  number=" + element.getNumero() + "  departamento=" + depto);
 				}
 			}
+			System.out.println("");
 			
 			/*
+			List<Guia> dataSorted = new ArrayList<Guia>();
+
+			for (Controlenvio controlenvio : ControlenvioList) {
+				dataSorted.add(controlenvio.getGuia());
+			}
+			*/
+			ObservableList<Guia> datos = null;
+
+			for (int i = 0; i < hashMap.size(); i ++) {
+
+				List<Guia> guiaList = hashMap.get(i);
+
+				for (Guia element : guiaList) {
+					System.out.println("ListaNo= "+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
+			
+					if (datos == null) {
+						datos = FXCollections.observableArrayList();
+					}
+					
+					count++;
+					countRows++;
+	
+					datos.add(element);
+	
+					if (count == 22) {
+						hashList.put(new Integer(counterList), datos);
+						counterList++;
+	
+						count = 0;	
+						datos = null;
+					} 
+					else if (countRows == guiaList.size()) {
+						hashList.put(new Integer(counterList), datos);
+						count = 0;
+						countRows = 0;
+						
+						counterList++;
+						datos = null;
+					}
+				}
+			}
+
 			for (int i = 0; i < hashList.size(); i++) {
+//				System.out.println("hashList.size()="+hashList.size());
 				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos, otroDeptoField) instanceof VBox) {
 					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
 					tables.setVisible(false);
+//					
 					paneVbox.getChildren().addAll(tables);
+//					int index = paneVbox.getChildren().indexOf(tables);
+//					VboxTable test = new test()
+					List<Guia> guiaList = hashList.get(i);
+					vboxTableMap.put(i, new VboxTable(i, tables, guiaList.size()));
+//					System.out.println("container= " + paneVbox.getChildren().get(i));
 					countTableList++;
 				}
 			}
-			*/
-			printButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					paneVbox.getChildren().remove(confirmText);
-					
-//					printButton.setVisible(false);
-//					cancelButton.setVisible(false);
-					
-					try {
-						for (int i = 0; i < countTableList; i++) {
-							Node node = paneVbox.getChildren().get(i);
-							if (node != null && node instanceof VBox) {
-								VBox vboxPrinting = (VBox) node;
-								
-								if (i == countTableList - 1) {
-									
-									if (countTableList == 1) {
-										vboxPrinting.setTranslateY(-120);
-									}	
-									else { 
-										vboxPrinting.setTranslateY(-335);
-									}
-									
-									vboxPrinting.setVisible(true);
-									
-									ReportBackend.printForTable(vboxPrinting);
-									
-									countTableList = 0;
-								} else {
-									vboxPrinting.setVisible(true);
-									ReportBackend.printForTable(vboxPrinting);
+//		System.out.println("countTableList= " + countTableList);
+		
+		for (int i = 0; i < hashList.size(); i++) {
+			List<Guia> guiaList = hashList.get(i);
+			for (Guia element : guiaList) {
+				System.out.println("i=" + i + "  hashList element: " + element);
+			}
+			System.out.println("");
+		}
+		
+		printButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+				confirmText.setVisible(false);
+				
+				try {
+//					for (int i = 0; i < countTableList + 1; i++) {
+//						Node node = paneVbox.getChildren().get(i);
+						VboxTable vboxtableObj = vboxTableMap.get(0);
+						Node node = vboxtableObj.getVbox();
+						
+						if (node != null && node instanceof VBox) {
+							
+							VBox vboxPrinting = (VBox) node;
+						
+								if (vboxtableObj.getRowsNumber() < 20) {
+//									vboxPrinting.setTranslateY(-335);
+								}	
+								else { 
+									vboxPrinting.setTranslateY(-335);
 								}
-								System.out.println("countTableList: " + countTableList);
-							}
-						}
-				        
-						Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
-						alertInfo.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
-						alertInfo.setTitle("información");
-						
-						alertInfo.setHeaderText(null);
-						alertInfo.setContentText("La Impresión ha finalizado correctamente");
-						alertInfo.showAndWait();
-												
-						GenerarReporteStage(stage, usuario);
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-						e.printStackTrace();
-						Alert alertWarn = new Alert(AlertType.WARNING, "content text");
-						alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
-						alertWarn.setTitle("Alerta al imprimir");
-						
-						alertWarn.setHeaderText(null);
-						alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
-						alertWarn.showAndWait();
+								
+								vboxPrinting.setVisible(true);
+								ReportBackend.printForTable(vboxPrinting);
+
+								vboxPrinting.setVisible(false);
+								
+								countTableList = 0;
+								
+//							} 
+//								else {
+//								vboxPrinting.setVisible(true);
+//								ReportBackend.printForTable(vboxPrinting);
+//									countTableList = 0;
+//								
+//								vboxPrinting.setVisible(false);
+//							}
+//								System.out.println("countTableList: " + countTableList);
 					}
-				}
-			});
-			
-			cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
+			        
+					Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
+					alertInfo.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
+					alertInfo.setTitle("información");
+					
+					alertInfo.setHeaderText(null);
+					alertInfo.setContentText("La Impresión ha finalizado correctamente");
+					alertInfo.showAndWait();
+											
+					GenerarReporteStage(stage, usuario);
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+					e.printStackTrace();
+					Alert alertWarn = new Alert(AlertType.WARNING, "content text");
+					alertWarn.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
+					alertWarn.setTitle("Alerta al imprimir");
+					
+					alertWarn.setHeaderText(null);
+					alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
+					alertWarn.showAndWait();
+					
 					GenerarReporteStage(stage, usuario);
 				}
-			});
+			}
+		});
+			
+		cancelButton = new Button("Cancelar");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				GenerarReporteStage(stage, usuario);
+			}
+		});
 		
-			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll(buttonsPane);
+		buttonsPane.setAlignment(Pos.BASELINE_CENTER);
+		buttonsPane.getChildren().addAll(printButton, cancelButton);
+		paneVbox.getChildren().addAll(buttonsPane);
 
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Generar reporte");
-			stage.setResizable(false);
+		stage.setScene(scene);
+		stage.setTitle("Control de paquetería - Generar reporte");
+		stage.setResizable(true);
+		
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
