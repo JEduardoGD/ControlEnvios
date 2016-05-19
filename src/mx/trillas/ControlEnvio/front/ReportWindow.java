@@ -22,7 +22,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -37,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -59,6 +59,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
+import mx.trillas.ControlEnvio.persistence.pojosaux.VboxTable;
 
 public class ReportWindow {
 
@@ -97,8 +98,9 @@ public class ReportWindow {
 			HBox headerPane = new HBox();
 			VBox pane = new VBox();
 
-			Scene scene = new Scene(border, 970, 500);
-
+//			Scene scene = new Scene(border, 970, 500);
+			Scene scene = new Scene(border, 950, 500);
+			
 			FlowPane labelsPane = new FlowPane(45, 80);
 			FlowPane datePane = new FlowPane(20, 100);
 			HBox footer = new HBox();
@@ -342,16 +344,17 @@ public class ReportWindow {
 		
 		VBox paneVbox = new VBox();
 		FlowPane buttonsPane = new FlowPane();
+		buttonsPane.setVisible(true);
 		
 		Text confirmText = new Text("");
 		confirmText.setId("confirmText");
-		confirmText.setText("Se encontraron " + dataList.size() + " registros. ¿Desea mandar a imprimir?");
+		confirmText.setText("Se encontraron " + dataList.size() + " registros. ¿Desea mandar a imprimir?\n\n\n");
 		paneVbox.getChildren().add(confirmText);
 		
 		HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
 	
-//		Scene scene = new Scene(paneVbox, 610, 700);
-		Scene scene = new Scene(paneVbox, 1110, 700);
+		Scene scene = new Scene(paneVbox, 950, 500);
+//		Scene scene = new Scene(paneVbox, 1110, 700);
 		
 		paneVbox.setAlignment(Pos.CENTER);
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -364,45 +367,16 @@ public class ReportWindow {
 			int countRows = 0;
 			int counterList = 0;
 
-			// Sorting list
+			// Rutina para entregar resultados organizados en orden alfabetico
 			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
 			Collections.sort(ControlenvioList);
 			
-			List<Guia> dataSorted = new ArrayList<Guia>();
-
-			for (Controlenvio controlenvio : ControlenvioList) {
-				dataSorted.add(controlenvio.getGuia());
-			}
+			// Rutina para dividir resultado en listas de departamentos
+			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap(ControlenvioList);
 			
-			ObservableList<Guia> datos = null;
-
-			for (Guia element : dataSorted) {
-				
-				if (datos == null) {
-					datos = FXCollections.observableArrayList();
-				}
-				
-				count++;
-				countRows++;
-
-				datos.add(element);
-
-				if (count == 22) {
-					hashList.put(new Integer(counterList), datos);
-					counterList++;
-
-					count = 0;
-					datos = null;
-				} 
-				else if (countRows == dataList.size()-1) {
-					hashList.put(new Integer(counterList), datos);
-					counterList++;
-				}
-			}
-
-			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap2(ControlenvioList);
-			
-			for (int i = 0;  i < hashMap.size();  i++){
+			HashMap<Integer, VboxTable> vboxTableMap = new HashMap<Integer, VboxTable>();
+			/*
+			for (int i = 0;  i < hashMap.size();  i++) {
 				List<Guia> lista = hashMap.get(i);
 				
 				for (Guia element : lista) {
@@ -414,103 +388,189 @@ public class ReportWindow {
 						depto = element.getDestinatario().getDepartamento().getNombre();
 					}
 					
-					System.out.println("Lista " + i + "   element: " + element.getId() + "   " + depto  + "    " + element.getNumero());
+					System.out.println("id=" + element.getId() + "  number=" + element.getNumero() + "  departamento=" + depto);
 				}
 			}
+			System.out.println("");
 			
-			/*
+			
+			List<Guia> dataSorted = new ArrayList<Guia>();
+
+			for (Controlenvio controlenvio : ControlenvioList) {
+				dataSorted.add(controlenvio.getGuia());
+			}
+			*/
+			
+			// Rutina para dividir las listas de departamentos por hojas
+			ObservableList<Guia> datos = null;
+
+			for (int i = 0; i < hashMap.size(); i ++) {
+
+				List<Guia> guiaList = hashMap.get(i);
+
+				for (Guia element : guiaList) {
+					System.out.println("ListaNo="+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
+			
+					if (datos == null) {
+						datos = FXCollections.observableArrayList();
+					}
+					
+					count++;
+					countRows++;
+	
+					datos.add(element);
+	
+					if (count == 22) {
+						hashList.put(new Integer(counterList), datos);
+						counterList++;
+	
+						count = 0;	
+						datos = null;
+					} 
+					else if (countRows == guiaList.size()) {
+						hashList.put(new Integer(counterList), datos);
+						count = 0;
+						countRows = 0;
+						
+						counterList++;
+						datos = null;
+					}
+				}
+			}
+
 			for (int i = 0; i < hashList.size(); i++) {
-				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos, otroDeptoField) instanceof VBox) {
-					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
+//				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
+				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos) instanceof VBox) {
+				
+					List<Guia> guiaList = hashList.get(i);
+					
+					// Rutina para conseguir nombre del departamento, al que pertenece la lista.
+					String depto = null;
+					for (Guia element : guiaList) {
+						
+						if (element.getDestinatario() == null) {
+							depto = element.getOtrodepartamento();
+						} else {
+							depto = element.getDestinatario().getDepartamento().getNombre();
+						}
+						break;
+					}
+					
+					VboxTable vboxObj = new VboxTable(i, guiaList.size(), depto);
+					
+					if (nombreDepartamento == null){
+						nombreDepartamento = depto;
+					}
+					vboxObj.setVbox((VBox) generarTable(hashList.get(i), depto, false));
+					
+					VBox tables = vboxObj.getVbox();
+//					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
+					
 					tables.setVisible(false);
-					paneVbox.getChildren().addAll(tables);
+					
+					paneVbox.getChildren().add(new VBox());
+					
+					vboxTableMap.put(i, vboxObj);
 					countTableList++;
 				}
 			}
-			*/
-			printButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					paneVbox.getChildren().remove(confirmText);
-					
-//					printButton.setVisible(false);
-//					cancelButton.setVisible(false);
-					
-					try {
-						for (int i = 0; i < countTableList; i++) {
-							Node node = paneVbox.getChildren().get(i);
-							if (node != null && node instanceof VBox) {
-								VBox vboxPrinting = (VBox) node;
-								
-								if (i == countTableList - 1) {
-									
-									if (countTableList == 1) {
-										vboxPrinting.setTranslateY(-120);
-									}	
-									else { 
-										vboxPrinting.setTranslateY(-335);
-									}
-									
-									vboxPrinting.setVisible(true);
-									
-									ReportBackend.printForTable(vboxPrinting);
-									
-									countTableList = 0;
-								} else {
-									vboxPrinting.setVisible(true);
-									ReportBackend.printForTable(vboxPrinting);
-								}
-								System.out.println("countTableList: " + countTableList);
+		System.out.println("countTableList= " + countTableList);
+		/*
+		for (int i = 0; i < hashList.size(); i++) {
+			List<Guia> guiaList = hashList.get(i);
+			for (Guia element : guiaList) {
+				System.out.println("i=" + i + "  hashList element: " + element);
+			}
+			System.out.println("");
+		}
+		*/
+		printButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+				confirmText.setText("Procesando... Por favor espere.");
+				buttonsPane.setVisible(false);
+				
+				try {
+					for (int i = 0; i < countTableList + 1; i++) {
+
+						VboxTable vboxTableObj = vboxTableMap.get(i);
+						
+						if (vboxTableObj != null) {
+						
+						VBox objVbox  = vboxTableObj.getVbox();
+						int objRowsNumber = vboxTableObj.getRowsNumber();
+						
+							if (objRowsNumber < 20) {
+
+							}	
+							else { 
+								objVbox.setTranslateY(-335);
 							}
-						}
-				        
-						Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
-						alertInfo.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
-						alertInfo.setTitle("información");
-						
-						alertInfo.setHeaderText(null);
-						alertInfo.setContentText("La Impresión ha finalizado correctamente");
-						alertInfo.showAndWait();
-												
-						GenerarReporteStage(stage, usuario);
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-						e.printStackTrace();
-						Alert alertWarn = new Alert(AlertType.WARNING, "content text");
-						alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
-						alertWarn.setTitle("Alerta al imprimir");
-						
-						alertWarn.setHeaderText(null);
-						alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
-						alertWarn.showAndWait();
+							
+							objVbox.setVisible(true);
+							ReportBackend.printForTable(objVbox);
+
+							paneVbox.getChildren().set(i+1, objVbox);
+							objVbox.setVisible(false);
+						} 
 					}
-				}
-			});
-			
-			cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
+			        
+					countTableList = 0;
+					confirmText.setText("Impresión concluida");
+					
+					Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
+					alertInfo.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
+					alertInfo.setTitle("información");
+					
+					alertInfo.setHeaderText(null);
+					alertInfo.setContentText("La Impresión ha finalizado correctamente");
+					alertInfo.showAndWait();
+											
+					GenerarReporteStage(stage, usuario);
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+					e.printStackTrace();
+					
+					confirmText.setText("Error al imprimir");
+					
+					Alert alertWarn = new Alert(AlertType.WARNING, "content text");
+					alertWarn.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
+					alertWarn.setTitle("Alerta al imprimir");
+					
+					alertWarn.setHeaderText(null);
+					alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
+					alertWarn.showAndWait();
+					
 					GenerarReporteStage(stage, usuario);
 				}
-			});
+			}
+		});
+			
+		cancelButton = new Button("Cancelar");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				GenerarReporteStage(stage, usuario);
+			}
+		});
 		
-			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(printButton, cancelButton);
-			paneVbox.getChildren().addAll(buttonsPane);
+		buttonsPane.setAlignment(Pos.BASELINE_CENTER);
+		buttonsPane.getChildren().addAll(printButton, cancelButton);
+		paneVbox.getChildren().addAll(buttonsPane);
 
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Generar reporte");
-			stage.setResizable(false);
+		stage.setScene(scene);
+		stage.setTitle("Control de paquetería - Generar reporte");
+		stage.setResizable(true);
+		
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 	}
 	    
-	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos, String otroDeptoField) {
+	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos) {
 
 		VBox vbox = new VBox();
-//		TableView<Guia> table = null;
 
 		table = new TableView<Guia>();
 		table.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -524,11 +584,9 @@ public class ReportWindow {
 		cabeceraText.getStyleClass().add("cabeceraClass");
 		cabeceraFlow.getChildren().addAll(cabeceraText);
 
-		if (nombreDepartamento != null) {
-			Text nombreDepartamentoText = new Text(nombreDepartamento);
-			nombreDepartamentoText.getStyleClass().add("cabeceraClass");
-			cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
-		}
+		Text nombreDepartamentoText = new Text(nombreDepartamento);
+		nombreDepartamentoText.getStyleClass().add("cabeceraClass");
+		cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
 
 		try {
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
@@ -593,20 +651,11 @@ public class ReportWindow {
 					if (param.getValue().getDestinatario() != null) {
 
 						String output = param.getValue().getDestinatario().getNombre().toString();
-						String outputDepto = param.getValue().getDestinatario().getDepartamento().getNombre()
-								.toString();
-
-						if (flagTodos == false) {
-							ssp = new SimpleStringProperty(
-									output.substring(0, 1).toUpperCase() + output.substring(1));
-						} else {
-							ssp = new SimpleStringProperty(output.substring(0, 1).toUpperCase()
-									+ output.substring(1) + "/" + outputDepto);
-						}
+						ssp = new SimpleStringProperty(output.substring(0, 1).toUpperCase() + output.substring(1));
 						return ssp;
-					} else {
-						return new SimpleStringProperty(param.getValue().getOtrodestinatario() + "/"
-								+ param.getValue().getOtrodepartamento());
+					} 
+					else {
+						return new SimpleStringProperty(param.getValue().getOtrodestinatario());
 					}
 				}
 			});

@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -103,6 +104,7 @@ public class OrigenesWindow {
 			rootVbox.getChildren().addAll(headerPane);
 
 			Text text = new Text("Ingrese el origen");
+			text.getStyleClass().add("textRules");
 			rootVbox.getChildren().addAll(text);
 
 			Label nombreLabel = new Label("Origen ");
@@ -117,7 +119,7 @@ public class OrigenesWindow {
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
 
-			Button aceptarButton = new Button("Aceptar");
+			Button aceptarButton = new Button("Guardar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -164,7 +166,7 @@ public class OrigenesWindow {
 			});
 
 			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
+			flowButtonsPane.getChildren().addAll(aceptarButton);
 
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
@@ -180,7 +182,6 @@ public class OrigenesWindow {
 
 	public void modificarOrigenesStage(Stage stage) {
 
-
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
@@ -190,6 +191,8 @@ public class OrigenesWindow {
 		
 		try {
 			VBox paneVbox = new VBox();
+			
+			FlowPane returnPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
 
 			Alert alert = new Alert(AlertType.WARNING, "content text");
@@ -204,20 +207,38 @@ public class OrigenesWindow {
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
-			Scene scene = new Scene(paneVbox, 290, 440);
+			Scene scene = new Scene(paneVbox, 430, 520);
 			paneVbox.setAlignment(Pos.CENTER);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/origenes.css").toExternalForm());
 
+			Button backButton = new Button("Regresar");
+			backButton.getStyleClass().add("backButton");
+			backButton.setCursor(Cursor.HAND);
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					OrigenesWindow window = new OrigenesWindow();
+					window.origenesStage(stage);
+				}
+			});
+			returnPane.getChildren().addAll(backButton);
+			paneVbox.getChildren().addAll(returnPane);
+			
+			Text text = new Text("Edite los registros que necesite modificar, y guarde \nlos cambios presionando el botón guardar.");
+			text.getStyleClass().add("textRules");
+			paneVbox.getChildren().addAll(text);
+			
 			TableView<Origen> table = new TableView<Origen>();
 			table.setEditable(true);
 
 			TableColumn<Origen, String> idCol = new TableColumn<>("Id");
-			idCol.setMinWidth(95);
+			idCol.setMinWidth(180);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
 			TableColumn<Origen, String> origenCol = new TableColumn<>("Origen");
-			origenCol.setMinWidth(190);
+			origenCol.setMinWidth(247);
 			origenCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
 			origenCol.setCellFactory(TextFieldTableCell.<Origen> forTableColumn());
@@ -267,7 +288,7 @@ public class OrigenesWindow {
 			paneVbox.setPadding(new Insets(1));
 			paneVbox.getChildren().addAll(table);
 
-			Button aceptarButton = new Button("Aceptar");
+			Button aceptarButton = new Button("Guardar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -294,7 +315,7 @@ public class OrigenesWindow {
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(aceptarButton, cancelButton);
+			buttonsPane.getChildren().addAll(aceptarButton);
 			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
