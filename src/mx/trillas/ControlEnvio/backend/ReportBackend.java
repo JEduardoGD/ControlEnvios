@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import javafx.collections.ObservableList;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
@@ -42,8 +41,6 @@ public class ReportBackend {
 
 		Printer printer = null;
 		PageLayout pageLayout = null;
-		double scaleX = 0;
-		double scaleY = 0;
 
 		try {
 			printer = Printer.getDefaultPrinter();
@@ -51,10 +48,7 @@ public class ReportBackend {
 			if (printer != null) {
 				pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
 
-				scaleX = pageLayout.getPrintableWidth() / table.getBoundsInParent().getWidth();
-				scaleY = pageLayout.getPrintableHeight() / table.getBoundsInParent().getHeight();
-				
-				table.getTransforms().add(new Scale(scaleX, scaleY));
+				table.getTransforms().add(new Scale(0.6612612612612613, 1.4580838323353293));
 				PrinterJob job = PrinterJob.createPrinterJob(printer);
 				
 				job.getJobSettings().setPageLayout(pageLayout);
@@ -98,41 +92,8 @@ public class ReportBackend {
 		}
 		return ControlenvioList;
 	}
-	
-	// Esta cosa devuelve un hashmap con las listas separadas por departamento
-	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap (List<Guia> dataSorted) {
-		
-		HashMap<Integer, ArrayList<Guia>> hashMap = new HashMap<Integer, ArrayList<Guia>>();
-		
-		int i = 0;
-		Boolean flag = true;
-		
-		while(flag==true) {
-		
-			hashMap.put(i, new ArrayList<Guia>());
-			
-			List<Guia> list = hashMap.get(i);
-			
-			for (int j = 0; j < dataSorted.size(); j++) {
-				if (j == dataSorted.size()){
-					flag = false;
-					break;
-				}
-				Guia guia = dataSorted.get(j);
-				String departamento = guia.getDestinatario().getDepartamento().getNombre();
-				
-				if (!list.contains(guia)) {
-					i++;
-					break;
-				} else {
-					list.add(guia);
-				}
-			}
-		}
-		return hashMap;
-	}
 
-	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap2 (List<Controlenvio> controlenvioList) {
+	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap (List<Controlenvio> controlenvioList) {
 	
 		HashMap<Integer, ArrayList<Guia>> hashMap = new HashMap<Integer, ArrayList<Guia>>();
 		
@@ -155,6 +116,8 @@ public class ReportBackend {
 				i++;
 				hashMap.put(i, new ArrayList<Guia>());
 				tempDepartamento = controlenvio.getDepartamento();
+				List<Guia> tempList = hashMap.get(i);
+				tempList.add(controlenvio.getGuia());
 			}
 		}
 		return hashMap;

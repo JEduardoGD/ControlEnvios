@@ -119,6 +119,7 @@ public class MensajeriaWindow {
 			rootVbox.getChildren().addAll(headerPane);
 
 			Text text = new Text("Ingrese la nueva empresa de mensajeria");
+			text.getStyleClass().add("textRules");
 			rootVbox.getChildren().addAll(text);
 
 			Label nombreLabel = new Label("Mensajería:");
@@ -132,7 +133,7 @@ public class MensajeriaWindow {
 			nombrePane.getChildren().addAll(nombreLabel, mensajeriaField);
 			rootVbox.getChildren().addAll(nombrePane);
 
-			Button aceptarButton = new Button("Aceptar");
+			Button aceptarButton = new Button("Guardar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -169,19 +170,8 @@ public class MensajeriaWindow {
 				}
 			});
 
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setAlignment(Pos.CENTER);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					MenuWindow menu = new MenuWindow();
-					menu.AdminMenuStage(stage);
-				}
-			});
-
 			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
+			flowButtonsPane.getChildren().addAll(aceptarButton);
 
 			rootVbox.setAlignment(Pos.CENTER);
 			rootVbox.getChildren().addAll(flowButtonsPane);
@@ -228,11 +218,11 @@ public class MensajeriaWindow {
 	
 	public void modificarMensajeriaStage(Stage stage) throws Exception {
 
-
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -242,7 +232,7 @@ public class MensajeriaWindow {
 		FlowPane returnPane = new FlowPane();
 		FlowPane buttonsPane = new FlowPane();
 
-		Scene scene = new Scene(paneVbox, 400, 490);
+		Scene scene = new Scene(paneVbox, 430, 520);
 		stage.setScene(scene);
 		stage.setTitle("Control de paquetería - Modificar empresa de mensajeria");
 		stage.setResizable(false);
@@ -272,7 +262,6 @@ public class MensajeriaWindow {
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					MensajeriaWindow window = new MensajeriaWindow();
 					window.mensajeriaStage(stage);
 				}
@@ -280,16 +269,20 @@ public class MensajeriaWindow {
 			returnPane.getChildren().addAll(backButton);
 			paneVbox.getChildren().addAll(returnPane);
 
+			Text text = new Text("Edite los registros que necesite modificar, y guarde \nlos cambios presionando el botón guardar.");
+			text.getStyleClass().add("textRules");
+			paneVbox.getChildren().addAll(text);
+			
 			TableView<Mensajeria> table = new TableView<Mensajeria>();
 			table.setEditable(true);
 
 			TableColumn<Mensajeria, String> idCol = new TableColumn<>("Id");
-			idCol.setMinWidth(170);
+			idCol.setMinWidth(180);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
 			TableColumn<Mensajeria, String> mensajeraCol = new TableColumn<>("Nombre");
-			mensajeraCol.setMinWidth(240);
+			mensajeraCol.setMinWidth(247);
 			mensajeraCol.setEditable(true);
 			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 			mensajeraCol.setCellFactory(TextFieldTableCell.<Mensajeria> forTableColumn());
@@ -338,7 +331,7 @@ public class MensajeriaWindow {
 			paneVbox.setPadding(new Insets(1));
 			paneVbox.getChildren().addAll(table);
 
-			Button aceptarButton = new Button("Aceptar");
+			Button aceptarButton = new Button("Guardar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -355,14 +348,7 @@ public class MensajeriaWindow {
 					}
 				}
 			});
-			Button cancelButton = new Button("Cancelar");
-			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					MensajeriaWindow mensajeria = new MensajeriaWindow();
-					mensajeria.mensajeriaStage(stage);
-				}
-			});
+			
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
 			buttonsPane.getChildren().addAll(aceptarButton);
 			paneVbox.getChildren().addAll(buttonsPane);

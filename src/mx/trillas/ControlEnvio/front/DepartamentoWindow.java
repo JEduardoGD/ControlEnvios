@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -105,8 +106,9 @@ public class DepartamentoWindow {
 			rootVbox.getChildren().addAll(headerPane);
 
 			Text text = new Text("Ingrese el departamento");
+			text.getStyleClass().add("textRules");
 			rootVbox.getChildren().addAll(text);
-
+			
 			Label nombreLabel = new Label("Departamento:");
 			TextField nombreField = new TextField();
 			nombreField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -119,7 +121,7 @@ public class DepartamentoWindow {
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
 
-			Button aceptarButton = new Button("Aceptar");
+			Button aceptarButton = new Button("Guardar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -168,7 +170,7 @@ public class DepartamentoWindow {
 			});
 
 			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
+			flowButtonsPane.getChildren().addAll(aceptarButton);
 
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
@@ -194,6 +196,7 @@ public class DepartamentoWindow {
 		
 		try {
 			VBox paneVbox = new VBox();
+			FlowPane returnPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
 
 			Alert alert = new Alert(AlertType.WARNING, "content text");
@@ -211,21 +214,39 @@ public class DepartamentoWindow {
 				logger.error(e.getMessage());
 			}
 
-			Scene scene = new Scene(paneVbox, 400, 450);
+			Scene scene = new Scene(paneVbox, 430, 520);
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets()
 					.add(getClass().getClassLoader().getResource("style/departamento.css").toExternalForm());
 
+			
+			Button backButton = new Button("Regresar");
+			backButton.getStyleClass().add("backButton");
+			backButton.setCursor(Cursor.HAND);
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					MensajeriaWindow window = new MensajeriaWindow();
+					window.mensajeriaStage(stage);
+				}
+			});
+			returnPane.getChildren().addAll(backButton);
+			paneVbox.getChildren().addAll(returnPane);
+			
+			Text text = new Text("Edite los registros que necesite modificar, y guarde \nlos cambios presionando el botón guardar.");
+			text.getStyleClass().add("textRules");
+			paneVbox.getChildren().addAll(text);
+			
 			TableView<Departamento> table = new TableView<Departamento>();
 			table.setEditable(true);
 
 			TableColumn<Departamento, String> idCol = new TableColumn<Departamento, String>("Id");
-			idCol.setMinWidth(200);
+			idCol.setMinWidth(180);
 			idCol.setEditable(false);
 			idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
 			TableColumn<Departamento, String> deptoCol = new TableColumn<Departamento, String>("Departamento");
-			deptoCol.setMinWidth(200);
+			deptoCol.setMinWidth(247);
 			deptoCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
 			deptoCol.setCellFactory(TextFieldTableCell.<Departamento> forTableColumn());
@@ -275,7 +296,7 @@ public class DepartamentoWindow {
 			paneVbox.setPadding(new Insets(1));
 			paneVbox.getChildren().addAll(table);
 
-			Button aceptarButton = new Button("Aceptar");
+			Button aceptarButton = new Button("Guardar");
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -301,7 +322,7 @@ public class DepartamentoWindow {
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(aceptarButton, cancelButton);
+			buttonsPane.getChildren().addAll(aceptarButton);
 			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
