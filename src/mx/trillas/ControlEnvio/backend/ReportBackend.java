@@ -54,8 +54,8 @@ public class ReportBackend {
 				scaleX = pageLayout.getPrintableWidth() / table.getBoundsInParent().getWidth();
 				scaleY = pageLayout.getPrintableHeight() / table.getBoundsInParent().getHeight();
 				
-				System.out.println(" scaleX=" + scaleX);
-				System.out.println(" scaleY=" + scaleY);
+//				System.out.println(" scaleX=" + scaleX);
+//				System.out.println(" scaleY=" + scaleY);
 				
 //				scaleX=0.6612612612612613
 //				scaleY=1.4580838323353293

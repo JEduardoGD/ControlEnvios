@@ -22,7 +22,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -37,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -98,8 +98,9 @@ public class ReportWindow {
 			HBox headerPane = new HBox();
 			VBox pane = new VBox();
 
-			Scene scene = new Scene(border, 970, 500);
-
+//			Scene scene = new Scene(border, 970, 500);
+			Scene scene = new Scene(border, 950, 500);
+			
 			FlowPane labelsPane = new FlowPane(45, 80);
 			FlowPane datePane = new FlowPane(20, 100);
 			HBox footer = new HBox();
@@ -343,16 +344,17 @@ public class ReportWindow {
 		
 		VBox paneVbox = new VBox();
 		FlowPane buttonsPane = new FlowPane();
+		buttonsPane.setVisible(true);
 		
 		Text confirmText = new Text("");
 		confirmText.setId("confirmText");
-		confirmText.setText("Se encontraron " + dataList.size() + " registros. ¿Desea mandar a imprimir?");
+		confirmText.setText("Se encontraron " + dataList.size() + " registros. ¿Desea mandar a imprimir?\n\n\n");
 		paneVbox.getChildren().add(confirmText);
 		
 		HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
 	
-//		Scene scene = new Scene(paneVbox, 610, 700);
-		Scene scene = new Scene(paneVbox, 1110, 700);
+		Scene scene = new Scene(paneVbox, 950, 500);
+//		Scene scene = new Scene(paneVbox, 1110, 700);
 		
 		paneVbox.setAlignment(Pos.CENTER);
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -365,13 +367,12 @@ public class ReportWindow {
 			int countRows = 0;
 			int counterList = 0;
 
-			// Sorting list
 			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
 			Collections.sort(ControlenvioList);
 			
 			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap(ControlenvioList);
 			HashMap<Integer, VboxTable> vboxTableMap = new HashMap<Integer, VboxTable>();
-			
+			/*
 			for (int i = 0;  i < hashMap.size();  i++) {
 				List<Guia> lista = hashMap.get(i);
 				
@@ -389,7 +390,7 @@ public class ReportWindow {
 			}
 			System.out.println("");
 			
-			/*
+			
 			List<Guia> dataSorted = new ArrayList<Guia>();
 
 			for (Controlenvio controlenvio : ControlenvioList) {
@@ -433,22 +434,42 @@ public class ReportWindow {
 			}
 
 			for (int i = 0; i < hashList.size(); i++) {
-//				System.out.println("hashList.size()="+hashList.size());
-				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos, otroDeptoField) instanceof VBox) {
-					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
-					tables.setVisible(false);
-//					
-					paneVbox.getChildren().addAll(tables);
-//					int index = paneVbox.getChildren().indexOf(tables);
-//					VboxTable test = new test()
+				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
+				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos) instanceof VBox) {
+				
 					List<Guia> guiaList = hashList.get(i);
-					vboxTableMap.put(i, new VboxTable(i, tables, guiaList.size()));
-//					System.out.println("container= " + paneVbox.getChildren().get(i));
+					
+					String depto = null;
+					for (Guia element : guiaList) {
+						
+						if (element.getDestinatario() == null) {
+							depto = element.getOtrodepartamento();
+						} else {
+							depto = element.getDestinatario().getDepartamento().getNombre();
+						}
+						break;
+					}
+					
+					VboxTable vboxObj = new VboxTable(i, guiaList.size(), depto);
+					
+					if (nombreDepartamento == null){
+						nombreDepartamento = depto;
+					}
+					vboxObj.setVbox((VBox) generarTable(hashList.get(i), depto, false));
+					
+					VBox tables = vboxObj.getVbox();
+//					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
+					
+					tables.setVisible(false);
+					
+					paneVbox.getChildren().add(new VBox());
+					
+					vboxTableMap.put(i, vboxObj);
 					countTableList++;
 				}
 			}
-//		System.out.println("countTableList= " + countTableList);
-		
+		System.out.println("countTableList= " + countTableList);
+		/*
 		for (int i = 0; i < hashList.size(); i++) {
 			List<Guia> guiaList = hashList.get(i);
 			for (Guia element : guiaList) {
@@ -456,48 +477,44 @@ public class ReportWindow {
 			}
 			System.out.println("");
 		}
-		
+		*/
 		printButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 
-				confirmText.setVisible(false);
+//				confirmText.setVisible(false);
+				confirmText.setText("Procesando... Por favor espere.");
+				buttonsPane.setVisible(false);
 				
 				try {
-//					for (int i = 0; i < countTableList + 1; i++) {
-//						Node node = paneVbox.getChildren().get(i);
-						VboxTable vboxtableObj = vboxTableMap.get(0);
-						Node node = vboxtableObj.getVbox();
-						
-						if (node != null && node instanceof VBox) {
-							
-							VBox vboxPrinting = (VBox) node;
-						
-								if (vboxtableObj.getRowsNumber() < 20) {
-//									vboxPrinting.setTranslateY(-335);
-								}	
-								else { 
-									vboxPrinting.setTranslateY(-335);
-								}
-								
-								vboxPrinting.setVisible(true);
-								ReportBackend.printForTable(vboxPrinting);
+					for (int i = 0; i < countTableList + 1; i++) {
 
-								vboxPrinting.setVisible(false);
-								
-								countTableList = 0;
-								
-//							} 
-//								else {
-//								vboxPrinting.setVisible(true);
-//								ReportBackend.printForTable(vboxPrinting);
-//									countTableList = 0;
-//								
-//								vboxPrinting.setVisible(false);
-//							}
-//								System.out.println("countTableList: " + countTableList);
+						VboxTable vboxTableObj = vboxTableMap.get(i);
+						
+						if (vboxTableObj != null) {
+						
+						VBox objVbox  = vboxTableObj.getVbox();
+						int objRowsNumber = vboxTableObj.getRowsNumber();
+						
+						
+							if (objRowsNumber < 20) {
+
+							}	
+							else { 
+								objVbox.setTranslateY(-335);
+							}
+							
+							objVbox.setVisible(true);
+							ReportBackend.printForTable(objVbox);
+
+							paneVbox.getChildren().set(i+1, objVbox);
+							objVbox.setVisible(false);
+						} 
 					}
 			        
+//					countTableList = 0;
+					confirmText.setText("Impresión concluida");
+					
 					Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
 					alertInfo.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
 					alertInfo.setTitle("información");
@@ -510,6 +527,8 @@ public class ReportWindow {
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 					e.printStackTrace();
+					
+					confirmText.setText("Error al imprimir");
 					Alert alertWarn = new Alert(AlertType.WARNING, "content text");
 					alertWarn.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
 					alertWarn.setTitle("Alerta al imprimir");
@@ -544,7 +563,7 @@ public class ReportWindow {
 		}
 	}
 	    
-	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos, String otroDeptoField) {
+	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos) {
 
 		VBox vbox = new VBox();
 //		TableView<Guia> table = null;
@@ -561,11 +580,11 @@ public class ReportWindow {
 		cabeceraText.getStyleClass().add("cabeceraClass");
 		cabeceraFlow.getChildren().addAll(cabeceraText);
 
-		if (nombreDepartamento != null) {
+//		if (nombreDepartamento != null) {
 			Text nombreDepartamentoText = new Text(nombreDepartamento);
 			nombreDepartamentoText.getStyleClass().add("cabeceraClass");
 			cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
-		}
+//		}
 
 		try {
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
