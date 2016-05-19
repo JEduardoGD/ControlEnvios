@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -28,7 +29,6 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -38,8 +38,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.backend.DestinatarioBackend;
-import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
-import mx.trillas.ControlEnvio.backend.OrigenBackend;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.dao.DestinatarioDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
@@ -57,11 +55,11 @@ public class DestinatariosWindow {
 
 	public void destinatariosStage(Stage stage) {
 
-
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -125,9 +123,10 @@ public class DestinatariosWindow {
 			rootVbox.getChildren().addAll(headerPane);
 
 			Text text = new Text("Ingrese los datos del nuevo destinatario");
+			text.getStyleClass().add("textRules");
 			rootVbox.getChildren().addAll(text);
 
-			Label destinatarioLabel = new Label("Destinatario ");
+			Label destinatarioLabel = new Label("Destinatario");
 			destinatarioLabel.getStyleClass().add(".inputs");
 			TextField destinatarioField = new TextField();
 			destinatarioField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -204,7 +203,7 @@ public class DestinatariosWindow {
 			});
 
 			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
+			flowButtonsPane.getChildren().addAll(aceptarButton);
 
 			rootVbox.getChildren().addAll(flowButtonsPane);
 
@@ -220,13 +219,15 @@ public class DestinatariosWindow {
 
 	public void modificarDestinatariosStage(Stage stage) {
 
-
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
+		
+		FlowPane returnPane = new FlowPane();
 		
 		List<Departamento> deptosList = new ArrayList<Departamento>();
 		
@@ -251,11 +252,28 @@ public class DestinatariosWindow {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
 
-			Scene scene = new Scene(paneVbox, 430, 450);
+			Scene scene = new Scene(paneVbox, 430, 520);
 			paneVbox.setAlignment(Pos.CENTER);
 			scene.getStylesheets()
 					.add(getClass().getClassLoader().getResource("style/destinatarios.css").toExternalForm());
 
+			Button backButton = new Button("Regresar");
+			backButton.getStyleClass().add("backButton");
+			backButton.setCursor(Cursor.HAND);
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					MensajeriaWindow window = new MensajeriaWindow();
+					window.mensajeriaStage(stage);
+				}
+			});
+			returnPane.getChildren().addAll(backButton);
+			paneVbox.getChildren().addAll(returnPane);
+
+			Text text = new Text("Edite los registros que necesite modificar, y guarde \nlos cambios presionando el botón guardar.");
+			text.getStyleClass().add("textRules");
+			paneVbox.getChildren().addAll(text);
+			
 			TableView<Destinatario> table = new TableView<Destinatario>();
 			table.setEditable(true);
 
@@ -273,7 +291,7 @@ public class DestinatariosWindow {
 			destinatarioCol.setCellFactory(TextFieldTableCell.<Destinatario> forTableColumn());
 			destinatarioCol.setOnEditCommit((CellEditEvent<Destinatario, String> t) -> {
 
-				if (!(t.getNewValue().equals("")) && MensajeriaBackend.checkString(t.getNewValue()) == true) {
+				if (!(t.getNewValue().equals("")) && DestinatarioBackend.checkString(t.getNewValue()) == true) {
 					((Destinatario) t.getTableView().getItems().get(t.getTablePosition().getRow())).setNombre(t.getNewValue().toString());
 					
 					Destinatario destinatario = null;
@@ -410,7 +428,7 @@ public class DestinatariosWindow {
 				}
 			});
 			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-			buttonsPane.getChildren().addAll(aceptarButton, cancelButton);
+			buttonsPane.getChildren().addAll(aceptarButton);
 			paneVbox.getChildren().addAll(buttonsPane);
 
 			stage.setScene(scene);
@@ -488,80 +506,6 @@ public class DestinatariosWindow {
 			}
 		} else {
 			// hacer algo
-		}
-	}
-
-	public void otroDestinatarioStage(Stage stage) {
-
-		try {
-			VBox rootVbox = new VBox(25);
-			rootVbox.setAlignment(Pos.CENTER);
-
-			FlowPane nombrePane = new FlowPane(18, 15);
-			nombrePane.setAlignment(Pos.CENTER);
-
-			FlowPane flowButtonsPane = new FlowPane();
-
-			HBox headerPane = new HBox(150);
-			Scene scene = new Scene(new Group(), 450, 450);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/otros.css").toExternalForm());
-
-			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
-
-			Button backButton = new Button("Regresar");
-			backButton.getStyleClass().add("backButton");
-			backButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			backButton.setAlignment(Pos.TOP_LEFT);
-
-			headerPane.getChildren().addAll(backButton);
-			rootVbox.getChildren().addAll(headerPane);
-
-			Text text = new Text("Ingrese el destinatario");
-			rootVbox.getChildren().addAll(text);
-
-			Label nombreLabel = new Label("Destinatario:");
-			TextField nombreField = new TextField();
-
-			nombrePane.getChildren().addAll(nombreLabel, nombreField);
-			rootVbox.getChildren().addAll(nombrePane);
-
-			Button aceptarButton = new Button("Aceptar");
-			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setAlignment(Pos.CENTER);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			flowButtonsPane.setAlignment(Pos.CENTER);
-			flowButtonsPane.getChildren().addAll(aceptarButton, cancelarButton);
-
-			rootVbox.getChildren().addAll(flowButtonsPane);
-
-			stage.setScene(scene);
-			stage.setTitle("Control de paquetería - Otro destinatario");
-			stage.setResizable(true);
-			stage.show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

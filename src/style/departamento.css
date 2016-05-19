@@ -10,7 +10,7 @@
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
-     -fx-text-fill: #fff;
+    -fx-text-fill: #fff;
     -fx-background-radius: 0;
     -fx-background-color: #1d1d1d;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
@@ -51,6 +51,43 @@
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 
+.textRules {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Arial";
+    -fx-opacity: 0.7;
+    -fx-text-fill: #1d1d1d;
+    -fx-font-weight: bold;	
+}
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 0.7;
+    -fx-text-fill: #1d1d1d;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.text-field {
+	-fx-color: white;
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+
+}
+
 .backButton {
 		-fx-padding: 25;
 		-fx-background-size: 50;
@@ -66,3 +103,4 @@
 		 -fx-text-fill: #000;
 		-fx-background-repeat: space;
 }
+

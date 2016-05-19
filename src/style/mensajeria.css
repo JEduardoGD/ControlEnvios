@@ -6,7 +6,6 @@
 	-fx-spacing: 15.0;
 }
 
-
 .button {
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #e2e2e2;
@@ -18,7 +17,6 @@
     -fx-font-size: 11pt;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
-
 
 .button:hover {
     -fx-background-color: #3a3a3a;
@@ -53,13 +51,20 @@
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 
+.textRules {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Arial";
+    -fx-opacity: 0.7;
+    -fx-text-fill: #1d1d1d;
+    -fx-font-weight: bold;	
+}
 
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: white;
-    -fx-opacity: 0.6;
-      -fx-text-fill: #1d1d1d;
+    -fx-opacity: 0.7;
+    -fx-text-fill: #1d1d1d;
 }
 
 .label-bright {
@@ -78,12 +83,7 @@
 
 .text-field {
 	-fx-color: white;
-/* 	-fx-pref-width: 10;
-	-fx-min-width: 150;
-    -fx-min-height: 20;
-    -fx-background-color: #ccc;
-    -fx-padding: 10 10;
-*/    -fx-font-size: 12pt;
+    -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Semibold";
 
 }
@@ -95,6 +95,7 @@
 		 -fx-text-fill: #000;
 		-fx-background-repeat: space;
 }
+
 
 .modificarRegistroButton {
 		-fx-padding: 25 40 25 40;

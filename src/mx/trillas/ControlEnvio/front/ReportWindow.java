@@ -367,10 +367,13 @@ public class ReportWindow {
 			int countRows = 0;
 			int counterList = 0;
 
+			// Rutina para entregar resultados organizados en orden alfabetico
 			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
 			Collections.sort(ControlenvioList);
 			
+			// Rutina para dividir resultado en listas de departamentos
 			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap(ControlenvioList);
+			
 			HashMap<Integer, VboxTable> vboxTableMap = new HashMap<Integer, VboxTable>();
 			/*
 			for (int i = 0;  i < hashMap.size();  i++) {
@@ -397,6 +400,8 @@ public class ReportWindow {
 				dataSorted.add(controlenvio.getGuia());
 			}
 			*/
+			
+			// Rutina para dividir las listas de departamentos por hojas
 			ObservableList<Guia> datos = null;
 
 			for (int i = 0; i < hashMap.size(); i ++) {
@@ -404,7 +409,7 @@ public class ReportWindow {
 				List<Guia> guiaList = hashMap.get(i);
 
 				for (Guia element : guiaList) {
-					System.out.println("ListaNo= "+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
+					System.out.println("ListaNo="+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
 			
 					if (datos == null) {
 						datos = FXCollections.observableArrayList();
@@ -434,11 +439,12 @@ public class ReportWindow {
 			}
 
 			for (int i = 0; i < hashList.size(); i++) {
-				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
+//				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
 				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos) instanceof VBox) {
 				
 					List<Guia> guiaList = hashList.get(i);
 					
+					// Rutina para conseguir nombre del departamento, al que pertenece la lista.
 					String depto = null;
 					for (Guia element : guiaList) {
 						
@@ -482,7 +488,6 @@ public class ReportWindow {
 			@Override
 			public void handle(ActionEvent event) {
 
-//				confirmText.setVisible(false);
 				confirmText.setText("Procesando... Por favor espere.");
 				buttonsPane.setVisible(false);
 				
@@ -495,7 +500,6 @@ public class ReportWindow {
 						
 						VBox objVbox  = vboxTableObj.getVbox();
 						int objRowsNumber = vboxTableObj.getRowsNumber();
-						
 						
 							if (objRowsNumber < 20) {
 
@@ -512,7 +516,7 @@ public class ReportWindow {
 						} 
 					}
 			        
-//					countTableList = 0;
+					countTableList = 0;
 					confirmText.setText("Impresión concluida");
 					
 					Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
@@ -529,6 +533,7 @@ public class ReportWindow {
 					e.printStackTrace();
 					
 					confirmText.setText("Error al imprimir");
+					
 					Alert alertWarn = new Alert(AlertType.WARNING, "content text");
 					alertWarn.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
 					alertWarn.setTitle("Alerta al imprimir");
@@ -566,7 +571,6 @@ public class ReportWindow {
 	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento,	Boolean flagTodos) {
 
 		VBox vbox = new VBox();
-//		TableView<Guia> table = null;
 
 		table = new TableView<Guia>();
 		table.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -580,11 +584,9 @@ public class ReportWindow {
 		cabeceraText.getStyleClass().add("cabeceraClass");
 		cabeceraFlow.getChildren().addAll(cabeceraText);
 
-//		if (nombreDepartamento != null) {
-			Text nombreDepartamentoText = new Text(nombreDepartamento);
-			nombreDepartamentoText.getStyleClass().add("cabeceraClass");
-			cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
-//		}
+		Text nombreDepartamentoText = new Text(nombreDepartamento);
+		nombreDepartamentoText.getStyleClass().add("cabeceraClass");
+		cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
 
 		try {
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Numero guia");
@@ -649,20 +651,11 @@ public class ReportWindow {
 					if (param.getValue().getDestinatario() != null) {
 
 						String output = param.getValue().getDestinatario().getNombre().toString();
-						String outputDepto = param.getValue().getDestinatario().getDepartamento().getNombre()
-								.toString();
-
-						if (flagTodos == false) {
-							ssp = new SimpleStringProperty(
-									output.substring(0, 1).toUpperCase() + output.substring(1));
-						} else {
-							ssp = new SimpleStringProperty(output.substring(0, 1).toUpperCase()
-									+ output.substring(1) + "/" + outputDepto);
-						}
+						ssp = new SimpleStringProperty(output.substring(0, 1).toUpperCase() + output.substring(1));
 						return ssp;
-					} else {
-						return new SimpleStringProperty(param.getValue().getOtrodestinatario() + "/"
-								+ param.getValue().getOtrodepartamento());
+					} 
+					else {
+						return new SimpleStringProperty(param.getValue().getOtrodestinatario());
 					}
 				}
 			});
