@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.apache.log4j.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -33,10 +36,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
+import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
 public class DepartamentoWindow {
 
@@ -50,6 +55,7 @@ public class DepartamentoWindow {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -117,7 +123,6 @@ public class DepartamentoWindow {
 					nombreField.setText(s);
 				}
 			});
-
 			nombrePane.getChildren().addAll(nombreLabel, nombreField);
 			rootVbox.getChildren().addAll(nombrePane);
 
@@ -158,17 +163,6 @@ public class DepartamentoWindow {
 				}
 			});
 
-			Button cancelarButton = new Button("Cancelar");
-			cancelarButton.setAlignment(Pos.CENTER);
-			cancelarButton.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					MenuWindow menu = new MenuWindow();
-					menu.AdminMenuStage(stage);
-				}
-			});
-
 			flowButtonsPane.setAlignment(Pos.CENTER);
 			flowButtonsPane.getChildren().addAll(aceptarButton);
 
@@ -180,7 +174,49 @@ public class DepartamentoWindow {
 			stage.show();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+	}
+
+	public void confirmarDepartamentoStage(Alert confirmation, String nombreDepartamento) {
+
+		Text text = new Text();
+		String output = "";
+
+		confirmation.setTitle("Confirme los cambios");
+		confirmation.setHeaderText("¿Desea guardar los cambios?");
+
+		output += "\nDepartamento: " + nombreDepartamento;
+		text.setText(output);
+
+		confirmation.setContentText(text.getText());
+
+		Optional<ButtonType> result = confirmation.showAndWait();
+		if (result.get() == ButtonType.OK) {
+
+			try {
+				nombreDepartamento = nombreDepartamento.toLowerCase();
+				DepartamentoBackend.loadDepartamentoData(nombreDepartamento);
+
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Cambios en departamentos");
+				alert.setHeaderText(null);
+				alert.setContentText("Los cambios se guardaron exitosamente");
+				alert.showAndWait();
+				
+				DepartamentoWindow window = new DepartamentoWindow();
+				window.departamentoStage(new Stage());
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Cambios en departamentos");
+				alert.setHeaderText(null);
+				alert.setContentText("Ocurrió un error al intentar realizar cambios en departamentos");
+				alert.showAndWait();
+			}
+		} else {
+			// hacer algo
 		}
 	}
 
@@ -191,6 +227,7 @@ public class DepartamentoWindow {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -226,8 +263,8 @@ public class DepartamentoWindow {
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					MensajeriaWindow window = new MensajeriaWindow();
-					window.mensajeriaStage(stage);
+					DepartamentoWindow window = new DepartamentoWindow();
+					window.departamentoStage(stage);
 				}
 			});
 			returnPane.getChildren().addAll(backButton);
@@ -247,8 +284,14 @@ public class DepartamentoWindow {
 
 			TableColumn<Departamento, String> deptoCol = new TableColumn<Departamento, String>("Departamento");
 			deptoCol.setMinWidth(247);
-			deptoCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-
+			deptoCol.setCellValueFactory(new Callback<CellDataFeatures<Departamento, String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Departamento, String> param) {
+					String departamento = param.getValue().getNombre().toLowerCase();
+					String deptoCaptitalize = departamento.substring(0, 1).toUpperCase() + departamento.substring(1);
+					return new SimpleStringProperty(deptoCaptitalize);
+				}
+			});
 			deptoCol.setCellFactory(TextFieldTableCell.<Departamento> forTableColumn());
 			deptoCol.setOnEditCommit((CellEditEvent<Departamento, String> t) -> {
 
@@ -352,6 +395,13 @@ public class DepartamentoWindow {
 
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
+			
+			String departamento = null;
+			for (Departamento element : departamentos) {
+				departamento = element.getNombre().toLowerCase();
+				element.setNombre(departamento);
+			}
+			
 			try {
 				departamentoDAO.altaDepartamentoByList(departamentos);
 			} catch (Exception e1) {
@@ -363,44 +413,6 @@ public class DepartamentoWindow {
 			alert.setHeaderText(null);
 			alert.setContentText("Los cambios se guardaron exitosamente");
 			alert.showAndWait();
-		} else {
-			// hacer algo
-		}
-	}
-
-	public void confirmarDepartamentoStage(Alert confirmation, String nombreDepartamento) {
-
-		Text text = new Text();
-		String output = "";
-
-		confirmation.setTitle("Confirme los cambios");
-		confirmation.setHeaderText("¿Desea guardar los cambios?");
-
-		output += "\nDepartamento: " + nombreDepartamento;
-		text.setText(output);
-
-		confirmation.setContentText(text.getText());
-
-		Optional<ButtonType> result = confirmation.showAndWait();
-		if (result.get() == ButtonType.OK) {
-
-			try {
-				DepartamentoBackend.loadDepartamentoData(nombreDepartamento);
-
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Cambios en departamentos");
-				alert.setHeaderText(null);
-				alert.setContentText("Los cambios se guardaron exitosamente");
-				alert.showAndWait();
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Cambios en departamentos");
-				alert.setHeaderText(null);
-				alert.setContentText("Ocurrió un error al intentar realizar cambios en departamentos");
-				alert.showAndWait();
-			}
 		} else {
 			// hacer algo
 		}

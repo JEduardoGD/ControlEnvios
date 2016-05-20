@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.apache.log4j.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -33,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.OrigenBackend;
 import mx.trillas.ControlEnvio.persistence.dao.OrigenesDAO;
 import mx.trillas.ControlEnvio.persistence.impl.OrigenesDAODBImpl;
@@ -45,11 +49,11 @@ public class OrigenesWindow {
 
 	public void origenesStage(Stage stage) {
 
-
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -239,8 +243,14 @@ public class OrigenesWindow {
 
 			TableColumn<Origen, String> origenCol = new TableColumn<>("Origen");
 			origenCol.setMinWidth(247);
-			origenCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-
+			origenCol.setCellValueFactory(new Callback<CellDataFeatures<Origen, String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Origen, String> param) {
+					String origen = param.getValue().getNombre().toLowerCase();
+					String origenCaptitalize = origen.substring(0, 1).toUpperCase() + origen.substring(1);
+					return new SimpleStringProperty(origenCaptitalize);
+				}
+			});
 			origenCol.setCellFactory(TextFieldTableCell.<Origen> forTableColumn());
 			origenCol.setOnEditCommit((CellEditEvent<Origen, String> t) -> {
 
@@ -352,7 +362,7 @@ public class OrigenesWindow {
 			}
 
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Cambios en mensajerias");
+			alert.setTitle("Cambios en origenes");
 			alert.setHeaderText(null);
 			alert.setContentText("Los cambios se guardaron exitosamente");
 			alert.showAndWait();
@@ -378,6 +388,7 @@ public class OrigenesWindow {
 		if (result.get() == ButtonType.OK) {
 			if (OrigenBackend.checkString(nombreOrigen)) {
 				try {
+					nombreOrigen = nombreOrigen.toLowerCase();
 					OrigenBackend.loadOrigenData(nombreOrigen);
 
 					Alert alert = new Alert(AlertType.INFORMATION);

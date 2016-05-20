@@ -25,7 +25,10 @@ import mx.trillas.ControlEnvio.persistence.pojosaux.Controlenvio;
 public class ReportBackend {
 
 	private static Logger logger = Logger.getLogger(ReportBackend.class);
-
+	
+	private static double SCALEX = 0.6612612612612613;
+	private static double SCALEY = 1.4580838323353293;
+	
 	public static Date getCalendarOnHour(Date date){
 		Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -48,7 +51,7 @@ public class ReportBackend {
 			if (printer != null) {
 				pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
 
-				table.getTransforms().add(new Scale(0.6612612612612613, 1.4580838323353293));
+				table.getTransforms().add(new Scale(SCALEX, SCALEY));
 				PrinterJob job = PrinterJob.createPrinterJob(printer);
 				
 				job.getJobSettings().setPageLayout(pageLayout);
@@ -79,15 +82,20 @@ public class ReportBackend {
 	
 	public static List<Controlenvio> guiaToControlenvio(List<Guia> guiaList) {
 		
+		String departamento = null;
 		List<Controlenvio> ControlenvioList = new ArrayList<Controlenvio>();
 		
 		for ( Guia guia : guiaList ) {
 			Controlenvio controlenvio = new Controlenvio();
 			controlenvio.setGuia(guia);
 			if (guia.getDestinatario() != null)
-				controlenvio.setDepartamento(guia.getDestinatario().getDepartamento().getNombre());
+				departamento = guia.getDestinatario().getDepartamento().getNombre();
 			else 
-				controlenvio.setDepartamento(guia.getOtrodepartamento());
+				departamento = guia.getOtrodepartamento();
+			
+			departamento = departamento.toLowerCase();
+			
+			controlenvio.setDepartamento(departamento);
 			ControlenvioList.add(controlenvio);
 		}
 		return ControlenvioList;

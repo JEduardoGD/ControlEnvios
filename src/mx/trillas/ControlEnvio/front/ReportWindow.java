@@ -339,6 +339,7 @@ public class ReportWindow {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -409,7 +410,7 @@ public class ReportWindow {
 				List<Guia> guiaList = hashMap.get(i);
 
 				for (Guia element : guiaList) {
-					System.out.println("ListaNo="+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
+//					System.out.println("ListaNo="+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
 			
 					if (datos == null) {
 						datos = FXCollections.observableArrayList();
@@ -502,11 +503,14 @@ public class ReportWindow {
 						int objRowsNumber = vboxTableObj.getRowsNumber();
 						
 							if (objRowsNumber < 20) {
-
+//							if (objRowsNumber == 21 ||objRowsNumber == 22) {
+//								objVbox.setTranslateY(-335);
 							}	
 							else { 
 								objVbox.setTranslateY(-335);
 							}
+							
+							System.out.println("objRowsNumber="+objRowsNumber);
 							
 							objVbox.setVisible(true);
 							ReportBackend.printForTable(objVbox);

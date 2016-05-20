@@ -571,6 +571,15 @@ public class CapturaWindow {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
+				if (guia.getDestinatario() != null && guia.getDestinatario().getDepartamento() != null){
+					String departamento = guia.getDestinatario().getDepartamento().getNombre();
+					departamento = departamento.toLowerCase();
+					guia.getDestinatario().getDepartamento().setNombre(departamento);
+				} else {
+					String departamento = guia.getOtrodepartamento();
+					departamento = departamento.toLowerCase();
+					guia.setOtrodepartamento(departamento);
+				}
 				CapturarRegistro.loadCapturaData(guia);
 				
 				Alert alertInfo = new Alert(AlertType.INFORMATION);

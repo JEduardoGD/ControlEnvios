@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.apache.log4j.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +27,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,6 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.backend.DestinatarioBackend;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
@@ -44,6 +48,8 @@ import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
+import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
+import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class DestinatariosWindow {
 
@@ -151,7 +157,6 @@ public class DestinatariosWindow {
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 
 					Destinatario destinatarioObj = null;
 					try {
@@ -213,7 +218,7 @@ public class DestinatariosWindow {
 			stage.show();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -229,8 +234,6 @@ public class DestinatariosWindow {
 		
 		FlowPane returnPane = new FlowPane();
 		
-		List<Departamento> deptosList = new ArrayList<Departamento>();
-		
 		ObservableList<String> deptosListCombo = null;
 		ObservableList<Destinatario> destinatariosData = null;
 		
@@ -243,11 +246,15 @@ public class DestinatariosWindow {
 		try {
 			destinatariosData = DestinatarioBackend.getDestinatarioData();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage());
 		}
-		System.out.println("deptosListCombo : " + deptosListCombo);
-		System.out.println("destinatariosData: " + destinatariosData);
+//		System.out.println("deptosListCombo : " + deptosListCombo);
+//		System.out.println("destinatariosData: " + destinatariosData);
+		
+		for (String element : deptosListCombo) {
+			System.out.println("element=" + element);
+		}
+		
 		try {
 			VBox paneVbox = new VBox();
 			FlowPane buttonsPane = new FlowPane();
@@ -263,8 +270,8 @@ public class DestinatariosWindow {
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					MensajeriaWindow window = new MensajeriaWindow();
-					window.mensajeriaStage(stage);
+					DestinatariosWindow window = new DestinatariosWindow();
+					window.destinatariosStage(stage);
 				}
 			});
 			returnPane.getChildren().addAll(backButton);
@@ -287,7 +294,14 @@ public class DestinatariosWindow {
 
 			/* Trabajo por destinatario*/
 			destinatarioCol.setMinWidth(190);
-			destinatarioCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+			destinatarioCol.setCellValueFactory(new Callback<CellDataFeatures<Destinatario, String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Destinatario, String> param) {
+					String destinatario = param.getValue().getNombre().toLowerCase();
+					String destinatarioCaptitalize = destinatario.substring(0, 1).toUpperCase() + destinatario.substring(1);
+					return new SimpleStringProperty(destinatarioCaptitalize);
+				}
+			});
 			destinatarioCol.setCellFactory(TextFieldTableCell.<Destinatario> forTableColumn());
 			destinatarioCol.setOnEditCommit((CellEditEvent<Destinatario, String> t) -> {
 
@@ -305,7 +319,6 @@ public class DestinatariosWindow {
 					}
 										
 					destinatario.setNombre(t.getNewValue());
-//					destinatario.getDepartamento().setNombre(deptoCol.getText());
 
 					/* Trabajo en la lista */
 					int counter = -1;
@@ -332,7 +345,7 @@ public class DestinatariosWindow {
 					alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
 					.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 
-					logger.error("El nombre de empresa de mensajeria no debe ir vacio");
+					logger.error("El nombre de destinatario no debe ir vacio");
 					alert.setHeaderText("Error al ingresar datos");
 					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo");
 					alert.showAndWait();
@@ -344,7 +357,14 @@ public class DestinatariosWindow {
 
 			/* Trabajo por departamento */
 			deptoCol.setMinWidth(140);
-			deptoCol.setCellValueFactory(new PropertyValueFactory<>("departamento"));
+			deptoCol.setCellValueFactory(new Callback<CellDataFeatures<Destinatario, String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Destinatario, String> param) {
+					String departamento = param.getValue().getDepartamento().getNombre().toLowerCase();
+					String departamentoCaptitalize = departamento.substring(0, 1).toUpperCase() + departamento.substring(1);
+					return new SimpleStringProperty(departamentoCaptitalize);
+				}
+			});
 			deptoCol.setCellFactory(ComboBoxTableCell.forTableColumn(null, deptosListCombo));
 			deptoCol.setOnEditCommit((CellEditEvent<Destinatario, String> t) -> {
 				((Destinatario) t.getTableView().getItems().get(t.getTablePosition().getRow())).getDepartamento().setNombre(t.getNewValue());
@@ -465,7 +485,7 @@ public class DestinatariosWindow {
 			}
 
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Cambios en mensajerias");
+			alert.setTitle("Cambios en destinatarios");
 			alert.setHeaderText(null);
 			alert.setContentText("Los cambios se guardaron exitosamente");
 			alert.showAndWait();
