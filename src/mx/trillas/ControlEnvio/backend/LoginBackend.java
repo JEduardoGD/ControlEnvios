@@ -43,6 +43,7 @@ public class LoginBackend {
 	}
 
 	public static void getMenuUser(Stage stage, String username, String passwd) throws Exception {
+		
 		try {
 			Usuario usuario = null;
 			MenuWindow menu = new MenuWindow();
@@ -51,18 +52,18 @@ public class LoginBackend {
 
 			if (usuario != null) {
 					
-					if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_ADMINISTRADOR))) {
-						menu.AdminMenuStage(stage);
-					} 
-					else if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_CAPTURISTA))) {
-						menu.UserMenuStage(stage, usuario);
-					}
-					else {
-						logger.error("Usuario no contiene los permisos necesarios de acceso.");
-					}
-				} else {
-					logger.error("El usuario ingresado no existe" );
+				if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_ADMINISTRADOR))) {
+					menu.AdminMenuStage(stage);
+				} 
+				else if (usuario.getTiposusuario().equals(tipousuarioDAO.getTipoDeusuario(TIPOS_USUARIO.TIPOUSUARIO_CAPTURISTA))) {
+					menu.UserMenuStage(stage, usuario);
 				}
+				else {
+					logger.error("Usuario no contiene los permisos necesarios de acceso.");
+				}
+			} else {
+				logger.error("El usuario ingresado no existe" );
+			}
 		} catch (Exception e) {
 			throw e;
 		}
