@@ -4,7 +4,6 @@ import java.util.List;
 
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 
 public interface DestinatarioDAO {
 	public void altaDestinatario(Destinatario destinatario) throws Exception;

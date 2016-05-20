@@ -10,7 +10,11 @@ import java.util.Set;
  */
 public class Departamento  implements java.io.Serializable {
 
-     private Integer id;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Integer id;
      private String nombre;
      private Set destinatarios = new HashSet(0);
 
