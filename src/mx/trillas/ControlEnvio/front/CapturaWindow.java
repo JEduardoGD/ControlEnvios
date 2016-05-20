@@ -87,6 +87,7 @@ public class CapturaWindow {
 			
 			FlowPane clearPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
+			buttonsPane.setPadding(new Insets(5, 0, 10, 0));
 
 			FlowPane verticalFlow = new FlowPane(10,1);
 			VBox vertical1 = new VBox(20);
@@ -95,7 +96,7 @@ public class CapturaWindow {
 			verticalFlow.setPadding(new Insets(5, 0, 5, 30));
 			vertical1.setAlignment(Pos.CENTER);
 			
-			Scene scene = new Scene(rootVBox, 435, 550);
+			Scene scene = new Scene(rootVBox, 480, 640);
 
 			mensajeraPane.setAlignment(Pos.CENTER);
 			guiaPane.setAlignment(Pos.CENTER);
@@ -143,6 +144,17 @@ public class CapturaWindow {
 			vertical1.getChildren().addAll(labelMensajeria);
 			vertical2.getChildren().addAll( mensajeriaCombo);
 
+			FlowPane textPane = new FlowPane();
+			textPane.setPadding(new Insets(7, 20, 7, 20));
+			textPane.setAlignment(Pos.CENTER);
+			
+			Text instrucciones = new Text("Complete los campos del formulario. Los datos paquetería, \nnumero guia, origen, departamento y destinatario son \nobligatorios."
+					+ " Si el dato origen, destinatario o \ndepartamento no existe dentro del menu de selección, \ningreselos manualmente desde el campo \"Otro\".");
+			instrucciones.getStyleClass().add("textRules");
+//			instrucciones.setTextAlignment(TextAlignment.CENTER);
+			textPane.getChildren().addAll(instrucciones);
+			rootVBox.getChildren().addAll(textPane);
+			
 			Label guiaLabel = new Label("Numero guia");
 
 			TextField guiaField = new TextField();
@@ -436,14 +448,14 @@ public class CapturaWindow {
 					}
 
 					/* Filtro para Departamento y destinatarios */
-					if (deptoCombo.getValue() == null  && deptoCombo.getValue().toString().equals("") && destinatarioCombo.getValue() == null && destinatarioCombo.getValue().toString().equals("")) 
+					if (deptoCombo.getValue() == null  && destinatarioCombo.getValue() == null) 
 					{
 							logger.error("Los datos departamento y destinatario no pueden ir vacios");
 							alert.setHeaderText("Los datos departamento y destinatario no pueden ir vacios");
 							alert.setContentText("Los datos departamento y destinatario no pueden ir vacios");
 							alert.showAndWait();
 							flag = false;
-					}
+					} 
 					
 					/* Filtro para otros Departamento y destinatarios */
 					else if (deptoCombo.getValue() != null && deptoCombo.getValue().toString().equals("Otro") || destinatarioCombo.getValue() != null && destinatarioCombo.getValue().toString().equals("Otro")) {
@@ -529,7 +541,7 @@ public class CapturaWindow {
 			stage.setResizable(false);
 			stage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
