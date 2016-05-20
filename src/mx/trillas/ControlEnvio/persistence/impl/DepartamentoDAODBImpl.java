@@ -11,8 +11,6 @@ import org.hibernate.criterion.Restrictions;
 import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
-import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class DepartamentoDAODBImpl implements DepartamentoDAO {
 

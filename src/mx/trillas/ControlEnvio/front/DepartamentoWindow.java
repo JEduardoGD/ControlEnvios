@@ -41,7 +41,6 @@ import mx.trillas.ControlEnvio.backend.DepartamentoBackend;
 import mx.trillas.ControlEnvio.persistence.dao.DepartamentoDAO;
 import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
-import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 
 public class DepartamentoWindow {
 

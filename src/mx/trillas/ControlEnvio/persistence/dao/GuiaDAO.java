@@ -3,7 +3,6 @@ package mx.trillas.ControlEnvio.persistence.dao;
 import java.util.Date;
 import java.util.List;
 
-import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 

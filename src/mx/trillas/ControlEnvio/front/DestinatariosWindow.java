@@ -1,6 +1,5 @@
 package mx.trillas.ControlEnvio.front;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +47,6 @@ import mx.trillas.ControlEnvio.persistence.impl.DepartamentoDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.impl.DestinatarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 import mx.trillas.ControlEnvio.persistence.pojos.Destinatario;
-import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
-import mx.trillas.ControlEnvio.persistence.pojos.Origen;
 
 public class DestinatariosWindow {
 
