@@ -381,9 +381,9 @@ public class CapturaWindow {
 
 					if (mensajeriaCombo.getValue() == null || mensajeriaCombo.getValue().toString() == null
 							|| mensajeriaCombo.getValue().toString().equals("")) {
-						logger.error("El valor de la mensajería no puede ir vacio");
+						logger.error("El campo mensajería no puede ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El valor de la mensajería no puede ir vacio");
+						alert.setContentText("El campo \"mensajería\" no puede ir vacio");
 						alert.showAndWait();
 						flag = false;
 					} else if (mensajeriaCombo.getValue().toString().equals("Personalmente")) {
@@ -399,15 +399,15 @@ public class CapturaWindow {
 					}
 
 					if (guiaField.getText() == null || guiaField.getText().equals("")) {
-						logger.error("El número guia no puede ir vacío");
+						logger.error("El campo número guia no puede ir vacío");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El número guia no puede ir vacío");
+						alert.setContentText("El campo \"número guia\" no puede ir vacío");
 						alert.showAndWait();
 						flag = false;
 					} else if (!(CapturarRegistro.checkStructNumeroGuia(guiaField.getText()))) {
-						logger.error("El número guia no contiene la estructura requerida");
+						logger.error("El campo número guia no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El número guia no contiene la estructura requerida");
+						alert.setContentText("El campo \"número guia\" no contiene la estructura requerida");
 						alert.showAndWait();
 						flag = false;
 					} else {
@@ -416,23 +416,22 @@ public class CapturaWindow {
 
 					if (origenCombo.getValue() == null || origenCombo.getValue().toString() == null
 							|| origenCombo.getValue().toString().equals("")) {
-						logger.error("El valor del origen no puede ir vacio");
+						logger.error("El campo origen no puede ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El valor del origen no puede ir vacio");
+						alert.setContentText("El campo \"origen\" no puede ir vacio");
 						alert.showAndWait();
 						flag = false;
 					} else if (origenCombo.getValue().toString().equals("Otro")) {
 						if (otroOrigenField.getText() == null || otroOrigenField.getText().equals("")) {
-							logger.error("El valor de otro origen no puede ir vacio");
+							logger.error("El campo otro origen no puede ir vacio");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText(
-									"El valor de otro origen no puede ir vacio.\nComplete el campo o seleccione un origen");
+							alert.setContentText("El campo \"Otro origen\" no puede ir vacio.\nComplete manualmente o seleccione un origen");
 							alert.showAndWait();
 							flag = false;
 						} else if (!(CapturarRegistro.checkString(otroOrigenField.getText()))) {
-							logger.error("El nombre origen no contiene la estructura requerida");
+							logger.error("El campo origen no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El nombre origen no contiene la estructura requerida");
+							alert.setContentText("El campo \"Origen\" no contiene la estructura requerida");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -450,9 +449,9 @@ public class CapturaWindow {
 					/* Filtro para Departamento y destinatarios */
 					if (deptoCombo.getValue() == null  && destinatarioCombo.getValue() == null) 
 					{
-							logger.error("Los datos departamento y destinatario no pueden ir vacios");
-							alert.setHeaderText("Los datos departamento y destinatario no pueden ir vacios");
-							alert.setContentText("Los datos departamento y destinatario no pueden ir vacios");
+							logger.error("Los campos departamento y destinatario no pueden ir vacios");
+							alert.setHeaderText("Los campos departamento y destinatario no pueden ir vacios");
+							alert.setContentText("Los campos \"departamento\" y \"destinatario\" no pueden ir vacios");
 							alert.showAndWait();
 							flag = false;
 					} 
@@ -460,15 +459,15 @@ public class CapturaWindow {
 					/* Filtro para otros Departamento y destinatarios */
 					else if (deptoCombo.getValue() != null && deptoCombo.getValue().toString().equals("Otro") || destinatarioCombo.getValue() != null && destinatarioCombo.getValue().toString().equals("Otro")) {
 						if (otroDeptoField.getText() == null || otroDeptoField.getText().equals("")) {
-							logger.error("El valor Otro Departamento no puede ir vacio");
+							logger.error("El campo Otro Departamento no puede ir vacio");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El valor de Otro Departamento no puede ir vacio.\nComplete el campo o seleccione un departamento");
+							alert.setContentText("El campo \"Otro departamento\" no puede ir vacio.\nComplete manualmente o seleccione un departamento");
 							alert.showAndWait();
 							flag = false;
 						} else if (!(CapturarRegistro.checkString(otroDeptoField.getText()))) {
-							logger.error("El nombre departamento no contiene la estructura requerida");
+							logger.error("El campo departamento no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El nombre departamento no contiene la estructura requerida");
+							alert.setContentText("El campo \"departamento\" no contiene la estructura requerida");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -476,15 +475,15 @@ public class CapturaWindow {
 						}
 						
 						if (otroDestinatarioField.getText() == null || otroDestinatarioField.getText().equals("")) {
-							logger.error("El valor Otro destinatario no puede ir vacio");
+							logger.error("El campo Otro destinatario no puede ir vacio");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El valor Otro destinatario no puede ir vacio.\nComplete el campo o seleccione un destinatario");
+							alert.setContentText("El campo \"Otro destinatario\" no puede ir vacio.\nComplete manualmente o seleccione un destinatario");
 							alert.showAndWait();
 							flag = false;
 						} else if (!(CapturarRegistro.checkString(otroDestinatarioField.getText()))) {
-							logger.error("El nombre destinatario no contiene la estructura requerida");
+							logger.error("El campo  destinatario no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El nombre destinatario no contiene la estructura requerida");
+							alert.setContentText("El campo \"destinatario\" no contiene la estructura requerida");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -497,7 +496,7 @@ public class CapturaWindow {
 							((!destinatarioCombo.getValue().toString().equals("Otro")) && deptoCombo.getValue() == null)) {
 							logger.error("Seleccione un departamento y un destinatario, u escriba en los campos asignados");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("Seleccione un departamento y un destinatario, u escriba en los campos asignados");
+							alert.setContentText("Seleccione un departamento y un destinatario, o complete manualmente los campos \"Otro\", respectivamente");
 							alert.showAndWait();
 							flag = false;
 					}
@@ -602,7 +601,7 @@ public class CapturaWindow {
 				logger.error(e.getMessage());
 			}
 		} else {
-			// hacer algo
+			// put here a irremediable error message
 		}
 	}
 }

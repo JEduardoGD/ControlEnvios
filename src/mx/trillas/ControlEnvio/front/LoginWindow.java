@@ -2,6 +2,7 @@ package mx.trillas.ControlEnvio.front;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,6 +20,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.LoginBackend;
 import mx.trillas.ControlEnvio.persistence.dao.UsuarioDAO;
 
@@ -28,6 +30,14 @@ public class LoginWindow {
 
 	public void LoginStage(Stage stage) {
 
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent event) {
+		        Platform.exit();
+		        System.exit(0);
+		    }
+		});
+		
 		VBox rootPane = new VBox();
 		Scene scene = new Scene(rootPane, 450, 490);
 
@@ -86,7 +96,6 @@ public class LoginWindow {
 					try {
 						existUserBoolean = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
 					}
 					if (existUserBoolean) {
@@ -94,7 +103,6 @@ public class LoginWindow {
 							try {
 								LoginBackend.getMenuUser(stage, usernameField.getText(), passwdField.getText());
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
 								logger.error(e.getMessage());
 							}
 						}
@@ -121,7 +129,6 @@ public class LoginWindow {
 					try {
 						existUserBoolean = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
 					}
 					if (existUserBoolean) {
@@ -129,7 +136,6 @@ public class LoginWindow {
 							try {
 								LoginBackend.getMenuUser(stage, usernameField.getText(), passwdField.getText());
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
 								logger.error(e.getMessage());
 							}
 						}
@@ -149,7 +155,6 @@ public class LoginWindow {
 				try {
 					existUserBoolean = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					logger.error(e.getMessage());
 				}
 				if (existUserBoolean) {

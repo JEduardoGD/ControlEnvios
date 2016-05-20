@@ -181,7 +181,9 @@ public class ReportWindow {
 			otroDeptoField.setDisable(true);
 
 			ComboBox<Object> deptoCombo = DepartamentoBackend.getDeptosListCombo();
-			deptoCombo.setPromptText("Seleccione una opcion...");
+			deptoCombo.setPromptText("Todos");
+			deptoCombo.setValue("Todos");
+			deptoCombo.setPrefWidth(185);
 			deptoCombo.setOnAction(new EventHandler<ActionEvent>() {
 				
 				@Override
@@ -199,7 +201,6 @@ public class ReportWindow {
 				}
 			});
 			deptoCombo.getItems().add("Otro");
-			deptoCombo.getItems().add("Todos");
 
 			container.getChildren().addAll(deptoCombo, otroDeptoField);
 			datePane.getChildren().addAll(datePickerInicio, datePickerFin, deptoCombo, otroDeptoField);
@@ -254,7 +255,6 @@ public class ReportWindow {
 					}
 				}
 			});
-
 			pane.getChildren().addAll(datePane);
 
 			footer.setAlignment(Pos.BOTTOM_CENTER);
@@ -318,9 +318,9 @@ public class ReportWindow {
 			}
 
 			if (dataFullList.isEmpty()) {
-				logger.error("El rango de fechas no arroja ningún registro. Intente con otro rango u otro departamento.");
-				alert.setHeaderText("Sin resultados");
-				alert.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango u otro departamento.");
+				logger.error("El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.");
+				alert.setHeaderText("Consulta sin resultados");
+				alert.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.");
 				alert.showAndWait();
 			} else {
 				for (Guia element : dataFullList) {
@@ -449,8 +449,6 @@ public class ReportWindow {
 					countTableList++;
 				}
 			}
-		System.out.println("countTableList= " + countTableList);
-
 		printButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -465,13 +463,7 @@ public class ReportWindow {
 						
 						if (vboxTableObj != null) {
 						
-						VBox objVbox  = vboxTableObj.getVbox();
-						int objRowsNumber = vboxTableObj.getRowsNumber();
-						String deptoobj = vboxTableObj.getDepartamento();
-							
-							System.out.println("objRowsNumber=" + objRowsNumber);
-							System.out.println("departamento=" + deptoobj);
-							
+							VBox objVbox  = vboxTableObj.getVbox();
 							objVbox.setVisible(true);
 							ReportBackend.printForTable(objVbox);
 

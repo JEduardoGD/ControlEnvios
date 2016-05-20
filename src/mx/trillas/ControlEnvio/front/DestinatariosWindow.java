@@ -102,7 +102,6 @@ public class DestinatariosWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					MenuWindow menu = new MenuWindow();
 					menu.AdminMenuStage(stage);
 				}
@@ -141,11 +140,11 @@ public class DestinatariosWindow {
 			nombrePane.getChildren().addAll(destinatarioLabel, destinatarioField);
 			rootVbox.getChildren().addAll(nombrePane);
 
-			Label deptoLabel = new Label("Departamento ");
+			Label deptoLabel = new Label("Departamento");
 			deptoLabel.getStyleClass().add(".inputs");
 
 			ComboBox<Object> deptoCombo = DepartamentoBackend.getDeptosListCombo();
-
+			deptoCombo.setPrefWidth(208);
 			deptoCombo.setPromptText("Seleccione una opcion...");
 			deptoPane.getChildren().addAll(deptoLabel, deptoCombo);
 			rootVbox.getChildren().addAll(deptoPane);
@@ -166,24 +165,24 @@ public class DestinatariosWindow {
 					if (destinatarioField.getText() == null || destinatarioField.getText().equals("")) {
 						logger.error("El nombre del destinatario no debe ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del destinatario\n no debe ir vacio");
+						alert.setContentText("El campo \"destinatario\" no debe ir vacio");
 						alert.showAndWait();
 					} else if (deptoCombo.getValue() == null || deptoCombo.getValue().toString() == null
 							|| deptoCombo.getValue().toString().equals("")) {
 						logger.error("El nombre del departamento no debe ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del departamento \nno  debe ir vacio");
+						alert.setContentText("El campo \"departamento\" no  debe ir vacio");
 						alert.showAndWait();
 					} else if (!(DestinatarioBackend.checkString(destinatarioField.getText()))) {
 						logger.error("El nombre del destinatario no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del destinatario \nno contiene la estructura requerida");
+						alert.setContentText("El campo \"destinatario\" no contiene la estructura requerida");
 						alert.showAndWait();
 					} else if (destinatarioObj != null) {
 						logger.info("El destinatario ya existe en otro departamento");
 						alert.setAlertType(AlertType.WARNING);
 						alert.setHeaderText(null);
-						alert.setContentText("El destinatario ya existe en \notro departamento");
+						alert.setContentText("El destinatario ya existe en otro departamento");
 						alert.showAndWait();
 					} else {
 						logger.info("Intento guardar el nuevo destinatario");
@@ -245,8 +244,6 @@ public class DestinatariosWindow {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-//		System.out.println("deptosListCombo : " + deptosListCombo);
-//		System.out.println("destinatariosData: " + destinatariosData);
 		
 		for (String element : deptosListCombo) {
 			System.out.println("element=" + element);

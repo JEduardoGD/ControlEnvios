@@ -49,7 +49,6 @@ public class DepartamentoWindow {
 
 	public void departamentoStage(Stage stage) {
 
-
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
@@ -142,21 +141,20 @@ public class DepartamentoWindow {
 					if (nombreField.getText() == null || nombreField.getText().equals("")) {
 						logger.error("El nombre del departamento no debe ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del departamento \nno debe ir vacio");
+						alert.setContentText("El campo del departamento\" \nno debe ir vacio");
 						alert.showAndWait();
 					} else if (!(DepartamentoBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre del departamento no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del departamento no \ncontiene la estructura requerida");
+						alert.setContentText("El campo \"departamento\" no contiene la estructura requerida");
 						alert.showAndWait();
 					} else if (departamentoObj != null) {
 						logger.error("El departamento que intenta crear ya existe.");
 						alert.setAlertType(AlertType.WARNING);
 						alert.setHeaderText(null);
-						alert.setContentText("El nombre del departamento que intenta \ncrear ya existe");
+						alert.setContentText("El nombre del departamento que intenta crear ya existe");
 						alert.showAndWait();
 					} else {
-						logger.info("Intento guardar el nuevo departamento");
 						confirmarDepartamentoStage(new Alert(AlertType.CONFIRMATION), nombreField.getText());
 					}
 				}
