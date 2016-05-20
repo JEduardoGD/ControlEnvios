@@ -98,7 +98,6 @@ public class ReportWindow {
 			HBox headerPane = new HBox();
 			VBox pane = new VBox();
 
-//			Scene scene = new Scene(border, 970, 500);
 			Scene scene = new Scene(border, 950, 500);
 			
 			FlowPane labelsPane = new FlowPane(45, 80);
@@ -185,8 +184,10 @@ public class ReportWindow {
 			ComboBox<Object> deptoCombo = DepartamentoBackend.getDeptosListCombo();
 			deptoCombo.setPromptText("Seleccione una opcion...");
 			deptoCombo.setOnAction(new EventHandler<ActionEvent>() {
+				
 				@Override
 				public void handle(ActionEvent event) {
+					System.out.println("Selected departamento: " +  deptoCombo.getValue());
 					try {
 						if (deptoCombo != null && deptoCombo.getValue().equals("Otro")) {
 							otroDeptoField.setDisable(false);
@@ -339,6 +340,7 @@ public class ReportWindow {
 		    @Override
 		    public void handle(WindowEvent event) {
 		        Platform.exit();
+		        System.exit(0);
 		    }
 		});
 		
@@ -348,13 +350,12 @@ public class ReportWindow {
 		
 		Text confirmText = new Text("");
 		confirmText.setId("confirmText");
-		confirmText.setText("Se encontraron " + dataList.size() + " registros. ¿Desea mandar a imprimir?\n\n\n");
+		confirmText.setText("Se han encontrado " + dataList.size() + " registros. ¿Desea continuar a imprimir?\n\n\n");
 		paneVbox.getChildren().add(confirmText);
 		
 		HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
 	
 		Scene scene = new Scene(paneVbox, 950, 500);
-//		Scene scene = new Scene(paneVbox, 1110, 700);
 		
 		paneVbox.setAlignment(Pos.CENTER);
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
@@ -367,6 +368,8 @@ public class ReportWindow {
 			int countRows = 0;
 			int counterList = 0;
 
+			System.out.println("dataList.size=" + dataList.size());
+			
 			// Rutina para entregar resultados organizados en orden alfabetico
 			List<Controlenvio> ControlenvioList = ReportBackend.guiaToControlenvio(dataList);
 			Collections.sort(ControlenvioList);
@@ -375,31 +378,6 @@ public class ReportWindow {
 			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap(ControlenvioList);
 			
 			HashMap<Integer, VboxTable> vboxTableMap = new HashMap<Integer, VboxTable>();
-			/*
-			for (int i = 0;  i < hashMap.size();  i++) {
-				List<Guia> lista = hashMap.get(i);
-				
-				for (Guia element : lista) {
-					String depto = null;
-					
-					if (element.getDestinatario() == null) {
-						depto = element.getOtrodepartamento();
-					} else {
-						depto = element.getDestinatario().getDepartamento().getNombre();
-					}
-					
-					System.out.println("id=" + element.getId() + "  number=" + element.getNumero() + "  departamento=" + depto);
-				}
-			}
-			System.out.println("");
-			
-			
-			List<Guia> dataSorted = new ArrayList<Guia>();
-
-			for (Controlenvio controlenvio : ControlenvioList) {
-				dataSorted.add(controlenvio.getGuia());
-			}
-			*/
 			
 			// Rutina para dividir las listas de departamentos por hojas
 			ObservableList<Guia> datos = null;
@@ -409,7 +387,6 @@ public class ReportWindow {
 				List<Guia> guiaList = hashMap.get(i);
 
 				for (Guia element : guiaList) {
-					System.out.println("ListaNo="+ i +"  id=" + element.getId() + "  element=" + element.getNumero() + "  guiaList.size=" +guiaList.size()+"  hashMap.size()=" + hashMap.size());
 			
 					if (datos == null) {
 						datos = FXCollections.observableArrayList();
@@ -438,10 +415,12 @@ public class ReportWindow {
 				}
 			}
 
+			/*
+			 * Consigue las listas creadas y las reparte por listas más pequeñas, tamaño por hoja de impresión.
+			 */
 			for (int i = 0; i < hashList.size(); i++) {
-//				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
-				if (generarTable(hashList.get(i), nombreDepartamento, flagTodos) instanceof VBox) {
-				
+				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
+				if (!hashList.get(i).isEmpty()) {
 					List<Guia> guiaList = hashList.get(i);
 					
 					// Rutina para conseguir nombre del departamento, al que pertenece la lista.
@@ -464,10 +443,7 @@ public class ReportWindow {
 					vboxObj.setVbox((VBox) generarTable(hashList.get(i), depto, false));
 					
 					VBox tables = vboxObj.getVbox();
-//					VBox tables = (VBox) generarTable(hashList.get(i),nombreDepartamento, flagTodos, otroDeptoField);
-					
 					tables.setVisible(false);
-					
 					paneVbox.getChildren().add(new VBox());
 					
 					vboxTableMap.put(i, vboxObj);
@@ -475,15 +451,7 @@ public class ReportWindow {
 				}
 			}
 		System.out.println("countTableList= " + countTableList);
-		/*
-		for (int i = 0; i < hashList.size(); i++) {
-			List<Guia> guiaList = hashList.get(i);
-			for (Guia element : guiaList) {
-				System.out.println("i=" + i + "  hashList element: " + element);
-			}
-			System.out.println("");
-		}
-		*/
+
 		printButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -500,13 +468,10 @@ public class ReportWindow {
 						
 						VBox objVbox  = vboxTableObj.getVbox();
 						int objRowsNumber = vboxTableObj.getRowsNumber();
-						
-							if (objRowsNumber < 20) {
-
-							}	
-							else { 
-								objVbox.setTranslateY(-335);
-							}
+						String deptoobj = vboxTableObj.getDepartamento();
+							
+							System.out.println("objRowsNumber=" + objRowsNumber);
+							System.out.println("departamento=" + deptoobj);
 							
 							objVbox.setVisible(true);
 							ReportBackend.printForTable(objVbox);
@@ -521,7 +486,7 @@ public class ReportWindow {
 					
 					Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
 					alertInfo.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
-					alertInfo.setTitle("información");
+					alertInfo.setTitle("Información");
 					
 					alertInfo.setHeaderText(null);
 					alertInfo.setContentText("La Impresión ha finalizado correctamente");
@@ -530,7 +495,7 @@ public class ReportWindow {
 					GenerarReporteStage(stage, usuario);
 				} catch (Exception e) {
 					logger.error(e.getMessage());
-					e.printStackTrace();
+//					e.printStackTrace();
 					
 					confirmText.setText("Error al imprimir");
 					
@@ -539,7 +504,7 @@ public class ReportWindow {
 					alertWarn.setTitle("Alerta al imprimir");
 					
 					alertWarn.setHeaderText(null);
-					alertWarn.setContentText("La Impresión no pudo concluir satisfactoriamente. Verifique su conexión a impresora");
+					alertWarn.setContentText("Ocurrió un problema al procesar impresión. Verifique su conexión a su impresora");
 					alertWarn.showAndWait();
 					
 					GenerarReporteStage(stage, usuario);
@@ -585,6 +550,8 @@ public class ReportWindow {
 		cabeceraFlow.getChildren().addAll(cabeceraText);
 
 		Text nombreDepartamentoText = new Text(nombreDepartamento);
+		String deptoCaptitalize = nombreDepartamentoText.getText().substring(0, 1).toUpperCase() +nombreDepartamentoText.getText().substring(1);
+		nombreDepartamentoText.setText(deptoCaptitalize);
 		nombreDepartamentoText.getStyleClass().add("cabeceraClass");
 		cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
 

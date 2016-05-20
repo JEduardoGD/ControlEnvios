@@ -82,8 +82,7 @@ public class DepartamentoBackend {
 				throw e;
 			}
 			for (Departamento element : departamentos) {
-				String elementFormat = element.getNombre().toString().substring(0, 1).toUpperCase()
-						+ element.getNombre().toString().substring(1);
+				String elementFormat = element.getNombre().substring(0, 1).toUpperCase() + element.getNombre().substring(1);
 				data.add(elementFormat);
 			}
 			return data;

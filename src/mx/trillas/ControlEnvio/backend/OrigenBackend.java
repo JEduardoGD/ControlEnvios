@@ -30,7 +30,6 @@ public class OrigenBackend {
 	 public static void loadOrigenData(String nombreOrigen) throws Exception {
 		 Origen origen = null;
 		 origen  = new Origen();
-		 
 		 origen.setNombre(nombreOrigen);
 		 
 		 try {

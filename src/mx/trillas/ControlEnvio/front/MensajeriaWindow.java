@@ -1,19 +1,16 @@
 package mx.trillas.ControlEnvio.front;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
-import javafx.scene.input.KeyEvent;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -25,22 +22,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import mx.trillas.ControlEnvio.backend.MensajeriaBackend;
 import mx.trillas.ControlEnvio.persistence.dao.MensajeriaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.MensajeriaDAODBImpl;
@@ -182,7 +177,7 @@ public class MensajeriaWindow {
 			stage.show();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -201,6 +196,7 @@ public class MensajeriaWindow {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
+				nombreMensajeria= nombreMensajeria.toLowerCase();
 				MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
 				
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -284,7 +280,14 @@ public class MensajeriaWindow {
 			TableColumn<Mensajeria, String> mensajeraCol = new TableColumn<>("Nombre");
 			mensajeraCol.setMinWidth(247);
 			mensajeraCol.setEditable(true);
-			mensajeraCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+			mensajeraCol.setCellValueFactory(new Callback<CellDataFeatures<Mensajeria, String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Mensajeria, String> param) {
+					String mensajera = param.getValue().getNombre().toLowerCase();
+					String mensajeraCaptitalize = mensajera.substring(0, 1).toUpperCase() +mensajera.substring(1);
+					return new SimpleStringProperty(mensajeraCaptitalize);
+				}
+			});
 			mensajeraCol.setCellFactory(TextFieldTableCell.<Mensajeria> forTableColumn());
 			mensajeraCol.setOnEditCommit((CellEditEvent<Mensajeria, String> t) -> {
 
