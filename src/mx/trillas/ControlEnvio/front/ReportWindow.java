@@ -500,18 +500,7 @@ public class ReportWindow {
 						if (vboxTableObj != null) {
 						
 						VBox objVbox  = vboxTableObj.getVbox();
-						int objRowsNumber = vboxTableObj.getRowsNumber();
 						
-							if (objRowsNumber < 20) {
-//							if (objRowsNumber == 21 ||objRowsNumber == 22) {
-//								objVbox.setTranslateY(-335);
-							}	
-							else { 
-								objVbox.setTranslateY(-335);
-							}
-							
-							System.out.println("objRowsNumber="+objRowsNumber);
-							
 							objVbox.setVisible(true);
 							ReportBackend.printForTable(objVbox);
 

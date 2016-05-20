@@ -5,8 +5,8 @@
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/controlenvios?zeroDateTimeBehavior=convertToNull</property>
-    <property name="hibernate.connection.username">controlenvio</property>
-    <property name="hibernate.connection.password">controlenvio</property>
+    <property name="hibernate.connection.username">controlenvios</property>
+    <property name="hibernate.connection.password">controlenvios</property>
     <mapping resource="mx/trillas/ControlEnvio/persistence/pojos/Guia.hbm.xml"/>
     <mapping resource="mx/trillas/ControlEnvio/persistence/pojos/Usuario.hbm.xml"/>
     <mapping resource="mx/trillas/ControlEnvio/persistence/pojos/Mensajeria.hbm.xml"/>

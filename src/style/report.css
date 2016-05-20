@@ -16,7 +16,7 @@
 
 .table-row-cell {
     -fx-cell-size: 12px;
-    -fx-font-size:  7;
+    -fx-font-size:  8.5;
     -fx-table-cell-border-color: #ccc;
 }
 
