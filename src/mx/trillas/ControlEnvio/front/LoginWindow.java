@@ -2,6 +2,7 @@ package mx.trillas.ControlEnvio.front;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,14 +20,25 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mx.trillas.ControlEnvio.backend.LoginBackend;
 import mx.trillas.ControlEnvio.persistence.dao.UsuarioDAO;
+import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
+import mx.trillas.ControlEnvio.util.Cript;
 
 public class LoginWindow {
 
 	private static Logger logger = Logger.getLogger(UsuarioDAO.class);
 
 	public void LoginStage(Stage stage) {
+
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 
 		VBox rootPane = new VBox();
 		Scene scene = new Scene(rootPane, 450, 490);
@@ -81,26 +93,44 @@ public class LoginWindow {
 			public void handle(KeyEvent keyEvent) {
 				if (keyEvent.getCode() == KeyCode.ENTER) {
 
-					Boolean existUserBoolean = false;
+					Boolean accessFlag = true;
+					Usuario usuario = null;
+					String passwdArg = null;
+					String passwdCript = null;
 
 					try {
-						existUserBoolean = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
+						usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
 					}
-					if (existUserBoolean) {
-						if (LoginBackend.checkLoginData(usernameField, passwdField)) {
-							try {
-								LoginBackend.getMenuUser(stage, usernameField.getText(), passwdField.getText());
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								logger.error(e.getMessage());
-							}
+
+					if (usuario != null) {
+						try {
+							passwdArg = usuario.getPassword();
+							passwdCript = Cript.getSha256(passwdField.getText());
+						} catch (Exception e) {
+							logger.error(e.getMessage());
 						}
-					} else {
-						alert.setContentText("El usuario no existe. Verifique los datos.");
+					}
+
+					if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
+						accessFlag = false;
+					} else if (usuario == null) {
+						alert.setContentText("El usuario no existe. Verifique los datos");
+						alert.showAndWait();
+						accessFlag = false;
+					} else if (!passwdArg.equals(passwdCript) && accessFlag == true) {
+						alert.setContentText("Los datos son incorrectos. Verifique y vuelva a intentar.");
+						alert.showAndWait();
+						accessFlag = false;
+					} else {
+						try {
+							LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
+						} catch (Exception e) {
+							logger.error(e.getMessage());
+						}
 					}
 				}
 			}
@@ -116,26 +146,44 @@ public class LoginWindow {
 			public void handle(KeyEvent keyEvent) {
 				if (keyEvent.getCode() == KeyCode.ENTER) {
 
-					Boolean existUserBoolean = false;
+					Boolean accessFlag = true;
+					Usuario usuario = null;
+					String passwdArg = null;
+					String passwdCript = null;
 
 					try {
-						existUserBoolean = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
+						usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						logger.error(e.getMessage());
 					}
-					if (existUserBoolean) {
-						if (LoginBackend.checkLoginData(usernameField, passwdField)) {
-							try {
-								LoginBackend.getMenuUser(stage, usernameField.getText(), passwdField.getText());
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								logger.error(e.getMessage());
-							}
+
+					if (usuario != null) {
+						try {
+							passwdArg = usuario.getPassword();
+							passwdCript = Cript.getSha256(passwdField.getText());
+						} catch (Exception e) {
+							logger.error(e.getMessage());
 						}
-					} else {
-						alert.setContentText("El usuario no existe. Verifique los datos.");
+					}
+
+					if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
+						accessFlag = false;
+					} else if (usuario == null) {
+						alert.setContentText("El usuario no existe. Verifique los datos");
+						alert.showAndWait();
+						accessFlag = false;
+					} else if (!passwdArg.equals(passwdCript) && accessFlag == true) {
+						alert.setContentText("Los datos son incorrectos. Verifique y vuelva a intentar.");
+						alert.showAndWait();
+						accessFlag = false;
+					} else {
+						try {
+							LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
+						} catch (Exception e) {
+							logger.error(e.getMessage());
+						}
 					}
 				}
 			}
@@ -144,26 +192,44 @@ public class LoginWindow {
 			@Override
 			public void handle(ActionEvent event) {
 
-				Boolean existUserBoolean = false;
+				Boolean accessFlag = true;
+				Usuario usuario = null;
+				String passwdArg = null;
+				String passwdCript = null;
 
 				try {
-					existUserBoolean = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
+					usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					logger.error(e.getMessage());
 				}
-				if (existUserBoolean) {
-					if (LoginBackend.checkLoginData(usernameField, passwdField)) {
-						try {
-							LoginBackend.getMenuUser(stage, usernameField.getText(), passwdField.getText());
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							logger.error(e.getMessage());
-						}
+
+				if (usuario != null) {
+					try {
+						passwdArg = usuario.getPassword();
+						passwdCript = Cript.getSha256(passwdField.getText());
+					} catch (Exception e) {
+						logger.error(e.getMessage());
 					}
-				} else {
-					alert.setContentText("El usuario no existe. Verifique los datos.");
+				}
+
+				if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+					alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 					alert.showAndWait();
+					accessFlag = false;
+				} else if (usuario == null) {
+					alert.setContentText("El usuario no existe. Verifique los datos");
+					alert.showAndWait();
+					accessFlag = false;
+				} else if (!passwdArg.equals(passwdCript) && accessFlag == true) {
+					alert.setContentText("Los datos son incorrectos. Verifique y vuelva a intentar.");
+					alert.showAndWait();
+					accessFlag = false;
+				} else {
+					try {
+						LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
 				}
 			}
 		});

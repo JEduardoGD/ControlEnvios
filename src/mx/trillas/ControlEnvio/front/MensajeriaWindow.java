@@ -84,7 +84,7 @@ public class MensajeriaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
+
 					MenuWindow menu = new MenuWindow();
 					menu.AdminMenuStage(stage);
 				}
@@ -104,7 +104,7 @@ public class MensajeriaWindow {
 					try {
 						mensajeria.modificarMensajeriaStage(stage);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+
 						logger.error("Ocurrio un error al procesar cambios");
 					}
 				}
@@ -132,7 +132,7 @@ public class MensajeriaWindow {
 			aceptarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
+
 					Mensajeria mensajeriaObj = null;
 
 					try {
@@ -142,14 +142,15 @@ public class MensajeriaWindow {
 					}
 
 					if (mensajeriaField.getText() == null || mensajeriaField.getText().equals("")) {
-						logger.error("El nombre de empresa de mensajeria no debe ir vacio");
+						logger.error("El campo mensajeria no puede ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre de empresa de mensajeria no debe ir vacio");
+						alert.setContentText("El nombre de empresa de mensajeria no puede ir vacio");
 						alert.showAndWait();
 					} else if (!(MensajeriaBackend.checkString(mensajeriaField.getText()))) {
-						logger.error("El nombre de empresa de mensajeria no contiene la estructura requerida");
+						logger.error("El campo mensajeria no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre de empresa de mensajeria no contiene la estructura requerida");
+						alert.setContentText("El campo mensajeria no contiene la estructura requerida."
+								+ " (Números, letras, puntos y comas)");
 						alert.showAndWait();
 					} else if (mensajeriaObj != null) {
 						logger.info("La empresa de mensajeria que intenta crear ya existe.");
@@ -158,9 +159,7 @@ public class MensajeriaWindow {
 						alert.setContentText("La empresa de mensajeria que intenta crear ya existe");
 						alert.showAndWait();
 					} else {
-						logger.info("Intento guardar la empresa de mensajeria");
 						confirmarMensajeriaStage(new Alert(AlertType.CONFIRMATION), mensajeriaField.getText());
-
 					}
 				}
 			});
@@ -265,7 +264,7 @@ public class MensajeriaWindow {
 			returnPane.getChildren().addAll(backButton);
 			paneVbox.getChildren().addAll(returnPane);
 
-			Text text = new Text("Edite los registros que necesite modificar, y guarde \nlos cambios presionando el botón guardar.");
+			Text text = new Text("Edite los registros que necesite modificar, y guarde \nlos cambios presionando el botón guardar");
 			text.getStyleClass().add("textRules");
 			paneVbox.getChildren().addAll(text);
 			
@@ -318,9 +317,10 @@ public class MensajeriaWindow {
 						}
 					}
 				} else {
-					logger.error("El nombre de empresa de mensajeria no debe ir vacio");
+					logger.error("El dato ingresado no contiene la estructura requerida. Por favor corrigalo");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo");
+					alert.setContentText("El dato ingresado no contiene la estructura requerida."
+							+ " (Números, letras, puntos y comas). Por favor corriga");
 					alert.showAndWait();
 					
 					table.getColumns().get(0).setVisible(false);

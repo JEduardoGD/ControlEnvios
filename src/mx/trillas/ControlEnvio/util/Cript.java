@@ -3,7 +3,7 @@ package mx.trillas.ControlEnvio.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Cripto {
+public class Cript {
 	public static String getSha256(String text) {
 		MessageDigest md;
 		try {
@@ -19,8 +19,6 @@ public class Cripto {
 						.substring(1));
 			}
 
-			// System.out.println("Hex format : " + sb.toString());
-
 			// convert the byte to hex format method 2
 			StringBuffer hexString = new StringBuffer();
 			for (int i = 0; i < byteData.length; i++) {
@@ -29,10 +27,8 @@ public class Cripto {
 					hexString.append('0');
 				hexString.append(hex);
 			}
-			// System.out.println("Hex format : " + hexString.toString());
 			return hexString.toString();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

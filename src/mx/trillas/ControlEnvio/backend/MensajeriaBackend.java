@@ -15,8 +15,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Mensajeria;
 
 public class MensajeriaBackend {
 
-	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
-	 private static final String RIGHT_PATTERN = "^[a-zA-Z]*";
+	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ.,]){3,45}";
 
 	 private static Logger logger = Logger.getLogger(MensajeriaBackend.class);
 
@@ -28,16 +27,6 @@ public class MensajeriaBackend {
 		  Matcher matcher;
 
 		  pattern = Pattern.compile(STRING_PATTERN);
-		  matcher = pattern.matcher(phrase);
-
-		  return matcher.matches();
-	 }
-	  public static boolean checkRightString(String phrase){
-
-		  Pattern pattern;
-		  Matcher matcher;
-
-		  pattern = Pattern.compile(RIGHT_PATTERN);
 		  matcher = pattern.matcher(phrase);
 
 		  return matcher.matches();
@@ -59,18 +48,17 @@ public class MensajeriaBackend {
 	 
 	public static ObservableList<Mensajeria> getMensajeriaData() throws Exception {
 
-			List<Mensajeria> mensajerias = new ArrayList<Mensajeria>();
-			ObservableList<Mensajeria> data = FXCollections.observableArrayList();
-			
-			try {
-				mensajerias = mensajeriaDAO.getMensajeriaList();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				throw e;
-			}
-			for (Mensajeria element : mensajerias) {
-				data.add(element);
-			}
-			return data;
+		List<Mensajeria> mensajerias = new ArrayList<Mensajeria>();
+		ObservableList<Mensajeria> data = FXCollections.observableArrayList();
+		
+		try {
+			mensajerias = mensajeriaDAO.getMensajeriaList();
+		} catch (Exception e) {
+			throw e;
+		}
+		for (Mensajeria element : mensajerias) {
+			data.add(element);
+		}
+		return data;
 	}
 }

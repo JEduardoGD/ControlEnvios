@@ -14,4 +14,5 @@ public interface GuiaDAO {
 	 public List<Guia> getGuiaListByDateOtroDepto(Date fechaInicio, Date fechaFin, String nombreDepartamento  ) throws Exception;
 	 public List<Guia> getGuiaListBySortedDepto(Date fechaInicio, Date fechaFin) throws Exception;
 	 public List<Guia> getGuiaListByDateyDestinatario(Date fechaInicio, Date fechaFin, Destinatario destinatario ) throws Exception;
+	 public List<String> getotrosDeptosList() throws Exception;
 }

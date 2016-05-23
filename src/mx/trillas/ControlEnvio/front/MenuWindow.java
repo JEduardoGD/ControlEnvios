@@ -53,7 +53,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(generarReporteButton);
 			
-			Button logOutButton = new Button("Log Out");
+			Button logOutButton = new Button("Cerrar sesión");
 			logOutButton.setCursor(Cursor.HAND);
 			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -142,7 +142,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(deptosButton);
 			
-			Button logOutButton = new Button("Log Out");
+			Button logOutButton = new Button("Cerrar sesión");
 			logOutButton.setCursor(Cursor.HAND);
 			logOutButton.setId("logOutButton");
 			logOutButton.setOnAction(new EventHandler<ActionEvent>() {
