@@ -18,7 +18,8 @@ import mx.trillas.ControlEnvio.persistence.pojos.Departamento;
 
 public class DestinatarioBackend {
 	
-	private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
+	private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ]){6,45}";
+	
 	private static DestinatarioDAO destinatarioDAO = new DestinatarioDAODBImpl();
 	private static DepartamentoDAO departamentoDAO = new DepartamentoDAODBImpl();
 	private static Logger logger = Logger.getLogger(DestinatarioBackend.class);

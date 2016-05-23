@@ -79,7 +79,9 @@ public class DepartamentoWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.WARNING, "content text");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+			.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 			alert.setTitle("Departamentos");
 
 			Button backButton = new Button("Regresar");
@@ -146,7 +148,8 @@ public class DepartamentoWindow {
 					} else if (!(DepartamentoBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre del departamento no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"departamento\" no contiene la estructura requerida");
+						alert.setContentText("El campo \"departamento\" no contiene la estructura requerida"
+								+ " (Números, letras)");
 						alert.showAndWait();
 					} else if (departamentoObj != null) {
 						logger.error("El departamento que intenta crear ya existe.");
@@ -321,7 +324,8 @@ public class DepartamentoWindow {
 				} else {
 					logger.error("El nombre del departamento no debe ir vacio");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo");
+					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo"
+							+ " (Números, letras)");
 					alert.showAndWait();
 
 					table.getColumns().get(0).setVisible(false);

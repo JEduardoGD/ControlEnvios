@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import mx.trillas.ControlEnvio.persistence.dao.GuiaDAO;
 import mx.trillas.ControlEnvio.persistence.impl.GuiaDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Guia;
@@ -14,7 +15,7 @@ import mx.trillas.ControlEnvio.persistence.pojos.Guia;
 public class GuiaBackend {
 
 	 private static final String NUMERO_GUIA_PATTERN = "([a-zA-Z]{1}[0-9]{3,44})";
-	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\s]){3,45}";
+	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ.,]){6,45}";
 	 
 	 private static GuiaDAO guiaDAO = new GuiaDAODBImpl();
 	 
@@ -64,4 +65,20 @@ public class GuiaBackend {
 		}
 		return data;
 	}
+	 
+	 public static ComboBox<Object> getotrosDeptosListCombo() throws Exception {
+		ComboBox<Object> departamentos = new ComboBox<>();
+		List<String> deptosList = new ArrayList<String>();
+		ObservableList<String> deptosObservList = FXCollections.observableArrayList(guiaDAO.getotrosDeptosList());
+
+		for (String element : deptosObservList) {
+			
+			if (element != null && deptosList.contains(element)==false) {
+				String elementFormat = element.toString().substring(0, 1).toUpperCase() + element.toString().substring(1);	
+				departamentos.getItems().addAll(elementFormat);
+				deptosList.add(element);
+			}
+		}
+		return departamentos;
+	 }
 }

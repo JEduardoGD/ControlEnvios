@@ -75,7 +75,9 @@ public class OrigenesWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.WARNING, "content text");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+			.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 			alert.setTitle("Origenes");
 
 			Button backButton = new Button("Regresar");

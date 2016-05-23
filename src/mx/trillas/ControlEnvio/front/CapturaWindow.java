@@ -151,7 +151,7 @@ public class CapturaWindow {
 			Text instrucciones = new Text("Complete los campos del formulario. Los datos paquetería, \nnumero guia, origen, departamento y destinatario son \nobligatorios."
 					+ " Si el dato origen, destinatario o \ndepartamento no existe dentro del menu de selección, \ningreselos manualmente desde el campo \"Otro\".");
 			instrucciones.getStyleClass().add("textRules");
-//			instrucciones.setTextAlignment(TextAlignment.CENTER);
+
 			textPane.getChildren().addAll(instrucciones);
 			rootVBox.getChildren().addAll(textPane);
 			
@@ -212,12 +212,12 @@ public class CapturaWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					try {
 						if (origenCombo != null && origenCombo.getValue().equals("Otro")) {
 							otroOrigenField.setDisable(false);
 						} else {
 							otroOrigenField.setDisable(true);
+							otroOrigenField.setText("");
 						}
 					} catch (Exception e) {
 						logger.error(e.getMessage());
@@ -288,6 +288,8 @@ public class CapturaWindow {
 						otroDeptoField.setDisable(true);
 						otroDestinatarioField.setDisable(true);
 						destinatarioCombo.setDisable(false);
+						otroDeptoField.setText("");
+						otroDestinatarioField.setText("");
 					}
 				}
 			});
@@ -407,7 +409,7 @@ public class CapturaWindow {
 					} else if (!(CapturarRegistro.checkStructNumeroGuia(guiaField.getText()))) {
 						logger.error("El campo número guia no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"número guia\" no contiene la estructura requerida");
+						alert.setContentText("El campo \"número guia\" no contiene la estructura requerida. (Números y letras)");
 						alert.showAndWait();
 						flag = false;
 					} else {
@@ -418,7 +420,7 @@ public class CapturaWindow {
 							|| origenCombo.getValue().toString().equals("")) {
 						logger.error("El campo origen no puede ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"origen\" no puede ir vacio");
+						alert.setContentText("Seleccione el \"origen\"");
 						alert.showAndWait();
 						flag = false;
 					} else if (origenCombo.getValue().toString().equals("Otro")) {
@@ -431,7 +433,8 @@ public class CapturaWindow {
 						} else if (!(CapturarRegistro.checkString(otroOrigenField.getText()))) {
 							logger.error("El campo origen no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El campo \"Origen\" no contiene la estructura requerida");
+							alert.setContentText("El campo \"Origen\" no contiene la estructura requerida"
+							+ " (Números, letras, puntos y comas)");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -449,9 +452,9 @@ public class CapturaWindow {
 					/* Filtro para Departamento y destinatarios */
 					if (deptoCombo.getValue() == null  && destinatarioCombo.getValue() == null) 
 					{
-							logger.error("Los campos departamento y destinatario no pueden ir vacios");
-							alert.setHeaderText("Los campos departamento y destinatario no pueden ir vacios");
-							alert.setContentText("Los campos \"departamento\" y \"destinatario\" no pueden ir vacios");
+							logger.error("Seleccione un departamento y eñ destinatario");
+							alert.setHeaderText("Los campos vacios");
+							alert.setContentText("Seleccione un departamento y eñ destinatario");
 							alert.showAndWait();
 							flag = false;
 					} 
@@ -467,7 +470,8 @@ public class CapturaWindow {
 						} else if (!(CapturarRegistro.checkString(otroDeptoField.getText()))) {
 							logger.error("El campo departamento no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El campo \"departamento\" no contiene la estructura requerida");
+							alert.setContentText("El campo \"Otro departamento\" no contiene la estructura requerida."
+									+ " (Números, letras)");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -483,7 +487,8 @@ public class CapturaWindow {
 						} else if (!(CapturarRegistro.checkString(otroDestinatarioField.getText()))) {
 							logger.error("El campo  destinatario no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El campo \"destinatario\" no contiene la estructura requerida");
+							alert.setContentText("El campo \"Otro destinatario\" no contiene la estructura requerida"
+									+ " (Números, letras)");
 							alert.showAndWait();
 							flag = false;
 						} else {
