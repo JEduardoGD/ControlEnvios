@@ -75,7 +75,9 @@ public class OrigenesWindow {
 
 			((Group) scene.getRoot()).getChildren().addAll(rootVbox);
 
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.WARNING, "content text");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+			.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 			alert.setTitle("Origenes");
 
 			Button backButton = new Button("Regresar");
@@ -136,23 +138,22 @@ public class OrigenesWindow {
 					}
 
 					if (nombreField.getText() == null || nombreField.getText().equals("")) {
-						logger.error("El nombre de origen no debe ir vacio");
+						logger.error("El campo origen no debe ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del nuevo origen \nno debe ir vacio");
+						alert.setContentText("El campo \"origen\" no debe ir vacio");
 						alert.showAndWait();
 					} else if (!(OrigenBackend.checkString(nombreField.getText()))) {
-						logger.error("El nombre de origen no contiene la estructura requerida");
+						logger.error("El campo origen no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El nombre del nuevo origen no \ncontiene la estructura requerida");
+						alert.setContentText("El campo \"origen\" no contiene la estructura requerida");
 						alert.showAndWait();
 					} else if (origenObj != null) {
 						logger.info("El origen que intenta crear ya existe.");
 						alert.setAlertType(AlertType.WARNING);
 						alert.setHeaderText(null);
-						alert.setContentText("El origen que intenta \ncrear ya existe");
+						alert.setContentText("El campo \"origen\" que intenta crear ya existe");
 						alert.showAndWait();
 					} else {
-						logger.info("Intento guardar el nuevo origen");
 						confirmarOrigenesStage(new Alert(AlertType.CONFIRMATION), nombreField.getText());
 					}
 				}
@@ -305,7 +306,7 @@ public class OrigenesWindow {
 				public void handle(ActionEvent event) {
 					if (origenList.isEmpty()) {
 						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Modificaciones en mensajería");
+						alert.setTitle("Modificaciones en origenes");
 						alert.setHeaderText("Alerta");
 						alert.setContentText("Aún no ha hecho cambios en registros");
 						alert.showAndWait();

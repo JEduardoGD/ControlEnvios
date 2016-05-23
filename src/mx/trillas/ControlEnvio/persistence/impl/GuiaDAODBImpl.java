@@ -84,6 +84,30 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		}
 		return guias;
 	}
+
+	public List<String> getotrosDeptosList() throws Exception {
+		Session session = null;
+		List<String> otrosDeptos = new ArrayList<String>();
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Criteria criteria = session.createCriteria(Guia.class);
+
+			List<?> objList = criteria.list();
+			for (Object guiaObj : objList) {
+				if (guiaObj != null && guiaObj instanceof Guia) {
+					Guia guia = (Guia) guiaObj;
+					otrosDeptos.add(guia.getOtrodepartamento());
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return otrosDeptos;
+	}
 	
 	@Override
 	public List<Guia> getGuiaListBySortedDepto(Date fechaInicio, Date fechaFin) throws Exception {
