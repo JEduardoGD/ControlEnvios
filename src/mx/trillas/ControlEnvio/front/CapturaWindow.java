@@ -126,7 +126,7 @@ public class CapturaWindow {
 			rootVBox.getChildren().add(headerPane);
 
 			Label labelMensajeria = new Label();
-			labelMensajeria.setText("Paqueteria");
+			labelMensajeria.setText("Mensajería");
 			
 			ObservableList<Mensajeria> mensajeriaList = FXCollections.observableArrayList(mensajeriaDAO.getMensajeriaList());
 
