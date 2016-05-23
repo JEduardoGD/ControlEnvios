@@ -60,7 +60,6 @@ public class MenuWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					LoginWindow login = new LoginWindow();
 					login.LoginStage(stage);
 				}

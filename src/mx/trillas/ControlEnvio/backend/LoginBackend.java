@@ -1,6 +1,7 @@
 package mx.trillas.ControlEnvio.backend;
 
 import mx.trillas.ControlEnvio.front.MenuWindow;
+import mx.trillas.ControlEnvio.persistence.HibernateUtil;
 import mx.trillas.ControlEnvio.persistence.dao.TipousuarioDAO;
 import mx.trillas.ControlEnvio.persistence.dao.UsuarioDAO;
 import mx.trillas.ControlEnvio.persistence.dao.TipousuarioDAO.TIPOS_USUARIO;
@@ -8,6 +9,8 @@ import mx.trillas.ControlEnvio.persistence.factory.ImplFactory;
 import mx.trillas.ControlEnvio.persistence.impl.TipousuarioDAODBImpl;
 import mx.trillas.ControlEnvio.persistence.pojos.Usuario;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -19,6 +22,24 @@ public class LoginBackend {
 	private static UsuarioDAO usuarioDAO = ImplFactory.getUsuarioDAO();
 	private static TipousuarioDAO tipousuarioDAO = new TipousuarioDAODBImpl();
 
+	public static boolean testConnection(){
+		Session session = null;
+		
+		try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            if (session != null){
+            	return true;
+            }
+
+        } catch (HibernateException ex) {
+        	logger.error(ex.getMessage());
+        	return false;
+        } finally {
+            session.close();
+        }
+		return false;
+	}
+	
 	public static boolean checkLoginData(TextField usernameField, TextField passwdField) {
 		String contentUsernameField = usernameField.getText();
 		String contentPasswdField = passwdField.getText();

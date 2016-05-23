@@ -112,8 +112,14 @@ public class LoginWindow {
 							logger.error(e.getMessage());
 						}
 					}
-
-					if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+					
+					System.out.println("testConecction: " + LoginBackend.testConnection());
+					if (LoginBackend.testConnection() == false){
+						alert.setContentText("No existe conexión a la base de datos. Por favor, verifique con el administrador.");
+						alert.showAndWait();
+						accessFlag = false;
+					}
+					else if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
 						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
 						accessFlag = false;
@@ -165,7 +171,7 @@ public class LoginWindow {
 							logger.error(e.getMessage());
 						}
 					}
-
+					
 					if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
 						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
