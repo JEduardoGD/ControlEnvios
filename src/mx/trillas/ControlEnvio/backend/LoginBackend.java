@@ -24,7 +24,7 @@ public class LoginBackend {
 
 	public static boolean testConnection(){
 		Session session = null;
-		
+
 		try {
             session = HibernateUtil.getSessionFactory().openSession();
             if (session != null){
@@ -39,7 +39,7 @@ public class LoginBackend {
         }
 		return false;
 	}
-	
+
 	public static boolean checkLoginData(TextField usernameField, TextField passwdField) {
 		String contentUsernameField = usernameField.getText();
 		String contentPasswdField = passwdField.getText();

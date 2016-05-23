@@ -102,6 +102,13 @@ public class LoginWindow {
 						usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
 					} catch (Exception e) {
 						logger.error(e.getMessage());
+						e.printStackTrace();
+					}finally{
+						if(usuario==null){
+							logger.error("No se pudo validar el usuario");
+							return;
+						}
+						System.out.println();
 					}
 
 					if (usuario != null) {
@@ -112,7 +119,7 @@ public class LoginWindow {
 							logger.error(e.getMessage());
 						}
 					}
-					
+
 					System.out.println("testConecction: " + LoginBackend.testConnection());
 					if (LoginBackend.testConnection() == false){
 						alert.setContentText("No existe conexión a la base de datos. Por favor, verifique con el administrador.");
@@ -171,7 +178,7 @@ public class LoginWindow {
 							logger.error(e.getMessage());
 						}
 					}
-					
+
 					if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
 						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
