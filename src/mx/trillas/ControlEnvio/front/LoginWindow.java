@@ -98,52 +98,50 @@ public class LoginWindow {
 					String passwdArg = null;
 					String passwdCript = null;
 
-					try {
-						usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-						e.printStackTrace();
-					}finally{
-						if(usuario==null){
-							logger.error("No se pudo validar el usuario");
-							return;
-						}
-						System.out.println();
-					}
-
-					if (usuario != null) {
+					if (LoginBackend.checkLoginData(usernameField, passwdField)) {
 						try {
-							passwdArg = usuario.getPassword();
-							passwdCript = Cript.getSha256(passwdField.getText());
+							usuario = LoginBackend.existUser(usernameField.getText());
 						} catch (Exception e) {
 							logger.error(e.getMessage());
+							e.printStackTrace();
+						} finally {
+							if (usuario == null) {
+								logger.error("No es posible validar usuario.");
+								alert.setContentText("No es posible validar usuario.");
+								alert.showAndWait();
+								accessFlag = false;
+								return;
+							}
+							System.out.println();
 						}
-					}
 
-					System.out.println("testConecction: " + LoginBackend.testConnection());
-					if (LoginBackend.testConnection() == false){
-						alert.setContentText("No existe conexión a la base de datos. Por favor, verifique con el administrador.");
-						alert.showAndWait();
-						accessFlag = false;
-					}
-					else if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+						if (usuario != null) {
+							try {
+								passwdArg = usuario.getPassword();
+								passwdCript = Cript.getSha256(passwdField.getText());
+							} catch (Exception e) {
+								logger.error(e.getMessage());
+							}
+						}
+
+						if (!passwdArg.equals(passwdCript) && accessFlag == true) {
+							alert.setContentText("No es posible validar usuario. Verifique y vuelva a intentar.");
+							alert.showAndWait();
+							accessFlag = false;
+						} else {
+							try {
+								if (accessFlag == true) {
+									LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
+								}
+							} catch (Exception e) {
+								logger.error(e.getMessage());
+							}
+						}
+
+					} else {
 						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
 						accessFlag = false;
-					} else if (usuario == null) {
-						alert.setContentText("El usuario no existe. Verifique los datos");
-						alert.showAndWait();
-						accessFlag = false;
-					} else if (!passwdArg.equals(passwdCript) && accessFlag == true) {
-						alert.setContentText("Los datos son incorrectos. Verifique y vuelva a intentar.");
-						alert.showAndWait();
-						accessFlag = false;
-					} else {
-						try {
-							LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
-						} catch (Exception e) {
-							logger.error(e.getMessage());
-						}
 					}
 				}
 			}
@@ -158,45 +156,55 @@ public class LoginWindow {
 			@Override
 			public void handle(KeyEvent keyEvent) {
 				if (keyEvent.getCode() == KeyCode.ENTER) {
-
 					Boolean accessFlag = true;
 					Usuario usuario = null;
 					String passwdArg = null;
 					String passwdCript = null;
 
-					try {
-						usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-					}
-
-					if (usuario != null) {
+					if (LoginBackend.checkLoginData(usernameField, passwdField)) {
 						try {
-							passwdArg = usuario.getPassword();
-							passwdCript = Cript.getSha256(passwdField.getText());
+							usuario = LoginBackend.existUser(usernameField.getText());
 						} catch (Exception e) {
 							logger.error(e.getMessage());
+							e.printStackTrace();
+						} finally {
+							if (usuario == null) {
+								logger.error("No es posible validar usuario.");
+								alert.setContentText("No es posible validar usuario.");
+								alert.showAndWait();
+								accessFlag = false;
+								return;
+							}
+							System.out.println();
 						}
-					}
 
-					if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+						if (usuario != null) {
+							try {
+								passwdArg = usuario.getPassword();
+								passwdCript = Cript.getSha256(passwdField.getText());
+							} catch (Exception e) {
+								logger.error(e.getMessage());
+							}
+						}
+
+						if (!passwdArg.equals(passwdCript) && accessFlag == true) {
+							alert.setContentText("No es posible validar usuario. Verifique y vuelva a intentar.");
+							alert.showAndWait();
+							accessFlag = false;
+						} else {
+							try {
+								if (accessFlag == true) {
+									LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
+								}
+							} catch (Exception e) {
+								logger.error(e.getMessage());
+							}
+						}
+
+					} else {
 						alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 						alert.showAndWait();
 						accessFlag = false;
-					} else if (usuario == null) {
-						alert.setContentText("El usuario no existe. Verifique los datos");
-						alert.showAndWait();
-						accessFlag = false;
-					} else if (!passwdArg.equals(passwdCript) && accessFlag == true) {
-						alert.setContentText("Los datos son incorrectos. Verifique y vuelva a intentar.");
-						alert.showAndWait();
-						accessFlag = false;
-					} else {
-						try {
-							LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
-						} catch (Exception e) {
-							logger.error(e.getMessage());
-						}
 					}
 				}
 			}
@@ -210,39 +218,50 @@ public class LoginWindow {
 				String passwdArg = null;
 				String passwdCript = null;
 
-				try {
-					usuario = LoginBackend.existUser(usernameField.getText(), passwdField.getText());
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-				}
-
-				if (usuario != null) {
+				if (LoginBackend.checkLoginData(usernameField, passwdField)) {
 					try {
-						passwdArg = usuario.getPassword();
-						passwdCript = Cript.getSha256(passwdField.getText());
+						usuario = LoginBackend.existUser(usernameField.getText());
 					} catch (Exception e) {
 						logger.error(e.getMessage());
+						e.printStackTrace();
+					} finally {
+						if (usuario == null) {
+							logger.error("No es posible validar usuario.");
+							alert.setContentText("No es posible validar usuario.");
+							alert.showAndWait();
+							accessFlag = false;
+							return;
+						}
+						System.out.println();
 					}
-				}
 
-				if (!LoginBackend.checkLoginData(usernameField, passwdField)) {
+					if (usuario != null) {
+						try {
+							passwdArg = usuario.getPassword();
+							passwdCript = Cript.getSha256(passwdField.getText());
+						} catch (Exception e) {
+							logger.error(e.getMessage());
+						}
+					}
+
+					if (!passwdArg.equals(passwdCript) && accessFlag == true) {
+						alert.setContentText("No es posible validar usuario. Verifique y vuelva a intentar.");
+						alert.showAndWait();
+						accessFlag = false;
+					} else {
+						try {
+							if (accessFlag == true) {
+								LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
+							}
+						} catch (Exception e) {
+							logger.error(e.getMessage());
+						}
+					}
+
+				} else {
 					alert.setContentText("Los datos ingresados no contiene datos válidos. Verifique y vuelva a intentar.");
 					alert.showAndWait();
 					accessFlag = false;
-				} else if (usuario == null) {
-					alert.setContentText("El usuario no existe. Verifique los datos");
-					alert.showAndWait();
-					accessFlag = false;
-				} else if (!passwdArg.equals(passwdCript) && accessFlag == true) {
-					alert.setContentText("Los datos son incorrectos. Verifique y vuelva a intentar.");
-					alert.showAndWait();
-					accessFlag = false;
-				} else {
-					try {
-						LoginBackend.getMenuUser(stage, usernameField.getText(), passwdArg);
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-					}
 				}
 			}
 		});

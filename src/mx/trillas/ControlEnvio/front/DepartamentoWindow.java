@@ -148,8 +148,7 @@ public class DepartamentoWindow {
 					} else if (!(DepartamentoBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre del departamento no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"departamento\" no contiene la estructura requerida"
-								+ " (Números, letras)");
+						alert.setContentText("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 						alert.showAndWait();
 					} else if (departamentoObj != null) {
 						logger.error("El departamento que intenta crear ya existe.");
@@ -322,10 +321,9 @@ public class DepartamentoWindow {
 						}
 					}
 				} else {
-					logger.error("El nombre del departamento no debe ir vacio");
+					logger.error("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo"
-							+ " (Números, letras)");
+					alert.setContentText("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 					alert.showAndWait();
 
 					table.getColumns().get(0).setVisible(false);

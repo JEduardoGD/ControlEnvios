@@ -87,7 +87,7 @@ public class CapturaWindow {
 			
 			FlowPane clearPane = new FlowPane();
 			FlowPane buttonsPane = new FlowPane();
-			buttonsPane.setPadding(new Insets(5, 0, 10, 0));
+			buttonsPane.setPadding(new Insets(6, 0, 6, 0));
 
 			FlowPane verticalFlow = new FlowPane(10,1);
 			VBox vertical1 = new VBox(20);
@@ -96,7 +96,7 @@ public class CapturaWindow {
 			verticalFlow.setPadding(new Insets(5, 0, 5, 30));
 			vertical1.setAlignment(Pos.CENTER);
 			
-			Scene scene = new Scene(rootVBox, 480, 640);
+			Scene scene = new Scene(rootVBox, 480, 650);
 
 			mensajeraPane.setAlignment(Pos.CENTER);
 			guiaPane.setAlignment(Pos.CENTER);
@@ -131,6 +131,8 @@ public class CapturaWindow {
 			ObservableList<Mensajeria> mensajeriaList = FXCollections.observableArrayList(mensajeriaDAO.getMensajeriaList());
 
 			ComboBox<Object> mensajeriaCombo = new ComboBox<>();
+			TextField guiaField = new TextField();
+			guiaField.setDisable(false);
 
 			for (Mensajeria element : mensajeriaList) {
 				String elementFormat = element.toString().substring(0, 1).toUpperCase()
@@ -140,6 +142,18 @@ public class CapturaWindow {
 			mensajeriaCombo.getItems().add("Personalmente");
 			mensajeriaCombo.getItems().addAll();
 			mensajeriaCombo.setPromptText("Seleccione una opción...");
+			mensajeriaCombo.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					if (mensajeriaCombo.getValue().toString().equals("Personalmente")){
+						guiaField.clear();
+						guiaField.setDisable(true);
+					} else {
+						guiaField.setDisable(false);
+					}
+				}
+			});
 			
 			vertical1.getChildren().addAll(labelMensajeria);
 			vertical2.getChildren().addAll( mensajeriaCombo);
@@ -156,8 +170,7 @@ public class CapturaWindow {
 			rootVBox.getChildren().addAll(textPane);
 			
 			Label guiaLabel = new Label("Numero guia");
-
-			TextField guiaField = new TextField();
+			
 			guiaField.textProperty().addListener(( observable, oldValue, newValue) -> {
 				   if (guiaField.getText().length() > 44) {
 		                String s = guiaField.getText().substring(0, 44);
@@ -293,7 +306,6 @@ public class CapturaWindow {
 					}
 				}
 			});
-			
 			vertical1.getChildren().addAll(deptoLabel);
 			vertical2.getChildren().addAll( deptoCombo);
 
@@ -316,7 +328,6 @@ public class CapturaWindow {
 					}
 				}
 			});
-			
 			vertical1.getChildren().addAll(destinatarioLabel);
 			vertical2.getChildren().addAll( destinatarioCombo);
 
@@ -365,6 +376,7 @@ public class CapturaWindow {
 					otroOrigenField.setDisable(true);
 					deptoCombo.setDisable(false);
 					destinatarioCombo.setDisable(false);
+					guiaField.setDisable(false);
 				}
 			});
 			clearPane.getChildren().addAll(clearButton);
@@ -385,7 +397,7 @@ public class CapturaWindow {
 							|| mensajeriaCombo.getValue().toString().equals("")) {
 						logger.error("El campo mensajería no puede ir vacio");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"mensajería\" no puede ir vacio");
+						alert.setContentText("Seleccióne una empresa de \"mensajería\"");
 						alert.showAndWait();
 						flag = false;
 					} else if (mensajeriaCombo.getValue().toString().equals("Personalmente")) {
@@ -399,19 +411,27 @@ public class CapturaWindow {
 						}
 						guia.setMensajeria(mensajeria);
 					}
-
-					if (guiaField.getText() == null || guiaField.getText().equals("")) {
+					
+					if (guiaField.getText() == null || guiaField.getText().equals("") && !mensajeriaCombo.getValue().equals("Personalmente") ) {
 						logger.error("El campo número guia no puede ir vacío");
 						alert.setHeaderText("Error al ingresar datos");
 						alert.setContentText("El campo \"número guia\" no puede ir vacío");
 						alert.showAndWait();
 						flag = false;
-					} else if (!(CapturarRegistro.checkStructNumeroGuia(guiaField.getText()))) {
+					} else if (!(CapturarRegistro.checkStructNumeroGuia(guiaField.getText())) && !mensajeriaCombo.getValue().equals("Personalmente")) {
 						logger.error("El campo número guia no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"número guia\" no contiene la estructura requerida. (Números y letras)");
+						alert.setContentText("El campo \"número guia\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 						alert.showAndWait();
 						flag = false;
+					} else if (mensajeriaCombo.getValue().equals("Personalmente") && observacionField.getText().equals("")) {
+						logger.error("Escriba una nota acerca del estado o detalles de recepción en el campo \"observación\".");
+						alert.setHeaderText("Error por campo vacío");
+						alert.setContentText("Escriba una nota acerca del estado o detalles del paquete recibido en el campo \"Observación\".");
+						alert.showAndWait();
+						flag = false;
+					} else if (mensajeriaCombo.getValue().equals("Personalmente")) {
+						// null property
 					} else {
 						guia.setNumero(guiaField.getText());
 					}
@@ -433,8 +453,7 @@ public class CapturaWindow {
 						} else if (!(CapturarRegistro.checkString(otroOrigenField.getText()))) {
 							logger.error("El campo origen no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El campo \"Origen\" no contiene la estructura requerida"
-							+ " (Números, letras, puntos y comas)");
+							alert.setContentText("El campo \"Otro origen\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras, puntos, comas o espacios. Corrija y vuelva a intentar");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -454,7 +473,7 @@ public class CapturaWindow {
 					{
 							logger.error("Seleccione un departamento y eñ destinatario");
 							alert.setHeaderText("Los campos vacios");
-							alert.setContentText("Seleccione un departamento y eñ destinatario");
+							alert.setContentText("Seleccione un departamento y el destinatario");
 							alert.showAndWait();
 							flag = false;
 					} 
@@ -470,8 +489,7 @@ public class CapturaWindow {
 						} else if (!(CapturarRegistro.checkString(otroDeptoField.getText()))) {
 							logger.error("El campo departamento no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El campo \"Otro departamento\" no contiene la estructura requerida."
-									+ " (Números, letras)");
+							alert.setContentText("El campo \"Otro departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -487,8 +505,7 @@ public class CapturaWindow {
 						} else if (!(CapturarRegistro.checkString(otroDestinatarioField.getText()))) {
 							logger.error("El campo  destinatario no contiene la estructura requerida");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("El campo \"Otro destinatario\" no contiene la estructura requerida"
-									+ " (Números, letras)");
+							alert.setContentText("El campo \"Otro destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 							alert.showAndWait();
 							flag = false;
 						} else {
@@ -501,7 +518,7 @@ public class CapturaWindow {
 							((!destinatarioCombo.getValue().toString().equals("Otro")) && deptoCombo.getValue() == null)) {
 							logger.error("Seleccione un departamento y un destinatario, u escriba en los campos asignados");
 							alert.setHeaderText("Error al ingresar datos");
-							alert.setContentText("Seleccione un departamento y un destinatario, o complete manualmente los campos \"Otro\", respectivamente");
+							alert.setContentText("Seleccione un departamento y un destinatario, o complete manualmente los campos \"Otro departamento\" y \"Otro destinatario\"");
 							alert.showAndWait();
 							flag = false;
 					}
@@ -525,12 +542,12 @@ public class CapturaWindow {
 						logger.error(e.getMessage());
 					}
 					if (flag == true) { 
-						if(guiaObj == null) {
+						if(mensajeriaCombo.getValue().toString().equals("Personalmente") || guiaObj == null && !mensajeriaCombo.getValue().toString().equals("Personalmente")) {
 							confirmarStage(new Alert(AlertType.CONFIRMATION), guia, usuario);
 						} else if (guiaObj != null) {
 							logger.error("Un registro con el mismo número guía ya existe. Verifique el dato");
 							alert.setHeaderText("Error al guardar datos");
-							alert.setContentText("Un registro con el mismo número guía ya existe. Verifique el dato");
+							alert.setContentText("Un registro con el mismo número guía ya existe. Verifique el dato y vuelva a intentar");
 							alert.showAndWait();
 						}
 					}
@@ -538,7 +555,7 @@ public class CapturaWindow {
 			});
 			buttonsPane.getChildren().addAll(submitButton);
 			rootVBox.getChildren().addAll(verticalFlow);
-			rootVBox.getChildren().addAll(clearPane, buttonsPane);
+			rootVBox.getChildren().addAll(buttonsPane, clearPane);
 			
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Capturar registro");
@@ -558,11 +575,12 @@ public class CapturaWindow {
 		confirmation.setHeaderText("¿Desea guardar los cambios?");
 
 		if (guia.getMensajeria() != null && !(guia.getMensajeria().getNombre().toString().equals("")))
-			output += "\nPaquetería: " + guia.getMensajeria().getNombre();
+			output += "\nMensajería: " + guia.getMensajeria().getNombre();
 		else
-			output += "\nPaquetería: Personalmente";
+			output += "\nMensajería: Personalmente";
 		
-		output += "\nNúmero Guia: " + guia.getNumero();
+		if (guia.getNumero() != null && !(guia.getNumero().equals("")))
+			output += "\nNúmero Guia: " + guia.getNumero();
 
 		if (guia.getOrigen() != null && !(guia.getOrigen().getNombre().toString().equals("")))
 			output += "\nOrigen: " + guia.getOrigen().getNombre();

@@ -176,8 +176,7 @@ public class DestinatariosWindow {
 					} else if (!(DestinatarioBackend.checkString(destinatarioField.getText()))) {
 						logger.error("El nombre del destinatario no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"destinatario\" no contiene la estructura requerida"
-								+ " (Números, letras)");
+						alert.setContentText("El campo \"Destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 						alert.showAndWait();
 					} else if (destinatarioObj != null) {
 						logger.info("El destinatario ya existe en otro departamento");
@@ -340,8 +339,7 @@ public class DestinatariosWindow {
 
 					logger.error("El nombre de destinatario no debe ir vacio");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El dato ingresado no contiene la estructura requerida."
-							+ " (Números, letras). Por favor corrigalo");
+					alert.setContentText("El campo \"Destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 					alert.showAndWait();
 
 					table.getColumns().get(0).setVisible(false);
