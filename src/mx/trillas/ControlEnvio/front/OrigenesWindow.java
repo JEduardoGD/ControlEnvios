@@ -145,7 +145,7 @@ public class OrigenesWindow {
 					} else if (!(OrigenBackend.checkString(nombreField.getText()))) {
 						logger.error("El campo origen no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"origen\" no contiene la estructura requerida");
+						alert.setContentText("El campo \"Origen\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras, puntos, comas o espacios. Corrija y vuelva a intentar");
 						alert.showAndWait();
 					} else if (origenObj != null) {
 						logger.info("El origen que intenta crear ya existe.");
@@ -284,7 +284,7 @@ public class OrigenesWindow {
 				} else {
 					logger.error("El nombre del origen no debe ir vacio");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El dato ingresado no contiene la estructura requerida. Por favor corrigalo");
+					alert.setContentText("El campo \"Origen\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras, puntos, comas o espacios. Corrija y vuelva a intentar");
 					alert.showAndWait();
 
 					table.getColumns().get(0).setVisible(false);

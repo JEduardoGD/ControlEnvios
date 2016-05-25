@@ -22,24 +22,6 @@ public class LoginBackend {
 	private static UsuarioDAO usuarioDAO = ImplFactory.getUsuarioDAO();
 	private static TipousuarioDAO tipousuarioDAO = new TipousuarioDAODBImpl();
 
-	public static boolean testConnection(){
-		Session session = null;
-
-		try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            if (session != null){
-            	return true;
-            }
-
-        } catch (HibernateException ex) {
-        	logger.error(ex.getMessage());
-        	return false;
-        } finally {
-            session.close();
-        }
-		return false;
-	}
-
 	public static boolean checkLoginData(TextField usernameField, TextField passwdField) {
 		String contentUsernameField = usernameField.getText();
 		String contentPasswdField = passwdField.getText();
@@ -83,7 +65,7 @@ public class LoginBackend {
 		}
 	}
 
-	public static Usuario existUser(String username, String passwd) throws Exception {
+	public static Usuario existUser(String username) throws Exception {
 
 		Usuario usuario = null;
 

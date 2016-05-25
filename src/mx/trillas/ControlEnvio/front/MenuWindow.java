@@ -89,7 +89,7 @@ public class MenuWindow {
 			label.setText("Elija una opción");
 			rootVBox.getChildren().add(label);
 
-			Button mensajeriaButon = new Button("Alta o modificar empresa de mensajería");
+			Button mensajeriaButon = new Button("Dar de alta o modificar empresa de mensajería");
 			mensajeriaButon.setCursor(Cursor.HAND);
 			mensajeriaButon.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -102,7 +102,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(mensajeriaButon);
 
-			Button origenesButton = new Button("Alta o modificar lugares de origen");
+			Button origenesButton = new Button("Dar de alta o modificar lugares de origen");
 			origenesButton.setCursor(Cursor.HAND);
 			origenesButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -115,7 +115,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(origenesButton);
 
-			Button personasButton = new Button("Alta o modificar personas destinatarias");
+			Button personasButton = new Button("Dar de alta o modificar personas destinatarias");
 			personasButton.setCursor(Cursor.HAND);
 			personasButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -128,7 +128,7 @@ public class MenuWindow {
 			});
 			rootVBox.getChildren().add(personasButton);
 
-			Button deptosButton = new Button("Alta o modificar departamentos");
+			Button deptosButton = new Button("Dar de alta o modificar departamentos");
 			deptosButton.setCursor(Cursor.HAND);
 			deptosButton.setOnAction(new EventHandler<ActionEvent>() {
 

@@ -21,7 +21,7 @@
             <column name="f_usuario" not-null="true" />
         </many-to-one>
         <property name="numero" type="string">
-            <column name="numero" length="45" not-null="true" unique="true" />
+            <column name="numero" length="45" />
         </property>
         <property name="observacion" type="string">
             <column name="observacion" length="45" />

@@ -133,9 +133,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
 					}
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
-					}
 					if (guia.getDestinatario() != null) {
 						HibernateUtil.initializeObject(guia.getDestinatario());
 					}
@@ -175,9 +172,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 					}
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
-					}
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
 					}
 					if (guia.getDestinatario() != null) {
 						HibernateUtil.initializeObject(guia.getDestinatario());
@@ -220,9 +214,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
 					}
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
-					}
 					guias.add(guia);
 				}
 			}
@@ -258,9 +249,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 					}
 					if (guia.getOrigen() != null) {
 						HibernateUtil.initializeObject(guia.getOrigen());
-					}
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
 					}
 					if (guia.getDestinatario() != null) {
 						HibernateUtil.initializeObject(guia.getDestinatario());

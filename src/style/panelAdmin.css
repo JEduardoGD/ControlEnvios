@@ -20,8 +20,8 @@
 	-fx-font-size: 13.0;
 	-fx-min-height: 40;
 	-fx-max-height: 55;
-	-fx-min-width: 30;
-	-fx-max-width: 360;
+	-fx-min-width: 420;
+	
 }
 
 #logOutButton {
@@ -46,8 +46,7 @@
 	-fx-font-size: 13.0;
 	-fx-min-height: 40;
 	-fx-max-height: 55;
-	-fx-min-width: 30;
-	-fx-max-width: 360;
+	-fx-min-width: 410;
 }
 
 #logOutButton:hover {
