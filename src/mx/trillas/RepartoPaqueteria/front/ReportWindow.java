@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.GenerationTime;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,6 +47,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import mx.trillas.RepartoPaqueteria.backend.DepartamentoBackend;
 import mx.trillas.RepartoPaqueteria.backend.GuiaBackend;
+import mx.trillas.RepartoPaqueteria.backend.LoginBackend;
 import mx.trillas.RepartoPaqueteria.backend.ReportBackend;
 import mx.trillas.RepartoPaqueteria.persistence.dao.DepartamentoDAO;
 import mx.trillas.RepartoPaqueteria.persistence.dao.DestinatarioDAO;
@@ -57,7 +59,7 @@ import mx.trillas.RepartoPaqueteria.persistence.pojos.Departamento;
 import mx.trillas.RepartoPaqueteria.persistence.pojos.Destinatario;
 import mx.trillas.RepartoPaqueteria.persistence.pojos.Guia;
 import mx.trillas.RepartoPaqueteria.persistence.pojos.Usuario;
-import mx.trillas.RepartoPaqueteria.persistence.pojosaux. Repartopaqueteria;
+import mx.trillas.RepartoPaqueteria.persistence.pojosaux.Repartopaqueteria;
 import mx.trillas.RepartoPaqueteria.persistence.pojosaux.VboxTable;
 
 public class ReportWindow {
@@ -74,22 +76,23 @@ public class ReportWindow {
 	Date dateFin = new Date();
 
 	int countTableList = 0;
-	
+
 	Button printButton = new Button("Imprimir");
 	Button cancelButton = new Button("Cancelar");
 
 	public void GenerarReporteStage(Stage stage, Usuario usuario) {
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		    @Override
-		    public void handle(WindowEvent event) {
-		    	Platform.exit();
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
 				System.exit(0);
-		    }
+			}
 		});
-		
+
 		Alert alertWarn = new Alert(AlertType.WARNING, "content text");
-		alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+		alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+				.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 		alertWarn.setTitle("Alerta generando reporte");
 
 		try {
@@ -98,14 +101,15 @@ public class ReportWindow {
 			VBox pane = new VBox();
 
 			Scene scene = new Scene(border, 950, 500);
-			
+
 			FlowPane labelsPane = new FlowPane(45, 80);
 			FlowPane datePane = new FlowPane(20, 100);
 			HBox footer = new HBox();
 
 			pane.setAlignment(Pos.CENTER);
 
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
+			scene.getStylesheets()
+					.add(getClass().getClassLoader().getResource("style/generarReporte.css").toExternalForm());
 
 			Button backButton = new Button("Regresar");
 			backButton.setCursor(Cursor.HAND);
@@ -177,13 +181,13 @@ public class ReportWindow {
 			otroDeptoCombo.setPromptText("Seleccione una opción...");
 			otroDeptoCombo.setPrefWidth(208);
 			otroDeptoCombo.setOnAction(new EventHandler<ActionEvent>() {
-				
+
 				@Override
 				public void handle(ActionEvent event) {
-					System.out.println("Selected departamento: " +  otroDeptoCombo.getValue());
+					System.out.println("Selected departamento: " + otroDeptoCombo.getValue());
 				}
 			});
-			
+
 			ComboBox<Object> deptoCombo = DepartamentoBackend.getDeptosListCombo();
 			deptoCombo.setPromptText("Todos");
 			deptoCombo.setValue("Todos");
@@ -192,12 +196,12 @@ public class ReportWindow {
 
 				@Override
 				public void handle(ActionEvent event) {
-					System.out.println("Selected departamento: " +  deptoCombo.getValue());
-					
-					if (!deptoCombo.getItems().contains("Todos")){
-						deptoCombo.getItems().add("Todos");			
+					System.out.println("Selected departamento: " + deptoCombo.getValue());
+
+					if (!deptoCombo.getItems().contains("Todos")) {
+						deptoCombo.getItems().add("Todos");
 					}
-					
+
 					try {
 						if (deptoCombo != null && deptoCombo.getValue().equals("Otro")) {
 							otroDeptoCombo.setDisable(false);
@@ -222,7 +226,7 @@ public class ReportWindow {
 			generarButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					
+
 					if (datePickerInicio.getValue() == null) {
 						alertWarn.setHeaderText("Error en el manejo de datos");
 						alertWarn.setContentText("Seleccione la fecha de inicio");
@@ -237,14 +241,14 @@ public class ReportWindow {
 						alertWarn.showAndWait();
 					} else if (deptoCombo.getValue().toString().equals("Otro") && otroDeptoCombo.getValue() == null) {
 						alertWarn.setHeaderText("Error en el manejo de datos");
-						alertWarn.setContentText("Seleccione el nombre del Otro departamento en el menú de \"otros departamentos\"");
+						alertWarn.setContentText(
+								"Seleccione el nombre del Otro departamento en el menú de \"otros departamentos\"");
 						alertWarn.showAndWait();
 					} else {
 						if (deptoCombo.getValue().toString().equals("Todos")) {
 							checkReport(stage, usuario, dateInicio, dateFin, null, false);
-						} else 
-							if (deptoCombo.getValue().toString().equals("Otro")) {
-							checkReport(stage, usuario, dateInicio, dateFin, otroDeptoCombo.getValue().toString(), true);
+						} else if (deptoCombo.getValue().toString().equals("Otro")) {
+							checkReport(stage, usuario, dateInicio, dateFin, otroDeptoCombo.getValue().toString(),true);
 						} else {
 							checkReport(stage, usuario, dateInicio, dateFin, deptoCombo.getValue().toString(), false);
 						}
@@ -270,54 +274,56 @@ public class ReportWindow {
 
 	public void checkReport(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin, String nombreDepartamento, Boolean flagOtro) {
 
-		Alert alert = new Alert(AlertType.WARNING, "content text");
-		alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
-		alert.setTitle("Alerta al generar reporte");
+		Alert alertWarn = new Alert(AlertType.WARNING, "content text");
+		alertWarn.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+				.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+		alertWarn.setTitle("Alerta al generar reporte");
 
 		try {
 			ObservableList<Guia> datos = FXCollections.observableArrayList();
 			List<Guia> dataList = null;
 			List<Guia> dataFullList = null;
+			
+			Departamento departamento = null;
+			
+			try {
+				departamento = departamentoDAO.getDepartamento(nombreDepartamento);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
 
 			if (nombreDepartamento == null) {
 				try {
-					dataFullList = guiaDAO.getGuiaListByDate(fechaInicio, fechaFin);
+					dataFullList = guiaDAO.getReportList(fechaInicio, fechaFin, null, null);
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 				}
-			} else {
-				try {
-					Departamento departamento = departamentoDAO.getDepartamento(nombreDepartamento);
+			} else if (departamento != null ) {
 					if (flagOtro == false) {
-						if (departamento != null) {
-
-							List<Destinatario> destinatariosList = destinatarioDAO.getDestinatarioFromDeptoList(departamento);
-
-							dataFullList = new ArrayList<Guia>();
-
-							for (Destinatario element : destinatariosList) {
-								dataList = guiaDAO.getGuiaListByDateyDestinatario(fechaInicio, fechaFin, element);
-								dataFullList.addAll(dataList);
-							}
-						} else {
-							logger.error("No existen registros con el departamento indicado. Intente con otra consulta");
-							alert.setHeaderText("Sin resultados");
-							alert.setContentText("No existen registros con el departamento indicado. Intente con otra consulta");
-							alert.showAndWait();
+						List<Destinatario> destinatariosList = destinatarioDAO.getDestinatarioFromDeptoList(departamento);
+		
+						dataFullList = new ArrayList<Guia>();
+		
+						for (Destinatario element : destinatariosList) {
+							dataList = guiaDAO.getReportList(fechaInicio, fechaFin, element, null);
+							dataFullList.addAll(dataList);
 						}
 					} else {
-						dataFullList = guiaDAO.getGuiaListByDateOtroDepto(fechaInicio, fechaFin, nombreDepartamento);
+						logger.error("No existen registros con el departamento indicado. Intente con otra consulta");
+						alertWarn.setHeaderText("Sin resultados");
+						alertWarn.setContentText(
+								"No existen registros con el departamento indicado. Intente con otra consulta");
+						alertWarn.showAndWait();
 					}
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-				}
+			}  else {
+				dataFullList = guiaDAO.getReportList(fechaInicio, fechaFin, null, nombreDepartamento);
 			}
 
 			if (dataFullList.isEmpty()) {
 				logger.error("El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.");
-				alert.setHeaderText("Consulta sin resultados");
-				alert.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.");
-				alert.showAndWait();
+				alertWarn.setHeaderText("Consulta sin resultados");
+				alertWarn.setContentText("El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.");
+				alertWarn.showAndWait();
 			} else {
 				for (Guia element : dataFullList) {
 					datos.add(element);
@@ -329,81 +335,78 @@ public class ReportWindow {
 		}
 	}
 
-	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin, String nombreDepartamento, List<Guia> dataList) {
+	public void reporteViewStage(Stage stage, Usuario usuario, Date fechaInicio, Date fechaFin,	String nombreDepartamento, List<Guia> dataList) {
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		    @Override
-		    public void handle(WindowEvent event) {
-		        Platform.exit();
-		        System.exit(0);
-		    }
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
 		});
-		
+
 		VBox paneVbox = new VBox();
 		FlowPane buttonsPane = new FlowPane();
 		buttonsPane.setVisible(true);
-		
+
 		Text confirmText = new Text("");
 		confirmText.setId("confirmText");
 		confirmText.setText("Se han encontrado " + dataList.size() + " registros. ¿Desea continuar a imprimir?\n\n\n");
 		paneVbox.getChildren().add(confirmText);
-		
+
 		HashMap<Integer, ObservableList<Guia>> hashList = new HashMap<Integer, ObservableList<Guia>>();
-	
+
 		Scene scene = new Scene(paneVbox, 950, 500);
-		
+
 		paneVbox.setAlignment(Pos.CENTER);
 		scene.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 		printButton.setVisible(true);
 		cancelButton.setVisible(true);
-		
+
 		try {
 
 			int count = 0;
 			int countRows = 0;
 			int counterList = 0;
 
-//			System.out.println("dataList.size=" + dataList.size());
-			
 			// Rutina para entregar resultados organizados en orden alfabetico
 			List<Repartopaqueteria> RepartopaqueteriaList = ReportBackend.guiaToRepartopaqueteria(dataList);
 			Collections.sort(RepartopaqueteriaList);
-			
+
 			// Rutina para dividir resultado en listas de departamentos
 			HashMap<Integer, ArrayList<Guia>> hashMap = ReportBackend.getDeptoFullMap(RepartopaqueteriaList);
-			
+
 			HashMap<Integer, VboxTable> vboxTableMap = new HashMap<Integer, VboxTable>();
-			
+
 			// Rutina para dividir las listas de departamentos por hojas
 			ObservableList<Guia> datos = null;
 
-			for (int i = 0; i < hashMap.size(); i ++) {
+			for (int i = 0; i < hashMap.size(); i++) {
 
 				List<Guia> guiaList = hashMap.get(i);
 
 				for (Guia element : guiaList) {
-			
+
 					if (datos == null) {
 						datos = FXCollections.observableArrayList();
 					}
-					
+
 					count++;
 					countRows++;
-	
+
 					datos.add(element);
-	
+
 					if (count == 22) {
 						hashList.put(new Integer(counterList), datos);
 						counterList++;
-	
-						count = 0;	
+
+						count = 0;
 						datos = null;
-					} 
-					else if (countRows == guiaList.size()) {
+					} else if (countRows == guiaList.size()) {
 						hashList.put(new Integer(counterList), datos);
 						count = 0;
 						countRows = 0;
-						
+
 						counterList++;
 						datos = null;
 					}
@@ -411,17 +414,17 @@ public class ReportWindow {
 			}
 
 			/*
-			 * Consigue las listas creadas y las reparte por listas más pequeñas, tamaño por hoja de impresión.
-			 */
+			 * Consigue las listas creadas y las reparte por listas más
+			 * pequeñas, tamaño por hoja de impresión.
+			*/
 			for (int i = 0; i < hashList.size(); i++) {
-//				System.out.println("ListaNo="  + i  + "  hashList.size()="+hashList.size());
 				if (!hashList.get(i).isEmpty()) {
 					List<Guia> guiaList = hashList.get(i);
-					
-					// Rutina para conseguir nombre del departamento, al que pertenece la lista.
+
+					// Rutina que consegue nombre del departamento, al que pertenece la lista.
 					String depto = null;
 					for (Guia element : guiaList) {
-						
+
 						if (element.getDestinatario() == null) {
 							depto = element.getOtrodepartamento();
 						} else {
@@ -429,119 +432,128 @@ public class ReportWindow {
 						}
 						break;
 					}
-					
+
 					VboxTable vboxObj = new VboxTable(i, guiaList.size(), depto);
-					
-					if (nombreDepartamento == null){
+
+					if (nombreDepartamento == null) {
 						nombreDepartamento = depto;
 					}
-					vboxObj.setVbox((VBox) generarTable(hashList.get(i), depto));
-					
+					vboxObj.setVbox((VBox) generarTable(usuario, hashList.get(i), depto));
+
 					VBox tables = vboxObj.getVbox();
 					tables.setVisible(false);
 					paneVbox.getChildren().add(new VBox());
-					
+
 					vboxTableMap.put(i, vboxObj);
 					countTableList++;
 				}
 			}
-		printButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
+			printButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
 
-				confirmText.setText("Procesando... Por favor espere.");
-				buttonsPane.setVisible(false);
-				
-				try {
-					for (int i = 0; i < countTableList + 1; i++) {
+					confirmText.setText("Procesando... Por favor espere.");
+					buttonsPane.setVisible(false);
 
-						VboxTable vboxTableObj = vboxTableMap.get(i);
-						
-						if (vboxTableObj != null) {
-						
-							VBox objVbox  = vboxTableObj.getVbox();
-							objVbox.setVisible(true);
-							ReportBackend.printForTable(objVbox);
+					try {
+						for (int i = 0; i < countTableList + 1; i++) {
 
-							paneVbox.getChildren().set(i+1, objVbox);
-							objVbox.setVisible(false);
-						} 
+							VboxTable vboxTableObj = vboxTableMap.get(i);
+
+							if (vboxTableObj != null) {
+
+								VBox objVbox = vboxTableObj.getVbox();
+								objVbox.setVisible(true);
+								ReportBackend.printForTable(objVbox);
+
+								paneVbox.getChildren().set(i + 1, objVbox);
+								objVbox.setVisible(false);
+							}
+						}
+
+						countTableList = 0;
+						confirmText.setText("Impresión concluida");
+
+						Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
+						alertInfo.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label)
+								.forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
+						alertInfo.setTitle("Información");
+
+						alertInfo.setHeaderText(null);
+						alertInfo.setContentText("La Impresión ha finalizado correctamente");
+						alertInfo.showAndWait();
+
+						GenerarReporteStage(stage, usuario);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+
+						confirmText.setText("Error al imprimir");
+
+						Alert alertWarn = new Alert(AlertType.WARNING, "content text");
+						alertWarn.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label)
+								.forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
+						alertWarn.setTitle("Alerta al imprimir");
+
+						alertWarn.setHeaderText(null);
+						alertWarn.setContentText(
+								"Ocurrió un problema al procesar impresión. Verifique su conexión a su impresora");
+						alertWarn.showAndWait();
+
+						GenerarReporteStage(stage, usuario);
 					}
-			        
-					countTableList = 0;
-					confirmText.setText("Impresión concluida");
-					
-					Alert alertInfo = new Alert(AlertType.INFORMATION, "content text");
-					alertInfo.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
-					alertInfo.setTitle("Información");
-					
-					alertInfo.setHeaderText(null);
-					alertInfo.setContentText("La Impresión ha finalizado correctamente");
-					alertInfo.showAndWait();
-											
-					GenerarReporteStage(stage, usuario);
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-//					e.printStackTrace();
-					
-					confirmText.setText("Error al imprimir");
-					
-					Alert alertWarn = new Alert(AlertType.WARNING, "content text");
-					alertWarn.getDialogPane().getChildren().stream().filter(nodeAlert -> nodeAlert instanceof Label).forEach(nodeAlert -> ((Label) nodeAlert).setMinHeight(Region.USE_PREF_SIZE));
-					alertWarn.setTitle("Alerta al imprimir");
-					
-					alertWarn.setHeaderText(null);
-					alertWarn.setContentText("Ocurrió un problema al procesar impresión. Verifique su conexión a su impresora");
-					alertWarn.showAndWait();
-					
+				}
+			});
+
+			cancelButton = new Button("Cancelar");
+			cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
 					GenerarReporteStage(stage, usuario);
 				}
-			}
-		});
-			
-		cancelButton = new Button("Cancelar");
-		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override	
-			public void handle(ActionEvent event) {
-				GenerarReporteStage(stage, usuario);
-			}
-		});
-		
-		buttonsPane.setAlignment(Pos.BASELINE_CENTER);
-		buttonsPane.getChildren().addAll(printButton, cancelButton);
-		paneVbox.getChildren().addAll(buttonsPane);
+			});
 
-		stage.setScene(scene);
-		stage.setTitle("Control de paquetería - Generar reporte");
-		stage.setResizable(true);
-		
+			buttonsPane.setAlignment(Pos.BASELINE_CENTER);
+			buttonsPane.getChildren().addAll(printButton, cancelButton);
+			paneVbox.getChildren().addAll(buttonsPane);
+
+			stage.setScene(scene);
+			stage.setTitle("Control de paquetería - Generar reporte");
+			stage.setResizable(true);
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 	}
-	    
-	public VBox generarTable(ObservableList<Guia> datos, String nombreDepartamento) {
+
+	public VBox generarTable(Usuario usuario, ObservableList<Guia> datos, String nombreDepartamento) {
 
 		VBox vbox = new VBox();
 
 		table = new TableView<Guia>();
 		table.getStylesheets().add(getClass().getClassLoader().getResource("style/report.css").toExternalForm());
 		table.setEditable(false);
-		
-		table.getSelectionModel().clearSelection();
-		
-		FlowPane cabeceraFlow = new FlowPane(150, 5);
 
-		Text cabeceraText = new Text("Correspondencia");
+		table.getSelectionModel().clearSelection();
+
+		FlowPane cabeceraFlow = new FlowPane(230, 5);
+
+		Text cabeceraText = new Text("CORRESPONDENCIA");
 		cabeceraText.getStyleClass().add("cabeceraClass");
 		cabeceraFlow.getChildren().addAll(cabeceraText);
 
 		Text nombreDepartamentoText = new Text(nombreDepartamento);
-		String deptoCaptitalize = nombreDepartamentoText.getText().substring(0, 1).toUpperCase() +nombreDepartamentoText.getText().substring(1);
+		String deptoCaptitalize = nombreDepartamentoText.getText().toUpperCase();
 		nombreDepartamentoText.setText(deptoCaptitalize);
 		nombreDepartamentoText.getStyleClass().add("cabeceraClass");
 		cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
 
+		String nombreUsuario = usuario.getName();
+		nombreUsuario = nombreUsuario.toUpperCase();
+		
+		Text nombreusuarioText = new Text(nombreUsuario);
+		nombreusuarioText.getStyleClass().add("cabeceraClass");
+		cabeceraFlow.getChildren().addAll(nombreusuarioText);
+		
 		try {
 			TableColumn<Guia, String> numeroCol = new TableColumn<>("Número guia");
 			numeroCol.setMinWidth(190);
@@ -598,21 +610,22 @@ public class ReportWindow {
 			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("Destinatario");
 			destinatarioCol.setMinWidth(190);
 			destinatarioCol.setSortable(false);
-			destinatarioCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
-				@Override
-				public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
-					SimpleStringProperty ssp = null;
-					if (param.getValue().getDestinatario() != null) {
+			destinatarioCol
+					.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
+						@Override
+						public ObservableValue<String> call(CellDataFeatures<Guia, String> param) {
+							SimpleStringProperty ssp = null;
+							if (param.getValue().getDestinatario() != null) {
 
-						String output = param.getValue().getDestinatario().getNombre().toString();
-						ssp = new SimpleStringProperty(output.substring(0, 1).toUpperCase() + output.substring(1));
-						return ssp;
-					} 
-					else {
-						return new SimpleStringProperty(param.getValue().getOtrodestinatario());
-					}
-				}
-			});
+								String output = param.getValue().getDestinatario().getNombre().toString();
+								ssp = new SimpleStringProperty(
+										output.substring(0, 1).toUpperCase() + output.substring(1));
+								return ssp;
+							} else {
+								return new SimpleStringProperty(param.getValue().getOtrodestinatario());
+							}
+						}
+					});
 			destinatarioCol.setCellFactory(TextFieldTableCell.<Guia> forTableColumn());
 			destinatarioCol.setOnEditCommit((CellEditEvent<Guia, String> t) -> {
 				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).getDestinatario()
@@ -643,10 +656,10 @@ public class ReportWindow {
 			firmaCol.setMinWidth(150);
 			firmaCol.setSortable(false);
 
-			table.focusedProperty().addListener((a,b,c) -> {
+			table.focusedProperty().addListener((a, b, c) -> {
 				table.getSelectionModel().clearSelection();
 			});
-			
+
 			table.setItems(datos);
 			table.getColumns().addAll(numeroCol, mensajeraCol, origenCol, destinatarioCol, observacionCol, fechaCol,
 					firmaCol);

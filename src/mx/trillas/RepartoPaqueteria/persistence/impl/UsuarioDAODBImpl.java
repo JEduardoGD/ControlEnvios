@@ -40,7 +40,6 @@ public class UsuarioDAODBImpl implements UsuarioDAO {
 
 	@Override
 	public Usuario getUsuarioByUsername(String username) throws Exception {
-		// TODO Auto-generated method stub
 		Usuario usuario;
 		Session session = null;
 		try {

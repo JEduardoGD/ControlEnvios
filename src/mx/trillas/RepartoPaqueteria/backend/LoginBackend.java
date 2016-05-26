@@ -1,7 +1,6 @@
 package mx.trillas.RepartoPaqueteria.backend;
 
 import mx.trillas.RepartoPaqueteria.front.MenuWindow;
-import mx.trillas.RepartoPaqueteria.persistence.HibernateUtil;
 import mx.trillas.RepartoPaqueteria.persistence.dao.TipousuarioDAO;
 import mx.trillas.RepartoPaqueteria.persistence.dao.UsuarioDAO;
 import mx.trillas.RepartoPaqueteria.persistence.dao.TipousuarioDAO.TIPOS_USUARIO;
@@ -10,8 +9,6 @@ import mx.trillas.RepartoPaqueteria.persistence.impl.TipousuarioDAODBImpl;
 import mx.trillas.RepartoPaqueteria.persistence.pojos.Usuario;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;

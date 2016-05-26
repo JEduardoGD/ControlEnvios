@@ -84,11 +84,9 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		return guias;
 	}
 	
-	@Override
-	public List<Guia> getGuiaListByDateyDestinatario(Date fechaInicio, Date fechaFin, Destinatario destinatario ) throws Exception {
-
+	public List<Guia> getReportList(Date fechaInicio, Date fechaFin, Destinatario destinatario, String otroDepartamento) throws Exception {
 		Session session = null;
-		List<Guia> guias = new ArrayList<Guia>();
+		List<Guia> guiaList = new ArrayList<Guia>();
 
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -96,7 +94,11 @@ public class GuiaDAODBImpl implements GuiaDAO {
 
 			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
 			criteria.add(Restrictions.le("fecha", fechaFin));
-			criteria.add(Restrictions.eq("destinatario", destinatario));
+			
+			if (destinatario != null)
+				criteria.add(Restrictions.eq("destinatario", destinatario));
+			if (otroDepartamento != null)
+				criteria.add(Restrictions.eq("otrodepartamento", otroDepartamento));
 			
 			List<?> objList = criteria.list();
 			for (Object guiaObj : objList) {
@@ -112,7 +114,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 						HibernateUtil.initializeObject(guia.getDestinatario());
 						HibernateUtil.initializeObject(guia.getDestinatario().getDepartamento());
 					}
-					guias.add(guia);
+					guiaList.add(guia);
 				}
 			}
 		} catch (Exception e) {
@@ -121,35 +123,23 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			if (session != null)
 				session.close();
 		}
-		return guias;
+		return guiaList;
 	}
-
 	
 	@Override
-	public List<Guia> getGuiaListByDateOtroDepto(Date fechaInicio, Date fechaFin, String nombreDepartamento ) throws Exception {
-
+	public List<String> getotrosDeptosList() throws Exception {
 		Session session = null;
-		List<Guia> guias = new ArrayList<Guia>();
+		List<String> otrosDeptos = new ArrayList<String>();
 
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Criteria criteria = session.createCriteria(Guia.class);
 
-			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
-			criteria.add(Restrictions.le("fecha", fechaFin));
-			criteria.add(Restrictions.eq("otrodepartamento", nombreDepartamento));
-			
 			List<?> objList = criteria.list();
 			for (Object guiaObj : objList) {
 				if (guiaObj != null && guiaObj instanceof Guia) {
 					Guia guia = (Guia) guiaObj;
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
-					}
-					if (guia.getOrigen() != null) {
-						HibernateUtil.initializeObject(guia.getOrigen());
-					}
-					guias.add(guia);
+					otrosDeptos.add(guia.getOtrodepartamento());
 				}
 			}
 		} catch (Exception e) {
@@ -158,46 +148,6 @@ public class GuiaDAODBImpl implements GuiaDAO {
 			if (session != null)
 				session.close();
 		}
-		return guias;
-	}
-	
-	
-	@Override
-	public List<Guia> getGuiaListByDate(Date fechaInicio, Date fechaFin) throws Exception {
-
-		Session session = null;
-		List<Guia> guias = new ArrayList<Guia>();
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Criteria criteria = session.createCriteria(Guia.class);
-
-			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
-			criteria.add(Restrictions.le("fecha", fechaFin));
-			
-			List<?> objList = criteria.list();
-			for (Object guiaObj : objList) {
-				if (guiaObj != null && guiaObj instanceof Guia) {
-					Guia guia = (Guia) guiaObj;
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
-					}
-					if (guia.getOrigen() != null) {
-						HibernateUtil.initializeObject(guia.getOrigen());
-					}
-					if (guia.getDestinatario() != null) {
-						HibernateUtil.initializeObject(guia.getDestinatario());
-						HibernateUtil.initializeObject(guia.getDestinatario().getDepartamento());
-					}
-					guias.add(guia);
-				}
-			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if (session != null)
-				session.close();
-		}
-		return guias;
+		return otrosDeptos;
 	}
 }

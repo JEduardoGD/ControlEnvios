@@ -20,3 +20,5 @@
 2016-05-26 10:32:28 ERROR ReportWindow:519 - could not initialize proxy - no Session
 2016-05-26 11:04:19 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
 2016-05-26 11:21:25 ERROR ReportWindow:519 - could not initialize proxy - no Session
+2016-05-26 13:11:58 ERROR ReportWindow:321 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-26 13:12:02 ERROR ReportWindow:321 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.

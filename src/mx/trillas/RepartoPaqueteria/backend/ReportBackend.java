@@ -39,7 +39,7 @@ public class ReportBackend {
         date = calendar.getTime();
 		return date;
 	}
-
+	
 	public static void printForTable(VBox table) throws Exception {
 
 		Printer printer = null;

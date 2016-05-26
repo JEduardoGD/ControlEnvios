@@ -10,7 +10,6 @@ public interface GuiaDAO {
 	 public void altaGuia(Guia guia) throws Exception;
 	 public Guia getGuia(String numero) throws Exception;
 	 public List<Guia> getGuiaList() throws Exception;
-	 public List<Guia> getGuiaListByDate(Date fechaInicio, Date fechaFin) throws Exception;
-	 public List<Guia> getGuiaListByDateOtroDepto(Date fechaInicio, Date fechaFin, String nombreDepartamento  ) throws Exception;
-	 public List<Guia> getGuiaListByDateyDestinatario(Date fechaInicio, Date fechaFin, Destinatario destinatario ) throws Exception;
+	 public List<String> getotrosDeptosList() throws Exception;
+	 public List<Guia> getReportList(Date fechaInicio, Date fechaFin, Destinatario destinatario,  String otroDepartamento) throws Exception;
 }
