@@ -189,15 +189,10 @@ public class ReportWindow {
 			deptoCombo.setValue("Todos");
 			deptoCombo.setPrefWidth(185);
 			deptoCombo.setOnAction(new EventHandler<ActionEvent>() {
-
+				
 				@Override
 				public void handle(ActionEvent event) {
 					System.out.println("Selected departamento: " +  deptoCombo.getValue());
-					
-					if (!deptoCombo.getItems().contains("Todos")){
-						deptoCombo.getItems().add("Todos");			
-					}
-					
 					try {
 						if (deptoCombo != null && deptoCombo.getValue().equals("Otro")) {
 							otroDeptoCombo.setDisable(false);

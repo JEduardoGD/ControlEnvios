@@ -83,22 +83,25 @@ public class ReportBackend {
 	public static List<Repartopaqueteria> guiaToRepartopaqueteria(List<Guia> guiaList) {
 		
 		String departamento = null;
-		List<Repartopaqueteria> ControlenvioList = new ArrayList<Repartopaqueteria>();
+		List<Repartopaqueteria> repartopaqueteriaList = new ArrayList<Repartopaqueteria>();
 		
 		for ( Guia guia : guiaList ) {
-			Repartopaqueteria controlenvio = new Repartopaqueteria();
-			controlenvio.setGuia(guia);
-			if (guia.getDestinatario() != null)
+			Repartopaqueteria repartopaqueteria = new Repartopaqueteria();
+			
+			if (guia.getDestinatario() != null){
 				departamento = guia.getDestinatario().getDepartamento().getNombre();
+			}
 			else 
 				departamento = guia.getOtrodepartamento();
 			
 			departamento = departamento.toLowerCase();
 			
-			controlenvio.setDepartamento(departamento);
-			ControlenvioList.add(controlenvio);
+			repartopaqueteria.setGuia(guia);
+			repartopaqueteria.setDepartamento(departamento);
+			
+			repartopaqueteriaList.add(repartopaqueteria);
 		}
-		return ControlenvioList;
+		return repartopaqueteriaList;
 	}
 
 	public static HashMap<Integer, ArrayList<Guia>> getDeptoFullMap (List<Repartopaqueteria> repartopaqueteriaList) {

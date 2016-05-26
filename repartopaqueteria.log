@@ -16,3 +16,7 @@
 2016-05-25 14:17:02 ERROR LoginWindow:111 - No es posible validar usuario.
 2016-05-25 14:17:55 ERROR LoginWindow:112 - No es posible validar usuario.
 2016-05-25 14:20:09 ERROR LoginWindow:112 - No es posible validar usuario.
+2016-05-26 10:11:26 ERROR ReportWindow:519 - could not initialize proxy - no Session
+2016-05-26 10:32:28 ERROR ReportWindow:519 - could not initialize proxy - no Session
+2016-05-26 11:04:19 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-26 11:21:25 ERROR ReportWindow:519 - could not initialize proxy - no Session

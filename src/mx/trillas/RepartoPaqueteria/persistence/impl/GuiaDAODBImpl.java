@@ -7,7 +7,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import mx.trillas.RepartoPaqueteria.persistence.HibernateUtil;
@@ -84,71 +83,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 		}
 		return guias;
 	}
-
-	public List<String> getotrosDeptosList() throws Exception {
-		Session session = null;
-		List<String> otrosDeptos = new ArrayList<String>();
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Criteria criteria = session.createCriteria(Guia.class);
-
-			List<?> objList = criteria.list();
-			for (Object guiaObj : objList) {
-				if (guiaObj != null && guiaObj instanceof Guia) {
-					Guia guia = (Guia) guiaObj;
-					otrosDeptos.add(guia.getOtrodepartamento());
-				}
-			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if (session != null)
-				session.close();
-		}
-		return otrosDeptos;
-	}
 	
-	@Override
-	public List<Guia> getGuiaListBySortedDepto(Date fechaInicio, Date fechaFin) throws Exception {
-
-		Session session = null;
-		List<Guia> guias = new ArrayList<Guia>();
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Criteria criteria = session.createCriteria(Guia.class);
-
-			criteria.add(Restrictions.ge("fecha", fechaInicio)); 
-			criteria.add(Restrictions.le("fecha", fechaFin));
-			criteria.addOrder(Order.asc("destinatario.departamento"));
-			
-			List<?> objList = criteria.list();
-			for (Object guiaObj : objList) {
-				if (guiaObj != null && guiaObj instanceof Guia) {
-					Guia guia = (Guia) guiaObj;
-					if (guia.getMensajeria() != null) {
-						HibernateUtil.initializeObject(guia.getMensajeria());
-					}
-					if (guia.getOrigen() != null) {
-						HibernateUtil.initializeObject(guia.getOrigen());
-					}
-					if (guia.getDestinatario() != null) {
-						HibernateUtil.initializeObject(guia.getDestinatario());
-					}
-					guias.add(guia);
-				}
-			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if (session != null)
-				session.close();
-		}
-		return guias;
-	}
-	
-
 	@Override
 	public List<Guia> getGuiaListByDateyDestinatario(Date fechaInicio, Date fechaFin, Destinatario destinatario ) throws Exception {
 
@@ -252,6 +187,7 @@ public class GuiaDAODBImpl implements GuiaDAO {
 					}
 					if (guia.getDestinatario() != null) {
 						HibernateUtil.initializeObject(guia.getDestinatario());
+						HibernateUtil.initializeObject(guia.getDestinatario().getDepartamento());
 					}
 					guias.add(guia);
 				}
