@@ -194,7 +194,6 @@ public class MensajeriaWindow {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				nombreMensajeria= nombreMensajeria.toLowerCase();
 				MensajeriaBackend.loadMensajeriaData(nombreMensajeria);
 				
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -344,7 +343,11 @@ public class MensajeriaWindow {
 						alert.setContentText("Aún no ha hecho cambios en registros");
 						alert.showAndWait();
 					} else {
-						confirmarModificacionesMensajerias(new Alert(AlertType.CONFIRMATION), mensajeriaList);
+						Alert confirmation = new Alert(AlertType.CONFIRMATION, "content text");
+						confirmation.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+						.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+						
+						confirmarModificacionesMensajerias(confirmation, mensajeriaList);
 						mensajeriaList.clear();
 					}
 				}

@@ -12,7 +12,7 @@ import mx.trillas.RepartoPaqueteria.persistence.pojos.Guia;
 public class CapturarRegistro {
 	 
 	 private static final String NUMERO_GUIA_PATTERN = "([a-zA-Z0-9]{3,44})";
-	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ.,]){6,45}";
+	 private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ.,]){3,45}";
 	 
 	 private static Logger logger = Logger.getLogger(CapturarRegistro.class);
 	 

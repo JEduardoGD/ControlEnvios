@@ -41,6 +41,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import mx.trillas.RepartoPaqueteria.backend.DepartamentoBackend;
 import mx.trillas.RepartoPaqueteria.backend.DestinatarioBackend;
+import mx.trillas.RepartoPaqueteria.persistence.HibernateUtil;
 import mx.trillas.RepartoPaqueteria.persistence.dao.DepartamentoDAO;
 import mx.trillas.RepartoPaqueteria.persistence.dao.DestinatarioDAO;
 import mx.trillas.RepartoPaqueteria.persistence.impl.DepartamentoDAODBImpl;
@@ -176,13 +177,13 @@ public class DestinatariosWindow {
 					} else if (!(DestinatarioBackend.checkString(destinatarioField.getText()))) {
 						logger.error("El nombre del destinatario no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"Destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
+						alert.setContentText("El campo \"Destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser letras, espacios, puntos o comas. Corrija y vuelva a intentar");
 						alert.showAndWait();
 					} else if (destinatarioObj != null) {
 						logger.info("El destinatario ya existe en otro departamento");
 						alert.setAlertType(AlertType.WARNING);
 						alert.setHeaderText(null);
-						alert.setContentText("El destinatario ya existe en otro departamento");
+						alert.setContentText("El destinatario ya existe en el mismo u otro departamento");
 						alert.showAndWait();
 					} else {
 						confirmarDestinatariosStage(new Alert(AlertType.CONFIRMATION), destinatarioField.getText(),
@@ -209,7 +210,7 @@ public class DestinatariosWindow {
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Alta y modificacion de destinatarios");
-			stage.setResizable(true);
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (Exception e) {
@@ -289,9 +290,7 @@ public class DestinatariosWindow {
 			destinatarioCol.setCellValueFactory(new Callback<CellDataFeatures<Destinatario, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Destinatario, String> param) {
-					String destinatario = param.getValue().getNombre().toLowerCase();
-					String destinatarioCaptitalize = destinatario.substring(0, 1).toUpperCase() + destinatario.substring(1);
-					return new SimpleStringProperty(destinatarioCaptitalize);
+					return new SimpleStringProperty(param.getValue().getNombre());
 				}
 			});
 			destinatarioCol.setCellFactory(TextFieldTableCell.<Destinatario> forTableColumn());
@@ -339,7 +338,7 @@ public class DestinatariosWindow {
 
 					logger.error("El nombre de destinatario no debe ir vacio");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El campo \"Destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
+					alert.setContentText("El campo \"Destinatario\" requiere de entre 3 a 45 caracteres, éstos pueden ser letras, espacios, puntos o comas. Corrija y vuelva a intentar");
 					alert.showAndWait();
 
 					table.getColumns().get(0).setVisible(false);
@@ -352,9 +351,8 @@ public class DestinatariosWindow {
 			deptoCol.setCellValueFactory(new Callback<CellDataFeatures<Destinatario, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Destinatario, String> param) {
-					String departamento = param.getValue().getDepartamento().getNombre().toLowerCase();
-					String departamentoCaptitalize = departamento.substring(0, 1).toUpperCase() + departamento.substring(1);
-					return new SimpleStringProperty(departamentoCaptitalize);
+					String departamento = param.getValue().getDepartamento().getNombre();
+					return new SimpleStringProperty(departamento);
 				}
 			});
 			deptoCol.setCellFactory(ComboBoxTableCell.forTableColumn(null, deptosListCombo));
@@ -470,6 +468,15 @@ public class DestinatariosWindow {
 
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
+			
+			try {
+				for (Destinatario element : destinatarios) {
+					HibernateUtil.initializeObject(element.getDepartamento());
+				}
+			} catch (Exception e1) {
+				logger.error(e1.getMessage());
+			}
+			
 			try {
 				destinatarioDAO.updateDestinatarioByList(destinatarios);
 			} catch (Exception e1) {

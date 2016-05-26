@@ -548,10 +548,11 @@ public class ReportWindow {
 		cabeceraFlow.getChildren().addAll(nombreDepartamentoText);
 
 		String nombreUsuario = usuario.getName();
-		nombreUsuario = nombreUsuario.toUpperCase();
 		
-		Text nombreusuarioText = new Text(nombreUsuario);
-		nombreusuarioText.getStyleClass().add("cabeceraClass");
+		Text nombreusuarioText = new Text();
+		String nombreusuarioTextCap = nombreUsuario.substring(0, 1).toUpperCase() +nombreUsuario.substring(1);
+		nombreusuarioText.setText(nombreusuarioTextCap);
+		nombreusuarioText.getStyleClass().add("nameHeader");
 		cabeceraFlow.getChildren().addAll(nombreusuarioText);
 		
 		try {

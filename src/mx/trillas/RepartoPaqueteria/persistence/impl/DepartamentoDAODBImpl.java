@@ -37,7 +37,6 @@ public class DepartamentoDAODBImpl implements DepartamentoDAO {
 
 	@Override
 	public Departamento getDepartamento(String nombre) throws Exception {
-		// TODO Auto-generated method stub
 		Session session = null;
 		Departamento departamento = null;
 
@@ -60,7 +59,6 @@ public class DepartamentoDAODBImpl implements DepartamentoDAO {
 	
 	@Override
 	public List<Departamento> getDepartamentoList() throws Exception {
-		// TODO Auto-generated method stub
 		Session session = null;
 		List<Departamento> departamentos = new ArrayList<Departamento>();
 

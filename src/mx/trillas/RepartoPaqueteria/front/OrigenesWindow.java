@@ -247,9 +247,8 @@ public class OrigenesWindow {
 			origenCol.setCellValueFactory(new Callback<CellDataFeatures<Origen, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Origen, String> param) {
-					String origen = param.getValue().getNombre().toLowerCase();
-					String origenCaptitalize = origen.substring(0, 1).toUpperCase() + origen.substring(1);
-					return new SimpleStringProperty(origenCaptitalize);
+					String origen = param.getValue().getNombre();
+					return new SimpleStringProperty(origen);
 				}
 			});
 			origenCol.setCellFactory(TextFieldTableCell.<Origen> forTableColumn());
@@ -311,7 +310,11 @@ public class OrigenesWindow {
 						alert.setContentText("Aún no ha hecho cambios en registros");
 						alert.showAndWait();
 					} else {
-						confirmarModificacionesOrigenes(new Alert(AlertType.CONFIRMATION), origenList);
+						Alert confirmation = new Alert(AlertType.CONFIRMATION, "content text");
+						confirmation.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+						.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+						
+						confirmarModificacionesOrigenes(confirmation, origenList);
 						origenList.clear();
 					}
 				}
@@ -348,7 +351,7 @@ public class OrigenesWindow {
 		confirmation.setHeaderText("¿Desea guardar los cambios?");
 
 		for (Origen element : origenes) {
-			output += "Origen: " + element.getNombre();
+			output += "\nOrigen: " + element.getNombre();
 		}
 		text.setText(output);
 
@@ -389,7 +392,6 @@ public class OrigenesWindow {
 		if (result.get() == ButtonType.OK) {
 			if (OrigenBackend.checkString(nombreOrigen)) {
 				try {
-					nombreOrigen = nombreOrigen.toLowerCase();
 					OrigenBackend.loadOrigenData(nombreOrigen);
 
 					Alert alert = new Alert(AlertType.INFORMATION);

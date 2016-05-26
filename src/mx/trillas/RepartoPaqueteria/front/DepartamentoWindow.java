@@ -148,7 +148,7 @@ public class DepartamentoWindow {
 					} else if (!(DepartamentoBackend.checkString(nombreField.getText()))) {
 						logger.error("El nombre del departamento no contiene la estructura requerida");
 						alert.setHeaderText("Error al ingresar datos");
-						alert.setContentText("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
+						alert.setContentText("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser letras o espacios. Corrija y vuelva a intentar");
 						alert.showAndWait();
 					} else if (departamentoObj != null) {
 						logger.error("El departamento que intenta crear ya existe.");
@@ -169,7 +169,7 @@ public class DepartamentoWindow {
 
 			stage.setScene(scene);
 			stage.setTitle("Control de paquetería - Alta y modificacion de departamentos");
-			stage.setResizable(true);
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (Exception e) {
@@ -202,9 +202,6 @@ public class DepartamentoWindow {
 				alert.setHeaderText(null);
 				alert.setContentText("Los cambios se guardaron exitosamente");
 				alert.showAndWait();
-				
-				DepartamentoWindow window = new DepartamentoWindow();
-				window.departamentoStage(new Stage());
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 
@@ -286,9 +283,8 @@ public class DepartamentoWindow {
 			deptoCol.setCellValueFactory(new Callback<CellDataFeatures<Departamento, String>, ObservableValue<String>>() {
 				@Override
 				public ObservableValue<String> call(CellDataFeatures<Departamento, String> param) {
-					String departamento = param.getValue().getNombre().toLowerCase();
-					String deptoCaptitalize = departamento.substring(0, 1).toUpperCase() + departamento.substring(1);
-					return new SimpleStringProperty(deptoCaptitalize);
+					String departamento = param.getValue().getNombre();
+					return new SimpleStringProperty(departamento);
 				}
 			});
 			deptoCol.setCellFactory(TextFieldTableCell.<Departamento> forTableColumn());
@@ -323,7 +319,7 @@ public class DepartamentoWindow {
 				} else {
 					logger.error("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
 					alert.setHeaderText("Error al ingresar datos");
-					alert.setContentText("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar");
+					alert.setContentText("El campo \"Departamento\" requiere de entre 3 a 45 caracteres, éstos pueden ser letras, espacios, puntos o comas. Corrija y vuelva a intentar");
 					alert.showAndWait();
 
 					table.getColumns().get(0).setVisible(false);
@@ -349,7 +345,11 @@ public class DepartamentoWindow {
 						alert.setContentText("Aún no ha hecho cambios en registros");
 						alert.showAndWait();
 					} else {
-						confirmarModificacionesDepartamentos(new Alert(AlertType.CONFIRMATION), departamentoList);
+						Alert confirmation = new Alert(AlertType.CONFIRMATION, "content text");
+						confirmation.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+						.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+						
+						confirmarModificacionesDepartamentos(confirmation, departamentoList);
 						departamentoList.clear();
 					}
 				}

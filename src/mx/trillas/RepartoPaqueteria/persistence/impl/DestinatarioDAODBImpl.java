@@ -126,7 +126,6 @@ public class DestinatarioDAODBImpl implements DestinatarioDAO {
 	
 	@Override
 	public void updateDestinatario(Destinatario destinatario) throws Exception {
-		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
 		

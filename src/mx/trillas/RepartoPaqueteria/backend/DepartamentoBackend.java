@@ -16,7 +16,7 @@ import mx.trillas.RepartoPaqueteria.persistence.pojos.Departamento;
 
 public class DepartamentoBackend {
 
-	private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ]){6,45}";
+	private static final String STRING_PATTERN = "([a-zA-ZpáéíóúÁÉÍÓÚ\\sñÑ.,]){3,45}";
 
 	 private static Logger logger = Logger.getLogger(Departamento.class);
 
