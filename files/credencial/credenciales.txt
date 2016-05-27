@@ -1,0 +1,11 @@
+Administracion (temporal)
+
+usuario : admin
+contraseña:  admin
+
+
+
+Usuario capturista de prueba
+
+usuario: david
+contraseña: davidjumex

@@ -1,0 +1,63 @@
+2016-05-25 13:02:18 ERROR CapturaWindow:416 - El campo número guia no puede ir vacío
+2016-05-25 13:02:26 ERROR CapturaWindow:422 - El campo número guia no contiene la estructura requerida
+2016-05-25 14:00:51 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:00:56 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:01:54 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:02:34 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:11:17 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:11:40 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:11:42 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-25 14:12:44 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:12:47 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:12:48 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:14:05 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:15:15 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:15:41 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:17:02 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-25 14:17:55 ERROR LoginWindow:112 - No es posible validar usuario.
+2016-05-25 14:20:09 ERROR LoginWindow:112 - No es posible validar usuario.
+2016-05-26 10:11:26 ERROR ReportWindow:519 - could not initialize proxy - no Session
+2016-05-26 10:32:28 ERROR ReportWindow:519 - could not initialize proxy - no Session
+2016-05-26 11:04:19 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-26 11:21:25 ERROR ReportWindow:519 - could not initialize proxy - no Session
+2016-05-26 13:11:58 ERROR ReportWindow:321 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-26 13:12:02 ERROR ReportWindow:321 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-26 14:18:27 ERROR OrigenesWindow:146 - El campo origen no contiene la estructura requerida
+2016-05-26 14:27:28 ERROR DepartamentoWindow:154 - El departamento que intenta crear ya existe.
+2016-05-26 14:29:48 ERROR DepartamentoWindow:154 - El departamento que intenta crear ya existe.
+2016-05-26 14:42:22 ERROR DestinatariosWindow:476 - failed to lazily initialize a collection of role: mx.trillas.RepartoPaqueteria.persistence.pojos.Departamento.destinatarios, could not initialize proxy - no Session
+2016-05-26 15:23:19 ERROR DestinatariosWindow:341 - El nombre de destinatario no debe ir vacio
+2016-05-26 15:28:57 ERROR DestinatariosWindow:480 - failed to lazily initialize a collection of role: mx.trillas.RepartoPaqueteria.persistence.pojos.Departamento.destinatarios, could not initialize proxy - no Session
+2016-05-26 15:32:20 ERROR ReportWindow:323 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-26 15:58:41 ERROR MensajeriaWindow:318 - El dato ingresado no contiene la estructura requerida. Por favor corrigalo
+2016-05-26 16:13:00 ERROR OrigenesWindow:284 - El nombre del origen no debe ir vacio
+2016-05-26 16:24:30 ERROR CapturaWindow:549 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-26 16:24:41 ERROR CapturaWindow:520 - Seleccione un departamento y un destinatario, u escriba en los campos asignados
+2016-05-26 17:04:00 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-26 17:04:03 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-26 17:04:57 ERROR LoginWindow:227 - No row with the given identifier exists: [mx.trillas.RepartoPaqueteria.persistence.pojos.Tiposusuario#0]
+2016-05-26 17:04:57 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-26 17:05:37 ERROR LoginWindow:227 - No row with the given identifier exists: [mx.trillas.RepartoPaqueteria.persistence.pojos.Tiposusuario#0]
+2016-05-26 17:05:37 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-26 17:06:42 ERROR LoginWindow:227 - No row with the given identifier exists: [mx.trillas.RepartoPaqueteria.persistence.pojos.Tiposusuario#0]
+2016-05-26 17:06:42 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-27 10:04:43 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-27 10:06:44 ERROR ReportWindow:323 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-27 10:10:02 ERROR CapturaWindow:423 - El campo número guia no contiene la estructura requerida
+2016-05-27 10:23:52 ERROR CapturaWindow:540 - 
+2016-05-27 10:24:22 ERROR CapturaWindow:540 - query did not return a unique result: 2
+2016-05-27 10:24:49 ERROR CapturaWindow:552 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:35:23 ERROR CapturaWindow:555 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:45:52 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:46:16 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:46:43 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-27 10:46:55 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
+2016-05-27 10:47:05 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:48:31 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
+2016-05-27 10:50:20 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-27 10:51:15 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:51:56 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:58:22 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-27 10:58:33 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:59:18 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
+2016-05-27 10:59:38 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
