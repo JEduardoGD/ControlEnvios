@@ -556,7 +556,7 @@ public class ReportWindow {
 		cabeceraFlow.getChildren().addAll(nombreusuarioText);
 		
 		try {
-			TableColumn<Guia, String> numeroCol = new TableColumn<>("Número guia");
+			TableColumn<Guia, String> numeroCol = new TableColumn<>("NÚMERO GUÍA");
 			numeroCol.setMinWidth(190);
 			numeroCol.setSortable(false);
 			numeroCol.setCellValueFactory(new PropertyValueFactory<>("numero"));
@@ -566,7 +566,7 @@ public class ReportWindow {
 						.setNombre(t.getNewValue());
 			});
 
-			TableColumn<Guia, String> mensajeraCol = new TableColumn<>("Mensajería");
+			TableColumn<Guia, String> mensajeraCol = new TableColumn<>("MENSAJERÍA");
 			mensajeraCol.setMinWidth(130);
 			mensajeraCol.setSortable(false);
 			mensajeraCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
@@ -587,7 +587,7 @@ public class ReportWindow {
 						.setNombre(t.getNewValue());
 			});
 
-			TableColumn<Guia, String> origenCol = new TableColumn<>("Origen");
+			TableColumn<Guia, String> origenCol = new TableColumn<>("ORIGEN");
 			origenCol.setMinWidth(120);
 			origenCol.setSortable(false);
 			origenCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
@@ -608,7 +608,7 @@ public class ReportWindow {
 						.setNombre(t.getNewValue());
 			});
 
-			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("Destinatario");
+			TableColumn<Guia, String> destinatarioCol = new TableColumn<>("DESTINATARIO");
 			destinatarioCol.setMinWidth(190);
 			destinatarioCol.setSortable(false);
 			destinatarioCol
@@ -633,7 +633,7 @@ public class ReportWindow {
 						.setNombre(t.getNewValue());
 			});
 
-			TableColumn<Guia, String> fechaCol = new TableColumn<>("Fecha");
+			TableColumn<Guia, String> fechaCol = new TableColumn<>("FECHA");
 			fechaCol.setMinWidth(160);
 			fechaCol.setSortable(false);
 			fechaCol.setCellValueFactory(new Callback<CellDataFeatures<Guia, String>, ObservableValue<String>>() {
@@ -644,7 +644,7 @@ public class ReportWindow {
 				}
 			});
 
-			TableColumn<Guia, String> observacionCol = new TableColumn<>("Observación");
+			TableColumn<Guia, String> observacionCol = new TableColumn<>("OBSERVACIÓN");
 			observacionCol.setMinWidth(160);
 			observacionCol.setSortable(false);
 			observacionCol.setCellValueFactory(new PropertyValueFactory<>("observacion"));
@@ -653,7 +653,7 @@ public class ReportWindow {
 				((Guia) t.getTableView().getItems().get(t.getTablePosition().getRow())).setObservacion(t.getNewValue());
 			});
 
-			TableColumn<Guia, String> firmaCol = new TableColumn<>("Firma");
+			TableColumn<Guia, String> firmaCol = new TableColumn<>("FIRMA");
 			firmaCol.setMinWidth(150);
 			firmaCol.setSortable(false);
 

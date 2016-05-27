@@ -41,3 +41,23 @@
 2016-05-26 17:05:37 ERROR LoginWindow:231 - No es posible validar usuario.
 2016-05-26 17:06:42 ERROR LoginWindow:227 - No row with the given identifier exists: [mx.trillas.RepartoPaqueteria.persistence.pojos.Tiposusuario#0]
 2016-05-26 17:06:42 ERROR LoginWindow:231 - No es posible validar usuario.
+2016-05-27 10:04:43 ERROR LoginWindow:111 - No es posible validar usuario.
+2016-05-27 10:06:44 ERROR ReportWindow:323 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-27 10:10:02 ERROR CapturaWindow:423 - El campo número guia no contiene la estructura requerida
+2016-05-27 10:23:52 ERROR CapturaWindow:540 - 
+2016-05-27 10:24:22 ERROR CapturaWindow:540 - query did not return a unique result: 2
+2016-05-27 10:24:49 ERROR CapturaWindow:552 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:35:23 ERROR CapturaWindow:555 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:45:52 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:46:16 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:46:43 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-27 10:46:55 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
+2016-05-27 10:47:05 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:48:31 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
+2016-05-27 10:50:20 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-27 10:51:15 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:51:56 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:58:22 ERROR CapturaWindow:417 - El campo número guia no puede ir vacío
+2016-05-27 10:58:33 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 10:59:18 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
+2016-05-27 10:59:38 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato

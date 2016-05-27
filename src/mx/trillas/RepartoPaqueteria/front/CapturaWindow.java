@@ -432,7 +432,7 @@ public class CapturaWindow {
 						alert.showAndWait();
 						flag = false;
 					} else if (mensajeriaCombo.getValue().equals("Personalmente")) {
-						// null property
+						// null property mensajeriaCombo
 					} else {
 						guia.setNumero(guiaField.getText());
 					}
@@ -524,18 +524,15 @@ public class CapturaWindow {
 							flag = false;
 					}
 					 else {
-							try {
+						try {
 							destinatario = destinatarioDAO.getDestinatarioByName(destinatarioCombo.getValue().toString());
 							guia.setDestinatario(destinatario);
-							guia.setFecha(new Date());
-							guia.setUsuario(usuario);
-							guia.setObservacion(observacionField.getText());
 						} catch (Exception e) {
 							logger.error(e.getMessage());
 						}	
 					}
 					
-					/* Concluye y verifica si el numero guia existe */
+					/* Concluye y verifica si el número guia existe */
 					Guia guiaObj = null;
 					try {
 						guiaObj = guiaDAO.getGuia(guiaField.getText());
@@ -543,9 +540,17 @@ public class CapturaWindow {
 						logger.error(e.getMessage());
 					}
 					if (flag == true) { 
-						if(mensajeriaCombo.getValue().toString().equals("Personalmente") || guiaObj == null && !mensajeriaCombo.getValue().toString().equals("Personalmente")) {
+						if(!mensajeriaCombo.getValue().toString().equals("Personalmente")  && guiaObj == null || guiaField.getText().equals("") && guiaObj == null ) {
+							guia.setFecha(new Date());
+							guia.setUsuario(usuario);
+							if (!observacionField.getText().equals(""))
+								guia.setObservacion(observacionField.getText());
+							else {
+								// null property observacionField
+							}
+
 							confirmarStage(new Alert(AlertType.CONFIRMATION), guia, usuario);
-						} else if (guiaObj != null) {
+						} else  {
 							logger.error("Un registro con el mismo número guía ya existe. Verifique el dato");
 							alert.setHeaderText("Error al guardar datos");
 							alert.setContentText("Un registro con el mismo número guía ya existe. Verifique el dato y vuelva a intentar");
@@ -597,7 +602,7 @@ public class CapturaWindow {
 		if (guia.getOtrodestinatario() != null && !(guia.getOtrodestinatario().toString().equals("")))
 			output += "\nDestinatario: " + guia.getOtrodestinatario();
 		if (guia.getObservacion() != null && !(guia.getObservacion().toString().equals("")))
-			output += "\nObservaciones: " + guia.getObservacion().toString();
+			output += "\nObservación: " + guia.getObservacion().toString();
 
 		text.setText(output);
 

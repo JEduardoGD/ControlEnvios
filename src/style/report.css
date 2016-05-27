@@ -8,7 +8,7 @@
 }
 
 .nameHeader{
-	-fx-font-size: 4pt;
+	-fx-font-size: 0.1pt;
     -fx-font-family: "Arial";
     -fx-text-fill: #000;
     -fx-opacity: 0.9;
@@ -24,8 +24,8 @@
 .table-row-cell {
     -fx-cell-size: 12px;
     -fx-font-size:  8.5;
-    -fx-table-cell-border-color: #ccc;
-      -fx-text-fill: #111;
+    -fx-table-cell-border-color: #aaa;
+    -fx-text-fill: #111;
 }
 
 .table-row-cell .text{
