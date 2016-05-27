@@ -4,6 +4,7 @@
 	-fx-background-color: white;
 	-fx-padding: 20.0%;
 	-fx-spacing: 15.0;
+	-fx-graphic: url("/img/package-icon.jpg");
 }
 
 #introText {
