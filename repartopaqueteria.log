@@ -61,3 +61,10 @@
 2016-05-27 10:58:33 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
 2016-05-27 10:59:18 ERROR CapturaWindow:429 - Escriba una nota acerca del estado o detalles de recepción en el campo "observación".
 2016-05-27 10:59:38 ERROR CapturaWindow:554 - Un registro con el mismo número guía ya existe. Verifique el dato
+2016-05-27 15:31:58 ERROR ReportWindow:323 - El rango de fechas no arroja ningún registro. Intente con otro rango de fechas.
+2016-05-27 15:40:39 ERROR OrigenesWindow:146 - El campo origen no contiene la estructura requerida
+2016-05-27 15:42:05 ERROR OrigenesWindow:284 - El nombre del origen no debe ir vacio
+2016-05-27 15:42:13 ERROR OrigenesWindow:284 - El nombre del origen no debe ir vacio
+2016-05-27 15:42:57 ERROR OrigenesWindow:284 - El nombre del origen no debe ir vacio
+2016-05-27 15:46:33 ERROR DepartamentoWindow:320 - El campo "Departamento" requiere de entre 3 a 45 caracteres, éstos pueden ser números, letras o espacios. Corrija y vuelva a intentar
+2016-05-27 16:04:57 ERROR DestinatariosWindow:167 - El nombre del destinatario no debe ir vacio
