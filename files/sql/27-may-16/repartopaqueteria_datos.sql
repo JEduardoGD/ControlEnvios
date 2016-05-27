@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10deb1
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 27, 2016 at 11:22 AM
--- Server version: 5.5.47-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.14
+-- Generation Time: May 27, 2016 at 04:27 PM
+-- Server version: 5.5.49
+-- PHP Version: 5.4.45-3+donate.sury.org~precise+3
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -46,11 +46,11 @@ INSERT INTO `departamento` (`id`, `nombre`) VALUES
 --
 
 INSERT INTO `destinatario` (`id`, `nombre`, `f_departamento`) VALUES
-(1, 'Jonathan Castellanos', 14),
-(2, 'Antonio Leal', 14),
-(3, 'Raúl Cassani', 14),
+(1, 'Jonathan Castellanos', 3),
+(2, 'Antonio Leal', 3),
+(3, 'Raúl Cassani', 3),
 (4, 'Georgina González', 3),
-(5, 'Armando Saavedra', 1),
+(5, 'Armando Saavedra', 3),
 (6, 'Roberto Olivares', 3),
 (7, 'Esther Ruedas', 3),
 (8, 'Carmen Velazquez', 3),
@@ -118,11 +118,18 @@ INSERT INTO `destinatario` (`id`, `nombre`, `f_departamento`) VALUES
 (70, 'Isabel Mendez', 14);
 
 --
+-- Dumping data for table `guia`
+--
+
+INSERT INTO `guia` (`id`, `numero`, `observacion`, `fecha`, `otroorigen`, `otrodestinatario`, `otrodepartamento`, `f_origen`, `f_mensajeria`, `f_destinatario`, `f_usuario`) VALUES
+(31, '1013393383891133537600809602826011', NULL, '2016-05-27 12:06:34', NULL, NULL, NULL, 2, 8, 20, 3);
+
+--
 -- Dumping data for table `mensajeria`
 --
 
 INSERT INTO `mensajeria` (`id`, `nombre`) VALUES
-(13, 'Aeroflas'),
+(13, 'Aeroflash'),
 (11, 'Correos de México'),
 (7, 'DHL'),
 (4, 'Estafeta'),
@@ -138,24 +145,30 @@ INSERT INTO `mensajeria` (`id`, `nombre`) VALUES
 --
 
 INSERT INTO `origen` (`id`, `nombre`) VALUES
+(2, 'Acapulco'),
+(52, 'Administracion P.L. Molinos'),
 (19, 'Aguascalientes'),
+(51, 'Alm. Gral. Otros Fondos'),
 (35, 'Cancún'),
-(2, 'Centro Cultural Acapulco'),
 (36, 'Chihuahua'),
 (12, 'Ciudad Juárez (Las Torres)'),
+(47, 'Ciudad Juárez (Río grande)'),
+(43, 'Ciudad Juárez (Sendero)'),
+(48, 'Coacalco'),
 (32, 'Colombia'),
 (7, 'Cuauhtémoc'),
 (1, 'Cuernavaca'),
+(46, 'Durango'),
 (13, 'Guadalajara'),
-(42, 'Guadalajara (Centro)'),
+(42, 'Guadalajara Kiosco'),
 (37, 'Interlomas'),
 (17, 'Ixtapaluca'),
-(14, 'León'),
+(44, 'León (Campestre)'),
 (38, 'León (Centro)'),
 (21, 'Lerma'),
 (24, 'Mérida'),
 (41, 'Metepec'),
-(6, 'monterrey'),
+(6, 'Monterrey'),
 (8, 'Morelia'),
 (15, 'Oaxaca'),
 (25, 'Orizaba'),
@@ -163,19 +176,21 @@ INSERT INTO `origen` (`id`, `nombre`) VALUES
 (22, 'Politécnico (Santo Tomás)'),
 (23, 'Politécnico (Zacatenco)'),
 (39, 'Puebla (Centro)'),
-(9, 'Puebla (Plaza Dorada)'),
-(34, 'Puerto Vallarta'),
+(9, 'Puebla (Dorada)'),
 (26, 'Querétaro'),
 (27, 'Reynosa'),
 (28, 'Saltillo'),
-(10, 'san luis potosí'),
-(20, 'tampico'),
-(11, 'tijuana'),
-(18, 'toluca'),
+(10, 'San luis potosí'),
+(20, 'Tampico'),
+(11, 'Tijuana'),
+(18, 'Toluca (Centro)'),
 (29, 'Torreón'),
 (30, 'Tuxtla Gutierrez'),
+(50, 'U.A.N.L'),
+(49, 'Vallarta Bodega'),
+(34, 'Vallarta puerto'),
 (33, 'Venezuela'),
-(4, 'veracruz'),
+(4, 'Veracruz'),
 (40, 'Villahermosa'),
 (31, 'Xalapa');
 
@@ -192,9 +207,8 @@ INSERT INTO `tiposusuario` (`id`, `tipo`) VALUES
 --
 
 INSERT INTO `usuario` (`id`, `name`, `password`, `username`, `f_tiposusuario`) VALUES
-(2, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin', 2),
 (3, 'Juanita', '7a859b0e224b9e8ffab84c07541d9672d846aa568e4a728782e9c925bc5cd7f8', 'juanita', 1),
-(4, 'david', 'e5d74fef21f87d0b0d87d3afc757c2bb57ab93bda914752865367d67e651dce6', 'david', 1);
+(5, 'javier', 'da52a0582288ca37437c646d2f9ad1b607c4d671eeae234585fb71488a5aa2bd', 'gjavier', 2);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
